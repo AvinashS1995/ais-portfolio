@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: theme('colors.dark');
+  color: theme('colors.light');
+}
+
+main {
+  flex: 1;
+  padding-top: 80px;
+}

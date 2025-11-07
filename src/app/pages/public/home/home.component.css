@@ -1,0 +1,27 @@
+section {
+  background-color: #000;
+}
+
+button[mat-flat-button] {
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #f37b2d !important;
+  }
+}
+
+.typing-text {
+  border-right: 3px solid #f58b49;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: blinkCursor 0.8s step-end infinite;
+}
+
+@keyframes blinkCursor {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #f58b49;
+  }
+}
