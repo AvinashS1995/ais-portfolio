@@ -1,0 +1,136 @@
+<section class="relative bg-black text-white py-20 px-6 pt-[100px] md:px-12 overflow-hidden min-h-screen">
+  <!-- Soft Gradient Background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-[#111]/60 to-black pointer-events-none"></div>
+
+  <!-- Decorative Glowing Orbs -->
+  <div class="absolute top-20 -left-10 w-72 h-72 bg-[#f58b49]/10 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-10 right-0 w-64 h-64 bg-[#f58b49]/10 rounded-full blur-3xl"></div>
+
+  <!-- Main Grid -->
+  <div class="relative max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center z-10">
+    <!-- Left Image -->
+    <div class="relative flex justify-center md:justify-start" data-aos="fade-right">
+      <div class="absolute inset-0 bg-[#f58b49]/20 blur-3xl rounded-full w-64 h-64 md:w-96 md:h-96 m-auto -z-10">
+      </div>
+      <img src="assets/images/avatar.png" alt="Profile"
+        class="w-56 h-56 md:w-80 md:h-80 rounded-full object-cover border-4 border-[#f58b49] shadow-[0_0_30px_rgba(245,139,73,0.3)]" />
+    </div>
+
+    <!-- Right Text Content -->
+    <div class="space-y-6" data-aos="fade-left">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[#f58b49]">
+        About Me
+      </h2>
+
+      <p class="text-gray-300 leading-relaxed text-base md:text-lg">
+        I’m <span class="text-[#f58b49] font-semibold">Avinash Suryawanshi</span>,
+        a passionate Frontend Developer focused on crafting
+        <span class="text-[#f58b49]">modern, minimal, and immersive</span> web
+        experiences that blend creativity with performance.
+      </p>
+
+      <p class="text-gray-400 text-sm md:text-base">
+        Every project I build combines smooth interactions, clean visuals, and
+        thoughtful UX — all powered by modern technologies like
+        <span class="text-[#f58b49]">Angular</span>,
+        <span class="text-[#f58b49]">TypeScript</span>, and
+        <span class="text-[#f58b49]">Tailwind CSS</span>.
+      </p>
+
+      <div class="pt-2 flex flex-wrap gap-4">
+        <!-- View My Projects -->
+        <a routerLink="/project" class="inline-block bg-[#f58b49] text-black font-semibold px-6 py-2 rounded-full
+           hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_20px_rgba(245,139,73,0.3)]">
+          View My Projects →
+        </a>
+
+        <!-- Download Resume -->
+        <a href="assets/resume/Avinash_Suryawanshi_Resume.pdf" download
+          class="inline-flex items-center gap-2 border border-[#f58b49]/60 text-[#f58b49] font-semibold px-6 py-2 rounded-full
+           hover:bg-[#f58b49] hover:text-black hover:scale-105 transition transform shadow-[0_0_15px_rgba(245,139,73,0.2)]">
+          <i class="fas fa-download"></i>
+          Download Resume
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Floating Experience Stats -->
+  <div class="relative max-w-5xl mx-auto mt-20 flex flex-wrap justify-center gap-10 text-center" data-aos="fade-up">
+    <!-- Experience Bubble -->
+    <div
+      class="relative bg-[#111]/60 backdrop-blur-md border border-[#f58b49]/30 rounded-full px-10 py-6 shadow-[0_0_25px_rgba(245,139,73,0.15)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)] transition transform hover:scale-105">
+      <h4 class="text-5xl font-extrabold text-[#f58b49] mb-1">3+</h4>
+      <p class="text-gray-300 text-sm font-medium">Years Experience</p>
+    </div>
+
+    <!-- Clients Bubble -->
+    <div
+      class="relative bg-[#111]/60 backdrop-blur-md border border-[#f58b49]/30 rounded-full px-10 py-6 shadow-[0_0_25px_rgba(245,139,73,0.15)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)] transition transform hover:scale-105">
+      <h4 class="text-5xl font-extrabold text-[#f58b49] mb-1">15+</h4>
+      <p class="text-gray-300 text-sm font-medium">Happy Clients</p>
+    </div>
+
+    <!-- Recruiters Bubble -->
+    <div
+      class="relative bg-[#111]/60 backdrop-blur-md border border-[#f58b49]/30 rounded-full px-10 py-6 shadow-[0_0_25px_rgba(245,139,73,0.15)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)] transition transform hover:scale-105">
+      <h4 class="text-5xl font-extrabold text-[#f58b49] mb-1">10+</h4>
+      <p class="text-gray-300 text-sm font-medium">Recruiters Connected</p>
+    </div>
+  </div>
+
+  <!-- ✨ My Core Skills Section -->
+  <!-- ✨ My Core Skills Section -->
+  <div class="relative max-w-6xl mx-auto mt-20 z-10" data-aos="fade-up">
+    <h3 class="text-center text-3xl md:text-4xl font-bold text-[#f58b49] mb-12 tracking-wide">
+      My Core Skills
+    </h3>
+
+    <!-- 3 Column Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div *ngFor="let category of skillCategories" class="relative bg-[#111]/60 border border-[#f58b49]/20 rounded-2xl p-6 backdrop-blur-sm
+             shadow-[0_0_25px_rgba(245,139,73,0.1)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)]
+             transition-transform hover:-translate-y-2">
+        <!-- Glowing Header -->
+        <div class="flex flex-col items-center text-center mb-6 relative">
+          <!-- Glow line -->
+          <div class="absolute -bottom-2 w-16 h-[2px] rounded-full opacity-60" [style.background]="category.accent">
+          </div>
+
+          <div class="w-14 h-14 flex items-center justify-center rounded-full bg-[#f58b49]/10 mb-3"
+            [style.boxShadow]="'0_0_15px_' + category.accent">
+            <i class="fas" [ngClass]="category.icon" class="text-2xl" [style.color]="category.accent"></i>
+          </div>
+
+          <!-- Glowing title -->
+          <h4 class="text-lg font-semibold tracking-wide mb-1" [style.color]="category.accent">
+            {{ category.title }}
+          </h4>
+
+          <!-- subtle underline glow -->
+          <div class="h-[2px] w-12 bg-gradient-to-r from-transparent via-[#f58b49]/50 to-transparent mt-1"></div>
+        </div>
+
+        <!-- Skill Grid -->
+        <div class="grid grid-cols-3 gap-6 justify-items-center">
+          <div *ngFor="let skill of category.skills"
+            class="group flex flex-col items-center gap-2 hover:scale-105 transition-all duration-300">
+            <div class="relative w-14 h-14 flex items-center justify-center rounded-full
+            bg-[#111]/70 border border-[#f58b49]/30 backdrop-blur-sm
+            shadow-[0_0_12px_rgba(245,139,73,0.15)] 
+            group-hover:shadow-[0_0_20px_rgba(245,139,73,0.3)]
+            transition-all duration-300">
+              <img [src]="'assets/icons/' + skill.img" [alt]="skill.name"
+                class="w-7 opacity-90 grayscale group-hover:grayscale-0 transition duration-300" />
+            </div>
+            <p class="text-gray-300 text-xs font-medium text-center">
+              {{ skill.name }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
