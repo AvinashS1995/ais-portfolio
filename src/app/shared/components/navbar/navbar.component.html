@@ -6,12 +6,7 @@
   >
     <!-- Left Menu -->
     <div class="hidden md:flex items-center space-x-8">
-      <a
-        routerLink="/"
-        routerLinkActive="active-link"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="nav-link"
-      >
+      <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
         Home
       </a>
       <a routerLink="/about" routerLinkActive="active-link" class="nav-link">About</a>
@@ -19,12 +14,7 @@
     </div>
 
     <!-- Center Logo -->
-    <a
-      routerLink="/"
-      class="text-[#f58b49] font-extrabold text-3xl tracking-wide"
-    >
-      threadly
-    </a>
+    <a routerLink="/" class="text-[#f58b49] font-extrabold text-3xl tracking-wide"> AIS </a>
 
     <!-- Right Menu -->
     <div class="hidden md:flex items-center space-x-6">
@@ -36,7 +26,7 @@
     <!-- Mobile Menu Toggle -->
     <button
       (click)="toggleMenu()"
-      class="md:hidden text-gray-400 hover:text-white focus:outline-none"
+      class="md:hidden text-gray-400 hover:text-white focus:outline-none transition"
     >
       <svg
         *ngIf="!isMenuOpen"
@@ -61,18 +51,12 @@
     </button>
   </div>
 
-  <!-- Admin Button (Outside Rounded Div) -->
+  <!-- Admin Button -->
   <a
     routerLink="/admin"
     class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-[#f58b49] hover:scale-105 transition transform md:flex hidden"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-4 h-4"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -89,26 +73,21 @@
     class="absolute top-[80px] left-0 w-full bg-[#111] border-t border-gray-700 py-4 z-50 md:hidden"
   >
     <ul class="flex flex-col items-center space-y-4">
-      <li><a routerLink="/" routerLinkActive="active-link" class="nav-link">Home</a></li>
-      <li><a routerLink="/about" routerLinkActive="active-link" class="nav-link">About</a></li>
-      <li><a routerLink="/service" routerLinkActive="active-link" class="nav-link">Service</a></li>
-      <li><a routerLink="/resume" routerLinkActive="active-link" class="nav-link">Resume</a></li>
-      <li><a routerLink="/project" routerLinkActive="active-link" class="nav-link">Project</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active-link" class="nav-link">Contact</a></li>
+      <li><a (click)="closeMenu()" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Home</a></li>
+      <li><a (click)="closeMenu()" routerLink="/about" routerLinkActive="active-link" class="nav-link">About</a></li>
+      <li><a (click)="closeMenu()" routerLink="/service" routerLinkActive="active-link" class="nav-link">Service</a></li>
+      <li><a (click)="closeMenu()" routerLink="/experience" routerLinkActive="active-link" class="nav-link">Experience</a></li>
+      <li><a (click)="closeMenu()" routerLink="/project" routerLinkActive="active-link" class="nav-link">Project</a></li>
+      <li><a (click)="closeMenu()" routerLink="/contact" routerLinkActive="active-link" class="nav-link">Contact</a></li>
 
       <!-- Admin Button (Mobile) -->
       <li>
         <a
+          (click)="closeMenu()"
           routerLink="/admin"
           class="flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold hover:bg-[#f58b49] hover:scale-105 transition transform"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"

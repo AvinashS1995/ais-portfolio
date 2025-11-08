@@ -1,0 +1,73 @@
+<section class="relative bg-black text-white py-24 px-6 md:px-12 overflow-hidden">
+  <!-- Background Glow -->
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none"
+  ></div>
+
+  <!-- Header -->
+  <div class="relative text-center mb-20 z-10" data-aos="fade-up">
+    <h2
+      class="text-5xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_15px_rgba(245,139,73,0.5)]"
+    >
+      My Projects
+    </h2>
+    <p class="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
+      Handpicked projects demonstrating <span class="text-[#f58b49]">UI precision</span>,
+      <span class="text-[#f58b49]">frontend logic</span>, and real-world problem-solving.
+    </p>
+  </div>
+
+  <!-- Projects Grid -->
+  <div
+    class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto z-10"
+  >
+    <!-- Project Card -->
+    <div
+      *ngFor="let project of projects; let i = index"
+      class="group bg-[#1a1a1a] border border-[#2b2b2b] rounded-2xl overflow-hidden
+             transition-all duration-500 hover:shadow-[0_0_30px_rgba(245,139,73,0.4)]
+             hover:-translate-y-2 flex flex-col"
+      data-aos="fade-up"
+      [attr.data-aos-delay]="i * 120"
+    >
+      <!-- Project Image -->
+      <div class="relative overflow-hidden">
+        <img
+          [src]="project.image"
+          alt="{{ project.title }}"
+          class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      </div>
+
+      <!-- Project Content -->
+      <div class="flex flex-col justify-between flex-1 p-6">
+        <div>
+          <h3 class="text-xl font-bold text-white mb-2">{{ project.title }}</h3>
+          <p class="text-[#f58b49] text-sm font-medium mb-1">{{ project.category }}</p>
+          <p class="text-gray-400 text-sm">{{ project.role }}</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex items-center justify-between mt-6">
+          <a
+            *ngIf="project.codeLink"
+            [href]="project.codeLink"
+            target="_blank"
+            class="text-gray-400 text-sm hover:text-[#f58b49] transition-all duration-300"
+          >
+            View Code →
+          </a>
+          <a
+            *ngIf="project.previewLink"
+            [href]="project.previewLink"
+            target="_blank"
+            class="bg-[#f58b49] text-black text-sm font-semibold px-5 py-2 rounded-lg
+                   shadow-[0_0_15px_rgba(245,139,73,0.3)] hover:bg-[#ff9a61] transition-all duration-500"
+          >
+            Live Preview
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
