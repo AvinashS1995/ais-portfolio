@@ -41,7 +41,7 @@
         <!-- View My Projects -->
         <a routerLink="/project" class="inline-block bg-[#f58b49] text-black font-semibold px-6 py-2 rounded-full
            hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_20px_rgba(245,139,73,0.3)]">
-          View My Projects →
+          View My Projects <i class="fa-solid fa-arrow-right ml-2"></i>
         </a>
 
         <!-- Download Resume -->
@@ -99,9 +99,10 @@
           </div>
 
           <div class="w-14 h-14 flex items-center justify-center rounded-full bg-[#f58b49]/10 mb-3"
-            [style.boxShadow]="'0_0_15px_' + category.accent">
-            <i class="fas" [ngClass]="category.icon" class="text-2xl" [style.color]="category.accent"></i>
-          </div>
+  [style.boxShadow]="'0_0_15px_' + category.accent">
+  <i [ngClass]="['fa-solid', category.icon]" [style.color]="category.accent" class="text-2xl"></i>
+</div>
+
 
           <!-- Glowing title -->
           <h4 class="text-lg font-semibold tracking-wide mb-1" [style.color]="category.accent">

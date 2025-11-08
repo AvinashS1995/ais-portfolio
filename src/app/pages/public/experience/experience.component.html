@@ -8,11 +8,14 @@
 
   <!-- Header -->
   <div class="relative text-center mb-20 z-10" data-aos="fade-up">
-    <h2 class="text-5xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_15px_rgba(245,139,73,0.5)]">
+    <h2
+      class="text-5xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_15px_rgba(245,139,73,0.5)]"
+    >
       My Journey
     </h2>
     <p class="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-      A timeline reflecting my <span class="text-[#f58b49]">professional</span> and
+      A timeline reflecting my
+      <span class="text-[#f58b49]">professional</span> and
       <span class="text-[#f58b49]">academic</span> milestones.
     </p>
   </div>
@@ -20,11 +23,16 @@
   <!-- Experience Section -->
   <div class="relative max-w-6xl mx-auto z-10 mb-24">
     <!-- Center dotted line -->
-    <div class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"></div>
+    <div
+      class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"
+    ></div>
 
     <!-- Section title -->
     <div class="text-center mb-16" data-aos="fade-up">
-      <h3 class="inline-block text-2xl font-bold text-[#f58b49] uppercase border-b border-[#f58b49]/40 pb-1 tracking-wider">
+      <h3
+        class="inline-flex items-center gap-2 text-2xl font-bold text-[#f58b49] uppercase border-b border-[#f58b49]/40 pb-1 tracking-wider"
+      >
+        <i class="fa-solid fa-briefcase"></i>
         Experience
       </h3>
     </div>
@@ -38,31 +46,46 @@
     >
       <!-- Left -->
       <div class="w-full md:w-5/12 text-right pr-8 md:pr-12">
-    <h3 class="text-2xl font-semibold text-white">{{ exp.company }}</h3>
-    <p class="text-gray-400 text-sm mt-1">{{ exp.period }}</p>
-  </div>
+        <h3 class="text-2xl font-semibold text-white flex justify-end items-center gap-2">
+          <i class="fa-solid fa-building text-[#f58b49]"></i>
+          {{ exp.company }}
+        </h3>
+        <p class="text-gray-400 text-sm mt-1">
+          <i class="fa-regular fa-calendar text-[#f58b49] mr-1"></i> {{ exp.period }}
+        </p>
+      </div>
+
       <!-- Center Node -->
       <div
-        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-7 h-7 rounded-full border-4 border-black shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10"
-      ></div>
+        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-8 h-8 rounded-full border-4 border-black 
+               shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10 flex items-center justify-center"
+      >
+        <i class="fa-solid fa-briefcase text-black"></i>
+      </div>
 
       <!-- Right -->
       <div class="w-full md:w-5/12 md:pl-12 pl-8 mt-8 md:mt-0">
-    <h4 class="text-2xl font-bold text-[#f58b49] mb-2">{{ exp.role }}</h4>
-    <p class="text-gray-400 text-base leading-relaxed mb-2">{{ exp.project }}</p>
-    <p class="text-gray-500 text-sm italic">{{ exp.description }}</p>
-  </div>
+        <h4 class="text-2xl font-bold text-[#f58b49] mb-2">{{ exp.role }}</h4>
+        <p class="text-gray-400 text-base leading-relaxed mb-2">
+          <i class="fa-solid fa-laptop-code text-[#f58b49] mr-1"></i> {{ exp.project }}
+        </p>
+        <p class="text-gray-500 text-sm italic">{{ exp.description }}</p>
+      </div>
     </div>
   </div>
 
   <!-- Education Section -->
   <div class="relative max-w-6xl mx-auto z-10">
-    <!-- Center dotted line -->
-    <div class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"></div>
+    <div
+      class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"
+    ></div>
 
     <!-- Section title -->
     <div class="text-center mb-16" data-aos="fade-up">
-      <h3 class="inline-block text-2xl font-bold text-[#f58b49] uppercase border-b border-[#f58b49]/40 pb-1 tracking-wider">
+      <h3
+        class="inline-flex items-center gap-2 text-2xl font-bold text-[#f58b49] uppercase border-b border-[#f58b49]/40 pb-1 tracking-wider"
+      >
+        <i class="fa-solid fa-graduation-cap"></i>
         Education
       </h3>
     </div>
@@ -76,14 +99,22 @@
     >
       <!-- Left -->
       <div class="w-full md:w-5/12 text-right md:pr-12">
-        <h3 class="text-2xl font-semibold text-white">{{ edu.university }}</h3>
-        <p class="text-gray-400 text-sm mt-1">{{ edu.period }}</p>
+        <h3 class="text-2xl font-semibold text-white flex justify-end items-center gap-2">
+          <i class="fa-solid fa-university text-[#f58b49]"></i>
+          {{ edu.university }}
+        </h3>
+        <p class="text-gray-400 text-sm mt-1">
+          <i class="fa-regular fa-calendar text-[#f58b49] mr-1"></i> {{ edu.period }}
+        </p>
       </div>
 
       <!-- Center Node -->
       <div
-        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-7 h-7 rounded-full border-4 border-black shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10"
-      ></div>
+        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-8 h-8 rounded-full border-4 border-black 
+               shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10 flex items-center justify-center"
+      >
+        <i class="fa-solid fa-graduation-cap text-black"></i>
+      </div>
 
       <!-- Right -->
       <div class="w-full md:w-5/12 md:pl-12 mt-8 md:mt-0">
@@ -99,7 +130,7 @@
       shadow-[0_0_25px_rgba(245,139,73,0.5)] hover:shadow-[0_0_45px_rgba(245,139,73,0.8)]
       hover:scale-105 transition-all duration-500"
     >
-      Let’s Work Together →
+      Let’s Work Together <i class="fa-solid fa-arrow-right ml-2"></i>
     </button>
   </div>
 </section>
