@@ -1,0 +1,116 @@
+<div class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative">
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none"
+  ></div>
+
+  <div class="relative max-w-6xl mx-auto z-10">
+    <div class="flex items-center justify-between mb-8">
+      <button
+        routerLink="/admin/dashboard"
+        class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] transition-colors"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Dashboard
+      </button>
+
+      <button
+        (click)="openDialog()"
+        class="bg-[#f58b49] hover:bg-[#ff9a61] text-white px-4 py-2 rounded-lg transition-colors"
+      >
+        <i class="fa-solid fa-plus mr-2"></i> Add Education
+      </button>
+    </div>
+
+    <h2 class="text-3xl text-[#f58b49] mb-8">Manage Education</h2>
+
+    <div class="space-y-6">
+      <div
+        *ngFor="let edu of education"
+        class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl p-6 shadow-[0_0_40px_rgba(245,139,73,0.15)]"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h3 class="text-xl text-[#f58b49] mb-2">{{ edu.degree }}</h3>
+            <p class="text-gray-300 mb-1">{{ edu.university }}</p>
+            <p class="text-gray-400 text-sm">{{ edu.period }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              (click)="openDialog(edu)"
+              class="p-2 hover:bg-[#f58b49]/20 rounded-lg transition-colors"
+            >
+              <i class="fa-solid fa-pen text-[#f58b49]"></i>
+            </button>
+            <button
+              (click)="deleteEducation(edu.id)"
+              class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+            >
+              <i class="fa-solid fa-trash text-red-400"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog -->
+    <div
+      *ngIf="isDialogOpen"
+      class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-[#1a1a1a] border border-[#f58b49]/30 rounded-2xl p-6 w-[90%] md:w-[600px] max-h-[90vh] overflow-y-auto"
+      >
+        <h3 class="text-[#f58b49] text-xl mb-4">
+          {{ editingEdu ? 'Edit Education' : 'Add New Education' }}
+        </h3>
+
+        <form [formGroup]="eduForm" (ngSubmit)="saveEducation()" class="space-y-4">
+          <div>
+            <label class="block mb-1 font-bold text-[#f58b49]">Degree</label>
+            <input
+              formControlName="degree"
+              class="w-full bg-[#111] border border-[#2b2b2b] text-gray-200 rounded-lg p-2"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block mb-1 font-bold text-[#f58b49]">University</label>
+            <input
+              formControlName="university"
+              class="w-full bg-[#111] border border-[#2b2b2b] text-gray-200 rounded-lg p-2"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block mb-1 font-bold text-[#f58b49]">Period</label>
+            <input
+              formControlName="period"
+              placeholder="2016 - 2018"
+              class="w-full bg-[#111] border border-[#2b2b2b] text-gray-200 rounded-lg p-2"
+              required
+            />
+          </div>
+
+          <div class="flex gap-3 mt-4">
+            <button
+              type="submit"
+              class="flex-1 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <i class="fa-solid fa-floppy-disk mr-2"></i>
+              {{ editingEdu ? 'Update' : 'Add' }}
+            </button>
+            <button
+              type="button"
+              (click)="closeDialog()"
+              class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
+            >
+              <i class="fa-solid fa-xmark mr-2"></i> Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

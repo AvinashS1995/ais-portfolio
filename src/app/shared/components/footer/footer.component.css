@@ -1,0 +1,6 @@
+:host {
+  display: block;
+}
+footer {
+  box-shadow: 0 -5px 15px rgba(245, 139, 73, 0.05);
+}

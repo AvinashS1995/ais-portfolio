@@ -1,17 +1,26 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { AdminLayoutComponent } from '../../shared/components/admin-layout/admin-layout.component';
-import { CreateAdminComponent } from './create-admin/create-admin.component';
 import { adminGuard } from '../../core/guards/admin.guard';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { ManageAboutComponent } from './manage-about/manage-about.component';
+import { ManageEducationComponent } from './manage-education/manage-education.component';
+import { ManageExperienceComponent } from './manage-experience/manage-experience.component';
+import { ManageProjectsComponent } from './manage-projects/manage-projects.component';
+import { ManageServicesComponent } from './manage-services/manage-services.component';
+import { ManageMessagesComponent } from './manage-messages/manage-messages.component';
+import { ManageContactInfoComponent } from './manage-contact-info/manage-contact-info.component';
+import { AdminUserManagementComponent } from './admin-user-management/admin-user-management.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
 
 export const ADMIN_ROUTES: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'new-admin-creation', component: CreateAdminComponent },
-
-  {
-    path: '',
-    component: AdminLayoutComponent,
-    canActivate: [adminGuard],
-    children: [{ path: '', component: AdminLayoutComponent }],
-  },
+  { path: 'login', component: AdminLoginComponent },
+  { path: 'dashboard', component: AdminDashboardComponent },
+  { path: 'about', component: ManageAboutComponent },
+  { path: 'education', component: ManageEducationComponent },
+  { path: 'experience', component: ManageExperienceComponent },
+  { path: 'projects', component: ManageProjectsComponent },
+  { path: 'services', component: ManageServicesComponent },
+  { path: 'messages', component: ManageMessagesComponent },
+  { path: 'contact-info', component: ManageContactInfoComponent },
+  { path: 'user-management', component: AdminUserManagementComponent },
+  { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
 ];

@@ -1,0 +1,66 @@
+<div class="min-h-screen bg-black text-white py-24 px-6 pt-[100px] md:px-12 relative">
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none"
+  ></div>
+
+  <div class="relative max-w-6xl mx-auto z-10">
+    <!-- Back Button -->
+    <button
+      routerLink="/admin/dashboard"
+      class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] mb-8 transition-colors"
+    >
+      <i class="fa-solid fa-arrow-left"></i>
+      Back to Dashboard
+    </button>
+
+    <h2 class="text-3xl text-[#f58b49] mb-8">Contact Messages</h2>
+
+    <!-- No Messages -->
+    <div
+      *ngIf="contactMessages.length === 0"
+      class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
+             border border-[#f58b49]/30 rounded-3xl p-12 text-center
+             shadow-[0_0_40px_rgba(245,139,73,0.15)]"
+    >
+      <i class="fa-solid fa-envelope text-gray-600 text-5xl mb-4"></i>
+      <p class="text-gray-400">No messages yet</p>
+    </div>
+
+    <!-- Message Cards -->
+    <div *ngIf="contactMessages.length > 0" class="space-y-6">
+      <div
+        *ngFor="let message of contactMessages"
+        class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
+               border border-[#f58b49]/30 rounded-3xl p-6
+               shadow-[0_0_40px_rgba(245,139,73,0.15)]"
+      >
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="text-xl text-[#f58b49]">{{ message.name }}</h3>
+              <span class="text-gray-500 text-sm">{{ formatDate(message.createdAt) }}</span>
+            </div>
+            <p class="text-gray-400 text-sm mb-1">
+              <strong>Email:</strong> {{ message.email }}
+            </p>
+            <p class="text-gray-400 text-sm mb-3">
+              <strong>Subject:</strong> {{ message.subject }}
+            </p>
+          </div>
+          <button
+            (click)="deleteMessage(message.id)"
+            class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+          >
+            <i class="fa-solid fa-trash text-red-400"></i>
+          </button>
+        </div>
+
+        <div class="bg-[#0a0a0a]/50 rounded-xl p-4 border border-gray-800">
+          <p class="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+            {{ message.message }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

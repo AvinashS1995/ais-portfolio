@@ -1,26 +1,51 @@
 <nav
-  class="fixed top-0 left-0 w-full z-50 flex justify-center py-4 bg-black/90 backdrop-blur-md border-b border-gray-800 shadow-lg transition-all duration-300"
+  class="fixed top-0 left-0 w-full z-50 flex justify-center transition-all duration-300"
+  [ngClass]="{
+    'py-3 bg-black/90 border-b border-gray-800 shadow-lg backdrop-blur-md': isScrolled,
+    'py-4 bg-black/90 border-b border-gray-800 shadow-lg backdrop-blur-md': !isScrolled
+  }"
 >
   <div
     class="relative flex items-center justify-between w-[90%] md:w-[80%] bg-[#111]/90 border border-gray-700 rounded-full px-6 py-3"
   >
     <!-- Left Menu -->
     <div class="hidden md:flex items-center space-x-8">
-      <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
-        Home
+      <a
+        *ngFor="let link of navLinks.slice(0, 3)"
+        [routerLink]="link.path"
+        class="text-gray-400 hover:text-[#f58b49] transition-colors duration-300 relative"
+        [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
+      >
+        {{ link.label }}
+        <span
+          *ngIf="isActive(link.path)"
+          class="absolute -bottom-1 left-0 w-full h-[2px] bg-[#f58b49]"
+        ></span>
       </a>
-      <a routerLink="/about" routerLinkActive="active-link" class="nav-link">About</a>
-      <a routerLink="/service" routerLinkActive="active-link" class="nav-link">Service</a>
     </div>
 
     <!-- Center Logo -->
-    <a routerLink="/" class="text-[#f58b49] font-extrabold text-3xl tracking-wide"> AIS </a>
+    <a
+      routerLink="/"
+      class="text-[#f58b49] font-extrabold text-3xl tracking-wide hover:scale-105 transition-transform"
+    >
+      AIS
+    </a>
 
     <!-- Right Menu -->
     <div class="hidden md:flex items-center space-x-6">
-      <a routerLink="/experience" routerLinkActive="active-link" class="nav-link">Experience</a>
-      <a routerLink="/project" routerLinkActive="active-link" class="nav-link">Project</a>
-      <a routerLink="/contact" routerLinkActive="active-link" class="nav-link">Contact</a>
+      <a
+        *ngFor="let link of navLinks.slice(3)"
+        [routerLink]="link.path"
+        class="text-gray-400 hover:text-[#f58b49] transition-colors duration-300 relative"
+        [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
+      >
+        {{ link.label }}
+        <span
+          *ngIf="isActive(link.path)"
+          class="absolute -bottom-1 left-0 w-full h-[2px] bg-[#f58b49]"
+        ></span>
+      </a>
     </div>
 
     <!-- Mobile Menu Toggle -->
@@ -28,51 +53,31 @@
       (click)="toggleMenu()"
       class="md:hidden text-gray-400 hover:text-white focus:outline-none transition"
     >
-      <svg
-        *ngIf="!isMenuOpen"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        class="w-6 h-6"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg
-        *ngIf="isMenuOpen"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        class="w-6 h-6"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
+      <i *ngIf="!isMenuOpen" class="fa-solid fa-bars text-xl"></i>
+      <i *ngIf="isMenuOpen" class="fa-solid fa-xmark text-xl"></i>
     </button>
   </div>
 
   <!-- Admin Button -->
-  <a *ngIf="!isAdminLoggedIn"
-    routerLink="/admin/login"
-    class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-[#f58b49] hover:scale-105 transition transform md:flex hidden"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 11c1.104 0 2 .896 2 2v3H10v-3c0-1.104.896-2 2-2zM6 11V9a6 6 0 0112 0v2M4 11h16v9H4v-9z"
-      />
-    </svg>
-    <span>Admin</span>
-  </a>
+  <ng-container *ngIf="!isAdmin; else logoutBtn">
+    <a
+      routerLink="/admin/login"
+      class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-[#f58b49] hover:scale-105 transition transform md:flex hidden"
+    >
+      <i class="fa-solid fa-lock text-sm"></i>
+      <span>Admin</span>
+    </a>
+  </ng-container>
 
-  <a *ngIf="isAdminLoggedIn" (click)="logout()"
-    class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-[#f58b49] hover:scale-105 transition transform md:flex hidden"
-  >
-    <i class="fa-solid fa-right-from-bracket text-red-400"></i>
-    <span>Logout</span>
-  </a>
+  <ng-template #logoutBtn>
+    <button
+      (click)="logout()"
+      class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-red-600 hover:scale-105 transition transform md:flex hidden"
+    >
+      <i class="fa-solid fa-right-from-bracket text-red-400 text-sm"></i>
+      <span>Logout</span>
+    </button>
+  </ng-template>
 
   <!-- Mobile Menu -->
   <div
@@ -80,36 +85,35 @@
     class="absolute top-[80px] left-0 w-full bg-[#111] border-t border-gray-700 py-4 z-50 md:hidden"
   >
     <ul class="flex flex-col items-center space-y-4">
-      <li><a (click)="closeMenu()" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Home</a></li>
-      <li><a (click)="closeMenu()" routerLink="/about" routerLinkActive="active-link" class="nav-link">About</a></li>
-      <li><a (click)="closeMenu()" routerLink="/service" routerLinkActive="active-link" class="nav-link">Service</a></li>
-      <li><a (click)="closeMenu()" routerLink="/experience" routerLinkActive="active-link" class="nav-link">Experience</a></li>
-      <li><a (click)="closeMenu()" routerLink="/project" routerLinkActive="active-link" class="nav-link">Project</a></li>
-      <li><a (click)="closeMenu()" routerLink="/contact" routerLinkActive="active-link" class="nav-link">Contact</a></li>
-
-      <!-- Admin Button (Mobile) -->
-      <li>
-        <a *ngIf="!isAdminLoggedIn; else logoutMobile"
+      <li *ngFor="let link of navLinks">
+        <a
+          [routerLink]="link.path"
           (click)="closeMenu()"
-          routerLink="/admin/login"
-          class="flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold hover:bg-[#f58b49] hover:scale-105 transition transform"
+          class="text-gray-400 hover:text-[#f58b49] transition-colors"
+          [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 11c1.104 0 2 .896 2 2v3H10v-3c0-1.104.896-2 2-2zM6 11V9a6 6 0 0112 0v2M4 11h16v9H4v-9z"
-            />
-          </svg>
-          <span>Admin</span>
+          {{ link.label }}
         </a>
-        <ng-template #logoutMobile>
+      </li>
+
+      <li>
+        <ng-container *ngIf="!isAdmin; else mobileLogout">
+          <a
+            routerLink="/admin/login"
+            (click)="closeMenu()"
+            class="flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold hover:bg-[#f58b49] hover:scale-105 transition transform"
+          >
+            <i class="fa-solid fa-lock text-sm"></i>
+            <span>Admin</span>
+          </a>
+        </ng-container>
+
+        <ng-template #mobileLogout>
           <button
             (click)="logout(); closeMenu()"
             class="flex items-center space-x-2 text-white border border-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-[#1a1a1a] hover:border-red-500 hover:text-red-400 transition"
           >
-            <i class="fa-solid fa-right-from-bracket text-red-400"></i>
+            <i class="fa-solid fa-right-from-bracket text-red-400 text-sm"></i>
             <span>Logout</span>
           </button>
         </ng-template>

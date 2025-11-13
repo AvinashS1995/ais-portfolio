@@ -1,33 +1,63 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { ApiService } from '../services/api.service';
+import { CommonService } from '../services/common.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
+  const apiService = inject(ApiService);
+  const commonService = inject(CommonService);
 
-  // 🟠 Get token from localStorage
-  const token = localStorage.getItem('adminToken');
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
 
-  // 🟢 Clone request with Authorization header if token exists
-  const clonedRequest = token
+  // ✅ Attach access token if available
+  const clonedRequest = accessToken
     ? req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
+        setHeaders: { Authorization: `Bearer ${accessToken}` },
       })
     : req;
 
-  // 🔴 Handle 401 / 403 Unauthorized responses
   return next(clonedRequest).pipe(
-    // Intercept response errors
-    tap({
-      error: (err) => {
-        if (err.status === 401 || err.status === 403) {
-          // Clear local storage and redirect
-          localStorage.removeItem('adminToken');
-          localStorage.removeItem('role');
-          router.navigate(['/']);
-        }
-      },
+    catchError((error) => {
+      // 🔒 Handle token expiration (401 / 403)
+      if ((error.status === 401 || error.status === 403) && refreshToken) {
+        return apiService.refreshAccessToken(refreshToken).pipe(
+          switchMap((res: any) => {
+            const newAccessToken = res.accessToken;
+            localStorage.setItem('accessToken', newAccessToken);
+
+            // 🔁 Retry original request
+            const retryReq = req.clone({
+              setHeaders: { Authorization: `Bearer ${newAccessToken}` },
+            });
+            return next(retryReq);
+          }),
+          catchError((refreshErr) => {
+            // ❌ Refresh failed
+
+            console.log(refreshErr);
+            commonService.showToast(
+              'Session expired, please login again',
+              'error'
+            );
+            localStorage.clear();
+            router.navigate(['/home']);
+            return throwError(() => refreshErr);
+          })
+        );
+      }
+
+      // ⚠️ Other backend errors
+      if (error?.error?.message) {
+        commonService.showToast(error.error.message, 'error');
+      } else {
+        commonService.showToast('Something went wrong!', 'error');
+      }
+
+      return throwError(() => error);
     })
   );
 };

@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
 @Component({
   selector: 'app-service',
   standalone: true,
@@ -9,48 +17,58 @@ import { SHARED_MODULES } from '../../../core/common/shared-module';
   styleUrl: './service.component.css',
 })
 export class ServiceComponent {
-  services = [
-    {
-      title: 'Frontend Development',
-      icon: 'fa-code',
-      color: '#f58b49',
-      description:
-        'Building responsive, fast, and elegant web applications using Angular, TypeScript, and modern UI frameworks like Material & Tailwind.',
-    },
-    {
-      title: 'API Integration',
-      icon: 'fa-plug',
-      color: '#ff9d61',
-      description:
-        'Connecting and integrating REST APIs with clean, efficient, and secure communication layers for smooth data-driven experiences.',
-    },
-    {
-      title: 'UI/UX Design',
-      icon: 'fa-palette',
-      color: '#f7a06b',
-      description:
-        'Designing pixel-perfect interfaces with strong UX focus, accessibility, and modern design principles that enhance user engagement.',
-    },
-    {
-      title: 'Backend Support',
-      icon: 'fa-server',
-      color: '#f58b49',
-      description:
-        'Creating and managing backend logic using Node.js, .NET Core, and databases like MongoDB or MySQL for complete app solutions.',
-    },
-    {
-      title: 'Version Control & Dev Tools',
-      icon: 'fa-code-branch',
-      color: '#ff9d61',
-      description:
-        'Collaborating with teams using Git & GitHub for version control and agile workflows, ensuring smooth project development.',
-    },
-    {
-      title: 'Performance Optimization',
-      icon: 'fa-rocket',
-      color: '#f7a06b',
-      description:
-        'Optimizing web apps for faster load times, improved SEO, and better performance across devices for a seamless user experience.',
-    },
-  ];
+  services: Service[] = [];
+
+  ngOnInit() {
+    this.services = [
+      {
+        id: 1,
+        title: 'Frontend Development',
+        description:
+          'Building fast, modern, and responsive web interfaces using Angular, React, and TypeScript.',
+        icon: 'fa-code',
+        color: '#f58b49',
+      },
+      {
+        id: 2,
+        title: 'UI/UX Design',
+        description:
+          'Designing clean, user-friendly interfaces focused on usability, accessibility, and visual appeal.',
+        icon: 'fa-paint-brush',
+        color: '#f58b49',
+      },
+      {
+        id: 3,
+        title: 'API Integration',
+        description:
+          'Connecting apps with secure backend APIs and optimizing data flow using RESTful services.',
+        icon: 'fa-plug',
+        color: '#f58b49',
+      },
+      {
+        id: 4,
+        title: 'Performance Optimization',
+        description:
+          'Improving load time, Core Web Vitals, and rendering efficiency for seamless user experiences.',
+        icon: 'fa-rocket',
+        color: '#f58b49',
+      },
+      {
+        id: 5,
+        title: 'Maintenance & Support',
+        description:
+          'Ensuring applications run smoothly with updates, monitoring, and quick issue resolution.',
+        icon: 'fa-tools',
+        color: '#f58b49',
+      },
+      {
+        id: 6,
+        title: 'Deployment & DevOps',
+        description:
+          'CI/CD setup and deploying scalable apps on AWS, Vercel, and Render for production-ready systems.',
+        icon: 'fa-server',
+        color: '#f58b49',
+      },
+    ];
+  }
 }

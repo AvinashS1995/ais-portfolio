@@ -5,3 +5,17 @@
 .active-link {
   @apply bg-[#f58b49] text-white px-4 py-2 rounded-full font-semibold;
 }
+
+nav {
+  transition: all 0.3s ease;
+}
+
+a {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 0.75rem 0;
+  }
+}

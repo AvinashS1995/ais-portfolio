@@ -3,11 +3,12 @@ import { CanActivateFn, Router } from '@angular/router';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const token = localStorage.getItem('adminToken');
+  const accessToken = localStorage.getItem('accessToken');
+
   const role = localStorage.getItem('role');
 
   // ✅ Allow only if adminToken exists and role is 'admin'
-  if (token && role === 'admin') {
+  if (accessToken && role === 'admin') {
     return true;
   }
 

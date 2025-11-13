@@ -2,33 +2,41 @@
   class="relative bg-black text-white py-20 px-6 pt-[100px] md:px-12 overflow-hidden min-h-screen"
 >
   <!-- Soft Gradient Background -->
-  <div class="absolute inset-0 bg-gradient-to-b from-[#111]/60 to-black pointer-events-none"></div>
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-[#111]/60 to-black pointer-events-none"
+  ></div>
 
   <!-- Glowing Orbs -->
-  <div class="absolute top-10 -left-10 w-72 h-72 bg-[#f58b49]/10 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-10 right-0 w-72 h-72 bg-[#f58b49]/10 rounded-full blur-3xl"></div>
+  <div
+    class="absolute top-10 -left-10 w-72 h-72 bg-[#f58b49]/10 rounded-full blur-3xl"
+  ></div>
+  <div
+    class="absolute bottom-10 right-0 w-72 h-72 bg-[#f58b49]/10 rounded-full blur-3xl"
+  ></div>
 
   <!-- Header -->
-  <div class="relative text-center max-w-3xl mx-auto mb-16 z-10" data-aos="fade-up">
-    <h2 class="text-3xl md:text-4xl font-extrabold text-[#f58b49] tracking-wide">
+  <div class="relative text-center max-w-3xl mx-auto mb-16 z-10">
+    <h2
+      class="text-3xl md:text-4xl font-extrabold text-[#f58b49] tracking-wide"
+    >
       My Services
     </h2>
     <p class="text-gray-400 mt-4 text-sm md:text-base leading-relaxed">
-      I specialize in building <span class="text-[#f58b49] font-semibold">modern, scalable, and elegant</span> web solutions.
-      Each service focuses on delivering <span class="text-[#f58b49]">performance, usability,</span> and a great user experience.
+      I specialize in building
+      <span class="text-[#f58b49] font-semibold">modern, scalable, and elegant</span>
+      web solutions. Each service focuses on delivering
+      <span class="text-[#f58b49]">performance, usability,</span> and a great
+      user experience.
     </p>
   </div>
 
   <!-- Service Cards -->
   <div
     class="relative max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 z-10"
-    data-aos="fade-up"
   >
     <div
       *ngFor="let service of services"
-      class="group relative bg-[#111]/60 border border-[#f58b49]/20 rounded-2xl p-8 backdrop-blur-sm text-center
-      shadow-[0_0_25px_rgba(245,139,73,0.1)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)]
-      transition-all duration-500 hover:-translate-y-2 hover:bg-[#111]/80"
+      class="group relative bg-[#111]/60 border border-[#f58b49]/20 rounded-2xl p-8 backdrop-blur-sm text-center shadow-[0_0_25px_rgba(245,139,73,0.1)] hover:shadow-[0_0_35px_rgba(245,139,73,0.25)] transition-all duration-500 hover:-translate-y-2 hover:bg-[#111]/80"
     >
       <!-- Glow Accent -->
       <div
@@ -37,9 +45,7 @@
 
       <!-- Icon -->
       <div
-        class="w-16 h-16 flex items-center justify-center mx-auto mb-4 rounded-full bg-[#f58b49]/10
-        shadow-[0_0_25px_rgba(245,139,73,0.2)] group-hover:shadow-[0_0_35px_rgba(245,139,73,0.4)]
-        transition-all duration-500"
+        class="w-16 h-16 flex items-center justify-center mx-auto mb-4 rounded-full bg-[#f58b49]/10 shadow-[0_0_25px_rgba(245,139,73,0.2)] group-hover:shadow-[0_0_35px_rgba(245,139,73,0.4)] transition-all duration-500"
       >
         <i
           class="fas text-3xl"
@@ -68,13 +74,13 @@
   </div>
 
   <!-- CTA -->
-  <div class="text-center mt-16" data-aos="fade-up">
+  <div class="text-center mt-16">
     <a
       routerLink="/contact"
-      class="inline-block bg-[#f58b49] text-black font-semibold px-8 py-3 rounded-full
-             hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_25px_rgba(245,139,73,0.3)]"
+      class="inline-flex items-center gap-2 bg-[#f58b49] text-black font-semibold px-8 py-3 rounded-full hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_25px_rgba(245,139,73,0.3)]"
     >
-      Let’s Work Together <i class="fa-solid fa-arrow-right ml-2"></i>
+      Let's Work Together
+      <i class="fas fa-arrow-right text-sm"></i>
     </a>
   </div>
 </section>

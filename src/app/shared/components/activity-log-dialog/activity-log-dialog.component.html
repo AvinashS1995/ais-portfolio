@@ -1,0 +1,54 @@
+<div
+  *ngIf="show"
+  class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm"
+>
+  <div
+    class="bg-[#1a1a1a] border border-[#f58b49]/30 rounded-2xl w-full max-w-2xl p-6 shadow-xl text-white relative animate-fade-in"
+  >
+    <button
+      (click)="close.emit()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-white"
+    >
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+
+    <h2 class="text-2xl text-[#f58b49] font-bold mb-4 text-center">
+      {{ userName }}'s Activity Logs
+    </h2>
+
+    <div
+      class="max-h-[400px] overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-[#f58b49]/40 scrollbar-track-[#111]"
+    >
+      <div
+        *ngFor="let log of activities"
+        class="flex items-start gap-4 p-3 bg-[#111]/70 border border-[#2b2b2b] rounded-xl hover:bg-[#1f1f1f]/70 transition"
+      >
+        <div
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-[#f58b49]/10 border border-[#f58b49]/40"
+        >
+          <i class="fa-solid {{ getIcon(log.type) }} text-xl"></i>
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between items-center">
+            <h3 class="font-semibold text-[#f58b49]">
+              {{ getTypeLabel(log.type) }}
+            </h3>
+            <span class="text-xs text-gray-400">{{
+              log.timestamp | date: 'short'
+            }}</span>
+          </div>
+          <p class="text-sm text-gray-300 mt-1">{{ log.details }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center mt-5">
+      <button
+        (click)="close.emit()"
+        class="px-5 py-2 bg-[#f58b49] hover:bg-[#f58b49]/90 rounded-lg font-semibold text-white transition-all"
+      >
+        <i class="fa-solid fa-check mr-2"></i>Close
+      </button>
+    </div>
+  </div>
+</div>

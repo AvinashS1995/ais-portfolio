@@ -9,41 +9,48 @@ import { SHARED_MODULES } from '../../../core/common/shared-module';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  roles: string[] = [
-    'Angular Developer',
-    'Frontend Developer',
-    'Full Stack Developer',
-  ];
+  aboutData = {
+    name: 'Avinash Suryawanshi',
+    profileImage: 'assets/profile.jpg', // ✅ Replace with your real image URL or presigned URL
+  };
+
+  roles = ['Angular Developer', 'Frontend Developer', 'Full Stack Developer'];
   displayedText = '';
   currentRoleIndex = 0;
   currentCharIndex = 0;
-  typingSpeed = 120;
-  deletingSpeed = 70;
   isDeleting = false;
 
   ngOnInit(): void {
-    this.startTypingEffect();
+    this.typeEffect();
   }
 
-  startTypingEffect() {
+  typeEffect() {
     const currentRole = this.roles[this.currentRoleIndex];
-    if (this.isDeleting) {
-      this.displayedText = currentRole.substring(0, this.currentCharIndex--);
-    } else {
-      this.displayedText = currentRole.substring(0, this.currentCharIndex++);
-    }
+    const typingSpeed = this.isDeleting ? 70 : 120;
 
-    // Continue typing/deleting
-    if (!this.isDeleting && this.currentCharIndex === currentRole.length) {
-      setTimeout(() => (this.isDeleting = true), 1000);
-    } else if (this.isDeleting && this.currentCharIndex === 0) {
-      this.isDeleting = false;
-      this.currentRoleIndex = (this.currentRoleIndex + 1) % this.roles.length;
-    }
+    setTimeout(() => {
+      if (this.isDeleting) {
+        this.displayedText = currentRole.substring(
+          0,
+          this.currentCharIndex - 1
+        );
+        this.currentCharIndex--;
+      } else {
+        this.displayedText = currentRole.substring(
+          0,
+          this.currentCharIndex + 1
+        );
+        this.currentCharIndex++;
+      }
 
-    setTimeout(
-      () => this.startTypingEffect(),
-      this.isDeleting ? this.deletingSpeed : this.typingSpeed
-    );
+      if (!this.isDeleting && this.currentCharIndex === currentRole.length) {
+        setTimeout(() => (this.isDeleting = true), 1000);
+      } else if (this.isDeleting && this.currentCharIndex === 0) {
+        this.isDeleting = false;
+        this.currentRoleIndex = (this.currentRoleIndex + 1) % this.roles.length;
+      }
+
+      this.typeEffect();
+    }, typingSpeed);
   }
 }

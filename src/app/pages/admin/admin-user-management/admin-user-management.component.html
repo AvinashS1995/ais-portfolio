@@ -1,0 +1,104 @@
+<div class="min-h-screen bg-black text-white py-20 px-4 md:px-8 relative pt-[100px]"> <!-- Gradient Background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none"></div>
+  <div class="relative max-w-7xl mx-auto z-10"> <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 text-center sm:text-left"> <button
+        routerLink="/admin/dashboard" class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] transition"> <i
+          class="fas fa-arrow-left"></i> <span class="hidden sm:inline">Back to Dashboard</span> </button> <button
+        (click)="openDialog()"
+        class="flex items-center justify-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-4 sm:px-5 py-2 rounded-lg shadow-md transition-all w-full sm:w-auto">
+        <i class="fas fa-user-plus"></i> Create Admin </button> </div>
+    <h2 class="text-2xl sm:text-3xl text-[#f58b49] mb-6 font-bold text-center sm:text-left"> Manage Admin Users </h2>
+    <!-- Table Container -->
+    <div
+      class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-2xl shadow-[0_0_30px_rgba(245,139,73,0.15)] overflow-x-auto">
+      <table class="w-full border-collapse text-sm sm:text-base">
+        <thead class="bg-[#1a1a1a]/60 border-b border-[#f58b49]/20 text-[#f58b49]">
+          <tr>
+            <th class="p-3 sm:p-4 text-left">#</th>
+            <th class="p-3 sm:p-4 text-left">Name</th>
+            <th class="p-3 sm:p-4 text-left">Email</th>
+            <th class="p-3 sm:p-4 text-left">Role</th>
+            <th class="p-3 sm:p-4 text-left">Status</th>
+            <th class="p-3 sm:p-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of paginatedUsers; let i = index"
+            class="border-b border-[#2b2b2b] hover:bg-[#1a1a1a]/40 transition-all">
+            <td class="p-3 sm:p-4 text-gray-400"> {{ (page - 1) * pageSize + i + 1 }} </td>
+            <td class="p-3 sm:p-4 font-medium text-gray-200"> {{ user.name }} </td>
+            <td class="p-3 sm:p-4 text-gray-400 truncate max-w-[180px] sm:max-w-none"> {{ user.email }} </td>
+            <td class="p-3 sm:p-4 text-gray-400 capitalize"> {{ user.role }} </td>
+            <td class="p-3 sm:p-4"> <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold"
+                [ngClass]="{ 'bg-green-700/40 text-green-300': user.status === 'active', 'bg-red-700/40 text-red-300': user.status === 'locked' }">
+                {{ user.status }} </span> </td>
+            <td class="p-3 sm:p-4 text-center flex justify-center gap-2 sm:gap-3"> <button (click)="toggleLock(user)"
+                class="p-2 rounded-lg hover:bg-[#f58b49]/20"> <i class="fa-solid"
+                  [ngClass]=" user.status === 'active' ? 'fa-lock text-red-400' : 'fa-unlock text-green-400' "></i>
+              </button> <button (click)="editUser(user)" class="p-2 rounded-lg hover:bg-[#f58b49]/20 text-[#f58b49]"> <i
+                  class="fa-solid fa-pen"></i> </button> <button (click)="viewActivity(user)"
+                class="p-2 rounded-lg hover:bg-blue-600/30 text-blue-400"> <i class="fa-solid fa-chart-line"></i>
+              </button> <button (click)="deleteUser(user.id)" class="p-2 rounded-lg hover:bg-red-600/30 text-red-400">
+                <i class="fa-solid fa-trash"></i> </button> </td>
+          </tr>
+        </tbody>
+      </table> <!-- Pagination -->
+      <div
+        class="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-4 bg-[#0f0f0f]/80 border-t border-[#2b2b2b] gap-2 sm:gap-0">
+        <span class="text-xs sm:text-sm text-gray-400"> Showing {{ (page - 1) * pageSize + 1 }} - {{ Math.min(page *
+          pageSize, admins.length) }} of {{ admins.length }} </span>
+        <div class="flex items-center gap-2"> <button (click)="prevPage()" [disabled]="page === 1"
+            class="px-3 py-1 rounded-lg border border-[#f58b49]/40 text-[#f58b49] hover:bg-[#f58b49]/20 disabled:opacity-40 text-sm">
+            Prev </button> <span class="text-gray-300 text-sm">Page {{ page }}</span> <button (click)="nextPage()"
+            [disabled]="page * pageSize >= admins.length"
+            class="px-3 py-1 rounded-lg border border-[#f58b49]/40 text-[#f58b49] hover:bg-[#f58b49]/20 disabled:opacity-40 text-sm">
+            Next </button> </div>
+      </div>
+    </div>
+  </div> <!-- Dialog -->
+  <div *ngIf="showDialog" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div class="bg-[#1a1a1a] border border-[#f58b49]/30 rounded-2xl w-full max-w-md p-6 shadow-xl">
+      <h2 class="text-2xl text-[#f58b49] font-bold mb-6 text-center"> {{ editingUser ? 'Edit Admin' : 'Create Admin' }}
+      </h2>
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="space-y-4">
+        <div> <label class="block font-semibold mb-1 text-[#f58b49]">Full Name</label> <input type="text"
+            formControlName="name" class="w-full bg-[#111] border border-[#2b2b2b] p-2 rounded-lg text-gray-200" />
+        </div>
+        <div> <label class="block font-semibold mb-1 text-[#f58b49]">Email</label> <input type="email"
+            formControlName="email" class="w-full bg-[#111] border border-[#2b2b2b] p-2 rounded-lg text-gray-200" />
+        </div>
+        <div *ngIf="!editingUser"> <!-- Only show for create -->
+          <label class="block font-semibold mb-1 text-[#f58b49]">Password</label>
+          <input type="password" formControlName="password"
+            class="w-full bg-[#111] border border-[#2b2b2b] p-2 rounded-lg text-gray-200"
+            placeholder="Enter password" />
+          <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+            class="text-red-400 text-xs mt-1">
+            Password must be at least 6 characters
+          </div>
+        </div>
+        <div> <label class="block font-semibold mb-1 text-[#f58b49]">Role</label> <select formControlName="role"
+            class="w-full bg-[#111] border border-[#2b2b2b] p-2 rounded-lg text-gray-200">
+            <option value="Super Admin">Super Admin</option>
+            <option value="Admin">Admin</option>
+          </select> </div>
+        <div class="flex flex-col sm:flex-row gap-3 pt-4"> <button type="submit"
+            class="flex-1 bg-[#f58b49] hover:bg-[#ff9a61] px-4 py-2 rounded-lg font-semibold text-white"> <i
+              class="fa-solid fa-save mr-2"></i> {{ editingUser ? 'Update' : 'Create' }} </button> <button type="button"
+            (click)="closeDialog()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-white"> Cancel
+          </button> </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<app-confirmation-dialog *ngIf="confirmDialog.show" [message]="confirmDialog.message" (confirm)="handleConfirm(true)"
+  (cancel)="handleConfirm(false)"></app-confirmation-dialog>
+
+<!-- Alert Dialog -->
+<app-alert-dialog *ngIf="alertDialog.show" [title]="alertDialog.title" [message]="alertDialog.message"
+  [type]="alertDialog.type" (close)="alertDialog.show = false"></app-alert-dialog>
+
+<app-activity-log-dialog *ngIf="showActivityDialog" [show]="showActivityDialog" [userName]="activityUserName"
+  [activities]="userActivities" (close)="showActivityDialog = false"></app-activity-log-dialog>

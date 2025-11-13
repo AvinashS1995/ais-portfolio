@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+button i {
+  transition: transform 0.2s;
+}
+
+button:hover i {
+  transform: scale(1.1);
+}

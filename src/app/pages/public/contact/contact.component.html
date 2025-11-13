@@ -3,7 +3,7 @@
 >
   <!-- Subtle Animated Gradient Background -->
   <div
-    class="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-black to-[#1a1a1a] animate-pulse-slow"
+    class="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-black to-[#1a1a1a]"
   ></div>
 
   <!-- Ambient Glows -->
@@ -15,15 +15,14 @@
   ></div>
 
   <!-- Header -->
-  <div class="relative text-center mb-20 z-10" data-aos="fade-up">
+  <div class="relative text-center mb-20 z-10">
     <h2
-      class="text-5xl md:text-6xl font-extrabold text-[#f58b49] tracking-wide mb-4
-             drop-shadow-[0_0_25px_rgba(245,139,73,0.5)]"
+      class="text-5xl md:text-6xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_25px_rgba(245,139,73,0.5)]"
     >
-      Let’s Connect
+      Let's Connect
     </h2>
     <p class="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-      Feel free to drop a message or just say hello. I’m always open to new
+      Feel free to drop a message or just say hello. I'm always open to new
       ideas, collaborations, and projects.
     </p>
   </div>
@@ -32,137 +31,193 @@
   <div
     class="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 z-10"
   >
-    <!-- My Location Card -->
+    <!-- 🧭 My Location Card -->
     <div
-      class="group bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
-             border border-[#f58b49]/30 rounded-3xl p-8 shadow-[0_0_40px_rgba(245,139,73,0.15)]
-             backdrop-blur-xl transition-all duration-700 hover:shadow-[0_0_55px_rgba(245,139,73,0.4)] hover:scale-[1.02]"
-      data-aos="fade-right"
+      class="group bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl p-8 shadow-[0_0_40px_rgba(245,139,73,0.15)] backdrop-blur-xl transition-all duration-700 hover:shadow-[0_0_55px_rgba(245,139,73,0.4)] hover:scale-[1.02]"
     >
       <div class="flex items-center gap-3 mb-4">
         <span
           class="p-3 rounded-full bg-[#f58b49]/10 text-[#f58b49] shadow-[0_0_20px_rgba(245,139,73,0.4)]"
         >
-          <i class="fa-solid fa-location-dot text-2xl"></i>
+          <i class="fa-solid fa-map-pin w-6 h-6"></i>
         </span>
-        <h3 class="text-2xl font-bold text-[#f58b49]">My Location</h3>
+        <h3 class="text-2xl text-[#f58b49]">My Location</h3>
       </div>
 
       <p class="text-gray-300 mb-6 leading-relaxed">
-        <strong>Torrent Pharmaceuticals Ltd (Corporate Office)</strong><br />
-        Ahmedabad, Gujarat, India – 380009
+        <strong>{{ contactInfo.location.company }}</strong><br />
+        {{ contactInfo.location.address }}<br />
+        {{ contactInfo.location.city }}, {{ contactInfo.location.country }} –
+        {{ contactInfo.location.postalCode }}
       </p>
+
+      <!-- Contact Details -->
+      <div class="mb-6 space-y-2" *ngIf="contactInfo.email || contactInfo.phone">
+        <p
+          class="text-gray-400 text-sm flex items-center gap-2"
+          *ngIf="contactInfo.email"
+        >
+          <i class="fa-solid fa-envelope text-[#f58b49]"></i>
+          <a
+            [href]="'mailto:' + contactInfo.email"
+            class="hover:text-[#f58b49] transition-colors"
+            >{{ contactInfo.email }}</a
+          >
+        </p>
+        <p
+          class="text-gray-400 text-sm flex items-center gap-2"
+          *ngIf="contactInfo.phone"
+        >
+          <i class="fa-solid fa-phone text-[#f58b49]"></i>
+          <a
+            [href]="'tel:' + contactInfo.phone"
+            class="hover:text-[#f58b49] transition-colors"
+            >{{ contactInfo.phone }}</a
+          >
+        </p>
+      </div>
+
+      <!-- Social Media Links -->
+      <div
+        class="mb-6"
+        *ngIf="contactInfo.socialMedia.linkedin || contactInfo.socialMedia.github || contactInfo.socialMedia.twitter || contactInfo.socialMedia.instagram || contactInfo.socialMedia.facebook"
+      >
+        <p class="text-gray-400 text-sm mb-3">Follow me on:</p>
+        <div class="flex gap-3">
+          <a
+            *ngIf="contactInfo.socialMedia.linkedin"
+            [href]="contactInfo.socialMedia.linkedin"
+            target="_blank"
+            class="social-btn"
+          >
+            <i class="fab fa-linkedin text-[#f58b49] group-hover:text-black"></i>
+          </a>
+
+          <a
+            *ngIf="contactInfo.socialMedia.github"
+            [href]="contactInfo.socialMedia.github"
+            target="_blank"
+            class="social-btn"
+          >
+            <i class="fab fa-github text-[#f58b49] group-hover:text-black"></i>
+          </a>
+
+          <a
+            *ngIf="contactInfo.socialMedia.twitter"
+            [href]="contactInfo.socialMedia.twitter"
+            target="_blank"
+            class="social-btn"
+          >
+            <i class="fab fa-twitter text-[#f58b49] group-hover:text-black"></i>
+          </a>
+
+          <a
+            *ngIf="contactInfo.socialMedia.instagram"
+            [href]="contactInfo.socialMedia.instagram"
+            target="_blank"
+            class="social-btn"
+          >
+            <i class="fab fa-instagram text-[#f58b49] group-hover:text-black"></i>
+          </a>
+
+          <a
+            *ngIf="contactInfo.socialMedia.facebook"
+            [href]="contactInfo.socialMedia.facebook"
+            target="_blank"
+            class="social-btn"
+          >
+            <i class="fab fa-facebook text-[#f58b49] group-hover:text-black"></i>
+          </a>
+        </div>
+      </div>
 
       <!-- Google Map -->
       <div
+        *ngIf="contactInfo.location.mapEmbedUrl"
         class="rounded-2xl overflow-hidden border border-[#2b2b2b] shadow-[0_0_35px_rgba(245,139,73,0.1)] hover:shadow-[0_0_55px_rgba(245,139,73,0.3)] transition-all duration-700"
       >
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.335412989418!2d72.55830817436669!3d23.01055401611227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e84f57b9ed28b%3A0x5a4e6a238c2cb043!2sTorrent%20Pharmaceuticals%20Ltd%20(Corporate%20Office)!5e0!3m2!1sen!2sin!4v1731079900000!5m2!1sen!2sin"
+          [src]="contactInfo.location.mapEmbedUrl"
           width="100%"
           height="280"
-          style="border:0;"
-          allowfullscreen=""
+          style="border: 0"
+          allowfullscreen
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
     </div>
 
-    <!-- Get in Touch Form -->
+    <!-- ✉️ Get in Touch Form -->
     <div
-      class="group bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
-             border border-[#f58b49]/30 rounded-3xl p-8 shadow-[0_0_40px_rgba(245,139,73,0.15)]
-             backdrop-blur-xl transition-all duration-700 hover:shadow-[0_0_55px_rgba(245,139,73,0.4)] hover:scale-[1.02]"
-      data-aos="fade-left"
+      class="group bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl p-8 shadow-[0_0_40px_rgba(245,139,73,0.15)] backdrop-blur-xl transition-all duration-700 hover:shadow-[0_0_55px_rgba(245,139,73,0.4)] hover:scale-[1.02]"
     >
       <div class="flex items-center gap-3 mb-4">
         <span
           class="p-3 rounded-full bg-[#f58b49]/10 text-[#f58b49] shadow-[0_0_20px_rgba(245,139,73,0.4)]"
         >
-          <i class="fa-solid fa-envelope text-2xl"></i>
+          <i class="fa-solid fa-envelope w-6 h-6"></i>
         </span>
-        <h3 class="text-2xl font-bold text-[#f58b49]">Get in Touch</h3>
+        <h3 class="text-2xl text-[#f58b49]">Get in Touch</h3>
       </div>
 
-      <form
-        class="grid grid-cols-1 gap-6"
-        (ngSubmit)="onSubmit(contactForm)"
-        #contactForm="ngForm"
-      >
+      <form class="grid grid-cols-1 gap-6" (ngSubmit)="handleSubmit()">
         <!-- Name -->
         <div>
-          <label class="block text-gray-300 mb-2 font-medium">Name</label>
+          <label class="block text-[#f58b49] mb-2 font-semibold">Name</label>
           <input
-            type="text"
+            [(ngModel)]="formData.name"
             name="name"
-            ngModel
+            type="text"
             required
             placeholder="Your Name"
-            class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-xl px-4 py-3 text-gray-200
-                   focus:outline-none focus:border-[#f58b49] focus:ring-1 focus:ring-[#f58b49]
-                   transition-all duration-300 placeholder-gray-500"
+            class="input-field"
           />
         </div>
 
         <!-- Email -->
         <div>
-          <label class="block text-gray-300 mb-2 font-medium">Email</label>
+          <label class="block text-[#f58b49] mb-2 font-semibold">Email</label>
           <input
-            type="email"
+            [(ngModel)]="formData.email"
             name="email"
-            ngModel
+            type="email"
             required
             placeholder="you@example.com"
-            class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-xl px-4 py-3 text-gray-200
-                   focus:outline-none focus:border-[#f58b49] focus:ring-1 focus:ring-[#f58b49]
-                   transition-all duration-300 placeholder-gray-500"
+            class="input-field"
           />
         </div>
 
         <!-- Subject -->
         <div>
-          <label class="block text-gray-300 mb-2 font-medium">Subject</label>
+          <label class="block text-[#f58b49] mb-2 font-semibold">Subject</label>
           <input
-            type="text"
+            [(ngModel)]="formData.subject"
             name="subject"
-            ngModel
+            type="text"
             required
             placeholder="Enter Subject"
-            class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-xl px-4 py-3 text-gray-200
-                   focus:outline-none focus:border-[#f58b49] focus:ring-1 focus:ring-[#f58b49]
-                   transition-all duration-300 placeholder-gray-500"
+            class="input-field"
           />
         </div>
 
         <!-- Message -->
         <div>
-          <label class="block text-gray-300 mb-2 font-medium">Message</label>
+          <label class="block text-[#f58b49] mb-2 font-semibold">Message</label>
           <textarea
+            [(ngModel)]="formData.message"
             name="message"
-            ngModel
             rows="5"
             required
             placeholder="Write your message here..."
-            class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-xl px-4 py-3 text-gray-200
-                   focus:outline-none focus:border-[#f58b49] focus:ring-1 focus:ring-[#f58b49]
-                   transition-all duration-300 placeholder-gray-500 resize-none"
+            class="input-field resize-none"
           ></textarea>
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit -->
         <div class="text-center mt-4">
-          <button
-            type="submit"
-            [disabled]="!contactForm.valid"
-            class="relative bg-[#f58b49] hover:bg-[#ff9a61] text-white px-10 py-4 rounded-full font-semibold text-lg tracking-wide
-                   shadow-[0_0_25px_rgba(245,139,73,0.5)] hover:shadow-[0_0_45px_rgba(245,139,73,0.8)]
-                   hover:scale-105 transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
-          >
+          <button type="submit" class="submit-btn">
             <span class="relative z-10">Send Message →</span>
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-[#ffb37a] to-[#f58b49] opacity-0 group-hover:opacity-100 blur-lg transition-all duration-700"
-            ></span>
           </button>
         </div>
       </form>

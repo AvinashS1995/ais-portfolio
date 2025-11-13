@@ -5,15 +5,18 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    loadChildren: () =>
-      import('./pages/public/public.routes').then((m) => m.PUBLIC_ROUTES),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./pages/public/public.routes').then((m) => m.PUBLIC_ROUTES),
+      },
+      {
+        path: 'admin',
+        loadChildren: () =>
+          import('./pages/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+      },
+      { path: '**', redirectTo: '' },
+    ],
   },
-
-  // Admin section
-  {
-    path: 'admin',
-    loadChildren: () =>
-      import('./pages/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
-  },
-  { path: '**', redirectTo: '' },
 ];
