@@ -36,6 +36,7 @@ export interface DashboardStat {
 
 export interface GetDashboardPayload {
   role: string;
+  adminId?: String;
 }
 
 export interface SaveDashboardCardsPayload {

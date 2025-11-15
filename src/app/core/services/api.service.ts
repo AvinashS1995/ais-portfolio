@@ -88,10 +88,8 @@ export class ApiService {
     );
   }
 
-  GetDashboardCards(
-    payload: GetDashboardPayload
-  ): Observable<{ data: { cards: DashboardCard[] } }> {
-    return this.http.post<{ data: { cards: DashboardCard[] } }>(
+  GetDashboardCards(payload: GetDashboardPayload): Observable<any> {
+    return this.http.post<any>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_DASHBOARD_CARDS}`,
       payload
     );
@@ -104,10 +102,8 @@ export class ApiService {
     );
   }
 
-  GetDashboardStats(
-    payload: GetDashboardPayload
-  ): Observable<{ data: { stats: DashboardStat[] } }> {
-    return this.http.post<{ data: { stats: DashboardStat[] } }>(
+  GetDashboardStats(payload: GetDashboardPayload): Observable<any> {
+    return this.http.post<any>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_DASHBOARD_STATS}`,
       payload
     );

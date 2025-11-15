@@ -40,14 +40,16 @@ export class AdminDashboardComponent {
   ) {}
 
   ngOnInit(): void {
-    const payload: GetDashboardPayload = {
-      role: this.commonService.userInfo?.role || '',
-    };
-
-    this.loadDashboard(payload);
+    this.loadDashboardStats();
+    this.loadDashboardCards();
   }
 
-  private loadDashboard(payload: GetDashboardPayload): void {
+  private loadDashboardStats(): void {
+    const payload: GetDashboardPayload = {
+      role: this.commonService.userInfo?.role || '',
+      adminId: this.commonService.userInfo?.id || '',
+    };
+
     this.apiService
       .GetDashboardStats(payload)
       .pipe(takeUntil(this.destroy$))
@@ -56,10 +58,17 @@ export class AdminDashboardComponent {
           console.log(res);
           this.stats = res.data?.stats || [];
           console.log(this.stats);
+          this.commonService.showToast(res.message, 'success');
         },
         error: (err) =>
-          this.commonService.showToast(err.error.messages, 'error'),
+          this.commonService.showToast(err.error.message, 'error'),
       });
+  }
+
+  private loadDashboardCards(): void {
+    const payload: GetDashboardPayload = {
+      role: this.commonService.userInfo?.role || '',
+    };
 
     this.apiService
       .GetDashboardCards(payload)
@@ -69,16 +78,10 @@ export class AdminDashboardComponent {
           console.log(res);
           this.cards = res.data?.cards || [];
           console.log(this.cards);
+          this.commonService.showToast(res.message, 'success');
         },
         error: (err) => this.commonService.showToast(err.error.message),
       });
-  }
-
-  refreshDashboard(): void {
-    const payload: GetDashboardPayload = {
-      role: this.commonService.userInfo?.role || '',
-    };
-    this.loadDashboard(payload);
   }
 
   navigate(link: string): void {
