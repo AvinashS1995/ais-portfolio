@@ -50,8 +50,8 @@ export class AdminLoginComponent {
       next: (res) => {
         if (res?.status === 'success') {
           // ✅ Store both access and refresh tokens
-          localStorage.setItem('accessToken', res.tokens.accessToken);
-          localStorage.setItem('refreshToken', res.tokens.refreshToken);
+          sessionStorage.setItem('accessToken', res.tokens.accessToken);
+          sessionStorage.setItem('refreshToken', res.tokens.refreshToken);
 
           // ✅ Store admin info
           // localStorage.setItem('adminInfo', JSON.stringify(res.admin));

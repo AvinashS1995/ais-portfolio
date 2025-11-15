@@ -9,8 +9,8 @@ import { ApiService } from '../../../core/services/api.service';
 import { CommonService } from '../../../core/services/common.service';
 
 interface AdminUser {
-  id: string;
-  name: string;
+  _id: string;
+  fullName: string;
   email: string;
   role: string;
   status: 'active' | 'locked';
@@ -91,7 +91,7 @@ export class AdminUserManagementComponent {
       .pipe()
       .subscribe((res) => {
         this.admins = res.data.admins;
-        this.total = res.data.pagination.total;
+        this.total = res.data?.pagination?.total;
         this.paginatedUsers = this.admins;
       });
   }
@@ -113,7 +113,7 @@ export class AdminUserManagementComponent {
   openDialog(user?: AdminUser) {
     this.editingUser = user || null;
     this.userForm.reset({
-      name: user?.name || '',
+      name: user?.fullName || '',
       email: user?.email || '',
       role: user?.role || 'admin',
     });
@@ -142,7 +142,7 @@ export class AdminUserManagementComponent {
       this.alertDialog = {
         show: true,
         title: 'Created!',
-        message: 'Admin created successfully.',
+        message: res.message,
         type: 'success',
       };
       this.fetchAdmins();
@@ -169,7 +169,7 @@ export class AdminUserManagementComponent {
       this.alertDialog = {
         show: true,
         title: 'Updated!',
-        message: 'Admin updated successfully.',
+        message: res.message,
         type: 'success',
       };
       this.fetchAdmins();
@@ -180,7 +180,7 @@ export class AdminUserManagementComponent {
   toggleLock(user: AdminUser) {
     const newStatus = user.status === 'active' ? 'locked' : 'active';
     const payload = {
-      id: '',
+      id: user._id || '',
     };
     this.apiService
       .toggleLockUnlockAdmin(payload)
@@ -191,7 +191,7 @@ export class AdminUserManagementComponent {
         this.alertDialog = {
           show: true,
           title: newStatus === 'active' ? 'Unlocked!' : 'Locked!',
-          message: `Admin ${user.name} is now ${newStatus}.`,
+          message: `Admin ${user.fullName} is now ${newStatus}.`,
           type: newStatus === 'active' ? 'success' : 'error',
         };
       });
@@ -200,7 +200,11 @@ export class AdminUserManagementComponent {
   deleteUser(id: string) {
     const user = this.admins.find((u: any) => u._id === id);
     if (!user) return;
-    this.confirmDialog = { show: true, message: `Delete ${user.name}?`, id };
+    this.confirmDialog = {
+      show: true,
+      message: `Delete ${user.fullName}?`,
+      id,
+    };
   }
 
   handleConfirm(result: boolean) {
@@ -212,20 +216,20 @@ export class AdminUserManagementComponent {
         .DeleteAdmin(payload)
         .pipe()
         .subscribe({
-          next: () => {
+          next: (res) => {
             this.alertDialog = {
               show: true,
               title: 'Deleted!',
-              message: 'Admin deleted successfully.',
+              message: res.message,
               type: 'success',
             };
             this.fetchAdmins();
           },
-          error: () => {
+          error: (err) => {
             this.alertDialog = {
               show: true,
               title: 'Error!',
-              message: 'Failed to delete admin.',
+              message: err.error.message,
               type: 'error',
             };
           },
@@ -235,9 +239,9 @@ export class AdminUserManagementComponent {
   }
 
   viewActivity(user: AdminUser) {
-    this.activityUserName = user.name;
+    this.activityUserName = user.fullName;
     const payload = {
-      id: '',
+      id: user._id || '',
     };
     this.apiService
       .GetAdminActivity(payload)

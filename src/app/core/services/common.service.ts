@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
+  id?: string;
   role?: string;
   email?: string;
   name?: string;
@@ -24,7 +25,7 @@ export class CommonService {
   }
 
   loadUserFromToken(): void {
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (token) {
       try {
         const decoded: DecodedToken = jwtDecode(token);
@@ -48,7 +49,7 @@ export class CommonService {
 
   // ✅ Checks whether tokens exist
   private hasToken(): boolean {
-    return !!localStorage.getItem('accessToken');
+    return !!sessionStorage.getItem('accessToken');
   }
 
   // ✅ Call this on login
@@ -58,8 +59,8 @@ export class CommonService {
 
   // ✅ Call this on logout
   clearSession(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
     this.isAdminSubject.next(false);
   }
 

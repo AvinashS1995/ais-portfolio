@@ -7,9 +7,15 @@ import { AdminLockUnlock, LoginAdmin, SaveNewAdmin } from '../interfaces/auth';
 import {
   AdminActivity,
   AdminUserList,
+  DashboardCard,
+  DashboardStat,
   DeleteAdmin,
+  GetDashboardPayload,
+  SaveDashboardCardsPayload,
+  SaveDashboardStatsPayload,
   UpdateAdmin,
 } from '../interfaces/admin';
+import { SavePortfolioAboutPayload } from '../interfaces/about';
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +84,136 @@ export class ApiService {
   GetAdminActivity(payload: AdminActivity): Observable<any> {
     return this.http.post<AdminActivity>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_ACTIVITY}`,
+      payload
+    );
+  }
+
+  GetDashboardCards(
+    payload: GetDashboardPayload
+  ): Observable<{ data: { cards: DashboardCard[] } }> {
+    return this.http.post<{ data: { cards: DashboardCard[] } }>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_DASHBOARD_CARDS}`,
+      payload
+    );
+  }
+
+  SaveDashboardCards(payload: SaveDashboardCardsPayload): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_ADMIN_DASHBOARD_CARDS}`,
+      payload
+    );
+  }
+
+  GetDashboardStats(
+    payload: GetDashboardPayload
+  ): Observable<{ data: { stats: DashboardStat[] } }> {
+    return this.http.post<{ data: { stats: DashboardStat[] } }>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_DASHBOARD_STATS}`,
+      payload
+    );
+  }
+
+  SaveDashboardStats(payload: SaveDashboardStatsPayload): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_ADMIN_DASHBOARD_STATS}`,
+      payload
+    );
+  }
+
+  SavePortfolioAbout(payload: SavePortfolioAboutPayload): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_ABOUT_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioAbout(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_ABOUT_SECTION}`,
+      payload
+    );
+  }
+
+  SavePortfolioEducations(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_EDUCATIONS_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioEducations(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_EDUCATIONS_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioEducations(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_EDUCATIONS_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioEducations(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_EDUCATIONS_SECTION}`,
+      payload
+    );
+  }
+
+  SavePortfolioExperiences(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_EXPERIENCES_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioExperiences(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_EXPERIENCES_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioExperiences(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_EXPERIENCES_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioExperiences(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_EXPERIENCES_SECTION}`,
+      payload
+    );
+  }
+
+  SavePortfolioServices(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_SERVICE_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioServices(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_SERVICES_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioServices(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_SERVICE_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioServices(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_SERVICE_SECTION}`,
       payload
     );
   }

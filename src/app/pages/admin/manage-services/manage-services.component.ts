@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonService } from '../../../core/services/common.service';
+import { ApiService } from '../../../core/services/api.service';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 interface Service {
-  id: string;
+  _id: string;
   title: string;
   icon: string;
   color: string;
@@ -13,33 +16,30 @@ interface Service {
 @Component({
   selector: 'app-manage-services',
   standalone: true,
-  imports: [SHARED_MODULES],
+  imports: [SHARED_MODULES, ConfirmationDialogComponent],
   templateUrl: './manage-services.component.html',
   styleUrl: './manage-services.component.css',
 })
 export class ManageServicesComponent {
-  services: Service[] = [
-    {
-      id: '1',
-      title: 'Web Development',
-      icon: 'fa-code',
-      color: '#f58b49',
-      description: 'Building responsive web apps using Angular and Node.js.',
-    },
-    {
-      id: '2',
-      title: 'UI/UX Design',
-      icon: 'fa-paint-brush',
-      color: '#f58b49',
-      description: 'Designing modern, user-friendly interfaces.',
-    },
-  ];
+  services: Service[] = [];
 
   isDialogOpen = false;
   editingService: Service | null = null;
-  serviceForm: FormGroup;
+  serviceForm!: FormGroup;
+  confirmDialog = { show: false, message: '', serviceId: '' };
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    private apiService: ApiService
+  ) {}
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.loadServices();
+  }
+
+  initializeForm() {
     this.serviceForm = this.fb.group({
       title: ['', Validators.required],
       icon: ['fa-code', Validators.required],
@@ -66,29 +66,96 @@ export class ManageServicesComponent {
     this.isDialogOpen = false;
   }
 
-  saveService() {
-    if (this.serviceForm.invalid) return;
-
-    const formValue = this.serviceForm.value;
-
-    if (this.editingService) {
-      // Update
-      const index = this.services.findIndex(
-        (s) => s.id === this.editingService!.id
-      );
-      if (index !== -1)
-        this.services[index] = { ...this.editingService, ...formValue };
-    } else {
-      // Add new
-      this.services.push({ id: Date.now().toString(), ...formValue });
-    }
-
-    this.closeDialog();
+  loadServices() {
+    const payload = { id: this.commonService.userInfo?.id };
+    this.apiService.GetPortfolioServices(payload).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.services = res.data.services || [];
+        }
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
   }
 
-  deleteService(id: string) {
-    if (confirm('Are you sure you want to delete this service?')) {
-      this.services = this.services.filter((s) => s.id !== id);
+  saveServices() {
+    if (this.serviceForm.invalid) return;
+
+    const { title, icon, color, description } = this.serviceForm.getRawValue();
+    const payload = {
+      adminId: this.commonService.userInfo?.id,
+      title,
+      icon,
+      color,
+      description,
+    };
+
+    this.apiService.SavePortfolioServices(payload).subscribe({
+      next: () => {
+        this.loadServices();
+        this.commonService.showToast(
+          'Education added successfully!',
+          'success'
+        );
+        this.closeDialog();
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
+  }
+
+  updateServices() {
+    if (!this.editingService || this.serviceForm.invalid) return;
+
+    const { title, icon, color, description } = this.serviceForm.getRawValue();
+    const payload = {
+      adminId: this.commonService.userInfo?.id,
+      serviceId: this.editingService._id,
+      title,
+      icon,
+      color,
+      description,
+    };
+
+    this.apiService.UpdatePortfolioServices(payload).subscribe({
+      next: (res) => {
+        this.loadServices();
+        this.commonService.showToast(res.message, 'success');
+        this.closeDialog();
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
+  }
+
+  deleteService(serviceId: string) {
+    const service = this.services.find((e) => e._id === serviceId);
+    if (!service) return;
+
+    console.log(service);
+
+    this.confirmDialog = {
+      show: true,
+      message: `Are you sure you want to delete ${service.title}?`,
+      serviceId,
+    };
+  }
+
+  handleConfirm(result: boolean) {
+    debugger;
+    if (result && this.confirmDialog.serviceId) {
+      const payload = {
+        adminId: this.commonService.userInfo?.id,
+        serviceId: this.confirmDialog.serviceId,
+      };
+
+      this.apiService.DeletePortfolioServices(payload).subscribe({
+        next: (res) => {
+          this.loadServices();
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) =>
+          this.commonService.showToast(err.error.message, 'error'),
+      });
     }
+    this.confirmDialog.show = false;
   }
 }

@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../core/services/common.service';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
+import { Subject, takeUntil } from 'rxjs';
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-manage-about',
@@ -14,50 +16,116 @@ import { SHARED_MODULES } from '../../../core/common/shared-module';
 export class ManageAboutComponent {
   aboutForm!: FormGroup;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private cs: CommonService
+    private cs: CommonService,
+    private as: ApiService
   ) {}
 
   ngOnInit(): void {
-    // Sample default data (replace with API data if available)
-    const aboutData = {
-      name: 'John Doe',
-      title: 'Frontend Developer',
-      bio: 'I love building scalable and creative web applications.',
-      bio2: 'Passionate about design systems and user experience.',
-      profileImage: 'https://via.placeholder.com/150',
-      resumeUrl: 'https://example.com/resume.pdf',
-      stats: { experience: 4, clients: 12, recruiters: 8 },
+    this.initializeForm();
+    this.loadPortfolioAbout();
+  }
+
+  initializeForm() {
+    this.aboutForm = this.fb.group({
+      name: [],
+      title: [],
+      bio: [],
+      bio2: [],
+      profileImage: [],
+      resumeUrl: [],
+      stats: this.fb.group({
+        experience: [],
+        clients: [],
+        recruiters: [],
+      }),
+    });
+  }
+
+  loadPortfolioAbout() {
+    const payload = {
+      id: this.cs.userInfo?.id,
     };
 
-    this.aboutForm = this.fb.group({
-      name: [aboutData.name],
-      title: [aboutData.title],
-      bio: [aboutData.bio],
-      bio2: [aboutData.bio2],
-      profileImage: [aboutData.profileImage],
-      resumeUrl: [aboutData.resumeUrl],
-      stats: this.fb.group({
-        experience: [aboutData.stats.experience],
-        clients: [aboutData.stats.clients],
-        recruiters: [aboutData.stats.recruiters],
-      }),
+    this.as
+      .GetPortfolioAbout(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          if (res?.status === 'success' && res.data) {
+            this.setFormValue(res.data.about || []);
+
+            this.cs.showToast(res.message, 'success');
+          }
+        },
+        error: (err) => this.cs.showToast(err.error.message, 'error'),
+      });
+  }
+
+  setFormValue(portfolioAbout: any) {
+    this.aboutForm.patchValue({
+      name: portfolioAbout.name,
+      title: portfolioAbout.title,
+      bio: portfolioAbout.bio,
+      bio2: portfolioAbout.bio2,
+      profileImage: portfolioAbout.profileImage,
+      resumeUrl: portfolioAbout.resumeUrl,
+      stats: {
+        experience: portfolioAbout.stats?.experience || 0,
+        clients: portfolioAbout.stats?.clients || 0,
+        recruiters: portfolioAbout.stats?.recruiters || 0,
+      },
     });
   }
 
   onSubmit(): void {
     if (this.aboutForm.valid) {
-      const formData = this.aboutForm.value;
-      console.log('Updated About Data:', formData);
+      const aboutSection = this.aboutForm.getRawValue();
 
-      this.cs.showToast('About section updated successfully!', 'success');
-      this.router.navigate(['/admin/dashboard']);
+      const { name, title, bio, bio2, profileImage, resumeUrl, stats } =
+        aboutSection;
+
+      console.log('About Data:', aboutSection);
+
+      const payload = {
+        id: this.cs.userInfo?.id,
+        name: name,
+        title: title,
+        bio: bio,
+        bio2: bio2,
+        profileImage: profileImage,
+        resumeUrl: resumeUrl,
+        stats: {
+          experience: Number(stats.experience),
+          clients: Number(stats.clients),
+          recruiters: Number(stats.recruiters),
+        },
+      };
+
+      this.as
+        .SavePortfolioAbout(payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            this.cs.showToast(res.message, 'success');
+            this.router.navigate(['/admin/dashboard']);
+          },
+          error: (err) => this.cs.showToast(err.error.messages, 'error'),
+        });
     }
   }
 
   goBack(): void {
     this.router.navigate(['/admin/dashboard']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

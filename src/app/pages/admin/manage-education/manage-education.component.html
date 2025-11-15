@@ -4,6 +4,7 @@
   ></div>
 
   <div class="relative max-w-6xl mx-auto z-10">
+    <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <button
         routerLink="/admin/dashboard"
@@ -23,6 +24,7 @@
 
     <h2 class="text-3xl text-[#f58b49] mb-8">Manage Education</h2>
 
+    <!-- Education List -->
     <div class="space-y-6">
       <div
         *ngFor="let edu of education"
@@ -42,7 +44,7 @@
               <i class="fa-solid fa-pen text-[#f58b49]"></i>
             </button>
             <button
-              (click)="deleteEducation(edu.id)"
+              (click)="deleteEducation(edu._id)"
               class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
             >
               <i class="fa-solid fa-trash text-red-400"></i>
@@ -52,7 +54,7 @@
       </div>
     </div>
 
-    <!-- Dialog -->
+    <!-- Add/Edit Dialog -->
     <div
       *ngIf="isDialogOpen"
       class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
@@ -64,7 +66,7 @@
           {{ editingEdu ? 'Edit Education' : 'Add New Education' }}
         </h3>
 
-        <form [formGroup]="eduForm" (ngSubmit)="saveEducation()" class="space-y-4">
+        <form [formGroup]="eduForm" class="space-y-4">
           <div>
             <label class="block mb-1 font-bold text-[#f58b49]">Degree</label>
             <input
@@ -95,7 +97,8 @@
 
           <div class="flex gap-3 mt-4">
             <button
-              type="submit"
+              type="button"
+              (click)="editingEdu ? updateEducation() : saveEducation()"
               class="flex-1 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-4 py-2 rounded-lg transition-colors"
             >
               <i class="fa-solid fa-floppy-disk mr-2"></i>
@@ -112,5 +115,13 @@
         </form>
       </div>
     </div>
+
+    <!-- Confirmation Dialog -->
+    <app-confirmation-dialog
+      *ngIf="confirmDialog.show"
+      [message]="confirmDialog.message"
+      (confirm)="handleConfirm(true)"
+      (cancel)="handleConfirm(false)"
+    ></app-confirmation-dialog>
   </div>
 </div>

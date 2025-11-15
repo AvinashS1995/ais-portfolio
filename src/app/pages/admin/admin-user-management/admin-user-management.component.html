@@ -26,7 +26,7 @@
           <tr *ngFor="let user of paginatedUsers; let i = index"
             class="border-b border-[#2b2b2b] hover:bg-[#1a1a1a]/40 transition-all">
             <td class="p-3 sm:p-4 text-gray-400"> {{ (page - 1) * pageSize + i + 1 }} </td>
-            <td class="p-3 sm:p-4 font-medium text-gray-200"> {{ user.name }} </td>
+            <td class="p-3 sm:p-4 font-medium text-gray-200"> {{ user.fullName }} </td>
             <td class="p-3 sm:p-4 text-gray-400 truncate max-w-[180px] sm:max-w-none"> {{ user.email }} </td>
             <td class="p-3 sm:p-4 text-gray-400 capitalize"> {{ user.role }} </td>
             <td class="p-3 sm:p-4"> <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold"
@@ -38,7 +38,7 @@
               </button> <button (click)="editUser(user)" class="p-2 rounded-lg hover:bg-[#f58b49]/20 text-[#f58b49]"> <i
                   class="fa-solid fa-pen"></i> </button> <button (click)="viewActivity(user)"
                 class="p-2 rounded-lg hover:bg-blue-600/30 text-blue-400"> <i class="fa-solid fa-chart-line"></i>
-              </button> <button (click)="deleteUser(user.id)" class="p-2 rounded-lg hover:bg-red-600/30 text-red-400">
+              </button> <button (click)="deleteUser(user._id)" class="p-2 rounded-lg hover:bg-red-600/30 text-red-400">
                 <i class="fa-solid fa-trash"></i> </button> </td>
           </tr>
         </tbody>

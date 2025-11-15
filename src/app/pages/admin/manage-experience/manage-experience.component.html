@@ -49,7 +49,7 @@
               <i class="fas fa-edit text-[#f58b49]"></i>
             </button>
             <button
-              (click)="deleteExperience(exp.id)"
+              (click)="deleteExperience(exp._id)"
               class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
             >
               <i class="fas fa-trash text-red-400"></i>
@@ -72,7 +72,7 @@
         {{ editingExperience ? 'Edit Experience' : 'Add New Experience' }}
       </h2>
 
-      <form [formGroup]="experienceForm" (ngSubmit)="saveExperience()" class="space-y-4">
+      <form [formGroup]="experienceForm" class="space-y-4">
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Company</label>
           <input
@@ -121,7 +121,7 @@
 
         <div class="flex gap-3 pt-2">
           <button
-            type="submit"
+            type="submit" (click)="editingExperience ? updateExperience() : saveExperience()"
             class="flex-1 flex items-center justify-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg font-semibold"
           >
             <i class="fas fa-save"></i> {{ editingExperience ? 'Update' : 'Add' }}
@@ -138,3 +138,11 @@
     </div>
   </div>
 </div>
+
+ <!-- Confirmation Dialog -->
+    <app-confirmation-dialog
+      *ngIf="confirmDialog.show"
+      [message]="confirmDialog.message"
+      (confirm)="handleConfirm(true)"
+      (cancel)="handleConfirm(false)"
+    ></app-confirmation-dialog>

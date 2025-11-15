@@ -10,8 +10,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const apiService = inject(ApiService);
   const commonService = inject(CommonService);
 
-  const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
+  const accessToken = sessionStorage.getItem('accessToken');
+  const refreshToken = sessionStorage.getItem('refreshToken');
 
   // ✅ Attach access token if available
   const clonedRequest = accessToken
@@ -27,7 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return apiService.refreshAccessToken(refreshToken).pipe(
           switchMap((res: any) => {
             const newAccessToken = res.accessToken;
-            localStorage.setItem('accessToken', newAccessToken);
+            sessionStorage.setItem('accessToken', newAccessToken);
 
             // 🔁 Retry original request
             const retryReq = req.clone({
@@ -43,7 +43,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               'Session expired, please login again',
               'error'
             );
-            localStorage.clear();
+            sessionStorage.clear();
             router.navigate(['/home']);
             return throwError(() => refreshErr);
           })

@@ -20,6 +20,7 @@ export class NavbarComponent {
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
     { label: 'Services', path: '/service' },
+    { label: 'Experience', path: '/experience' },
     { label: 'Projects', path: '/project' },
     { label: 'Contact', path: '/contact' },
   ];
