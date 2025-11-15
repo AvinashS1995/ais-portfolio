@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../core/services/common.service';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
@@ -13,119 +13,110 @@ import { ApiService } from '../../../core/services/api.service';
   templateUrl: './manage-about.component.html',
   styleUrl: './manage-about.component.css',
 })
-export class ManageAboutComponent {
+export class ManageAboutComponent implements OnInit {
   aboutForm!: FormGroup;
+  showDialog = false;
+  editingAbout: any = null;
 
-  private destroy$ = new Subject<void>();
+  aboutData: any = null; // loaded API data
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private cs: CommonService,
-    private as: ApiService
+    private apiService: ApiService,
+    private commonService: CommonService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.initializeForm();
-    this.loadPortfolioAbout();
+    this.loadAbout();
   }
 
   initializeForm() {
     this.aboutForm = this.fb.group({
-      name: [],
-      title: [],
-      bio: [],
-      bio2: [],
-      profileImage: [],
-      resumeUrl: [],
+      name: ['', Validators.required],
+      title: ['', Validators.required],
+      bio: ['', Validators.required],
+      bio2: [''],
+      profileImage: [''],
+      resumeUrl: [''],
+
       stats: this.fb.group({
-        experience: [],
-        clients: [],
-        recruiters: [],
+        experience: [0],
+        clients: [0],
+        recruiters: [0],
       }),
     });
   }
 
-  loadPortfolioAbout() {
-    const payload = {
-      id: this.cs.userInfo?.id,
-    };
-
-    this.as
-      .GetPortfolioAbout(payload)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          if (res?.status === 'success' && res.data) {
-            this.setFormValue(res.data.about || []);
-
-            this.cs.showToast(res.message, 'success');
-          }
+  openDialog(about?: any) {
+    if (about) {
+      this.editingAbout = about;
+      this.aboutForm.patchValue({
+        ...about,
+        stats: {
+          experience: about.stats?.experience || 0,
+          clients: about.stats?.clients || 0,
+          recruiters: about.stats?.recruiters || 0,
         },
-        error: (err) => this.cs.showToast(err.error.message, 'error'),
       });
+    } else {
+      this.editingAbout = null;
+      this.aboutForm.reset();
+    }
+
+    this.showDialog = true;
   }
 
-  setFormValue(portfolioAbout: any) {
-    this.aboutForm.patchValue({
-      name: portfolioAbout.name,
-      title: portfolioAbout.title,
-      bio: portfolioAbout.bio,
-      bio2: portfolioAbout.bio2,
-      profileImage: portfolioAbout.profileImage,
-      resumeUrl: portfolioAbout.resumeUrl,
-      stats: {
-        experience: portfolioAbout.stats?.experience || 0,
-        clients: portfolioAbout.stats?.clients || 0,
-        recruiters: portfolioAbout.stats?.recruiters || 0,
+  closeDialog() {
+    this.showDialog = false;
+  }
+
+  loadAbout() {
+    const payload = { id: this.commonService.userInfo?.id };
+    this.apiService.GetPortfolioAbout(payload).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.aboutData = res.data.about || null;
+        }
       },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
     });
   }
 
-  onSubmit(): void {
-    if (this.aboutForm.valid) {
-      const aboutSection = this.aboutForm.getRawValue();
+  saveAbout() {
+    if (this.aboutForm.invalid) return;
 
-      const { name, title, bio, bio2, profileImage, resumeUrl, stats } =
-        aboutSection;
+    const payload = {
+      adminId: this.commonService.userInfo?.id,
+      ...this.aboutForm.value,
+    };
 
-      console.log('About Data:', aboutSection);
-
-      const payload = {
-        id: this.cs.userInfo?.id,
-        name: name,
-        title: title,
-        bio: bio,
-        bio2: bio2,
-        profileImage: profileImage,
-        resumeUrl: resumeUrl,
-        stats: {
-          experience: Number(stats.experience),
-          clients: Number(stats.clients),
-          recruiters: Number(stats.recruiters),
-        },
-      };
-
-      this.as
-        .SavePortfolioAbout(payload)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res) => {
-            console.log(res);
-            this.cs.showToast(res.message, 'success');
-            this.router.navigate(['/admin/dashboard']);
-          },
-          error: (err) => this.cs.showToast(err.error.messages, 'error'),
-        });
-    }
+    this.apiService.SavePortfolioAbout(payload).subscribe({
+      next: () => {
+        this.loadAbout();
+        this.commonService.showToast('About section added!', 'success');
+        this.closeDialog();
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
   }
 
-  goBack(): void {
-    this.router.navigate(['/admin/dashboard']);
-  }
+  updateAbout() {
+    if (!this.editingAbout || this.aboutForm.invalid) return;
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // const payload = {
+    //   adminId: this.commonService.userInfo?.id,
+    //   aboutId: this.editingAbout._id,
+    //   ...this.aboutForm.value,
+    // };
+
+    // this.apiService.UpdatePortfolioAbout(payload).subscribe({
+    //   next: (res) => {
+    //     this.loadAbout();
+    //     this.commonService.showToast(res.message, 'success');
+    //     this.closeDialog();
+    //   },
+    //   error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    // });
   }
 }

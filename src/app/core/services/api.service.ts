@@ -217,4 +217,60 @@ export class ApiService {
       payload
     );
   }
+
+  SavePortfolioProjects(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_PROJECTS_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioProjects(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_PROJECTS_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioProjects(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_PROJECTS_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioProjects(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_PROJECTS_SECTION}`,
+      payload
+    );
+  }
+
+  SavePortfolioContactInfo(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_CONTACT_INFO_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioContactInfo(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_CONTACT_INFO_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioContactInfo(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_CONTACT_INFO_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioContactInfo(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_CONTACT_INFO_SECTION}`,
+      payload
+    );
+  }
 }

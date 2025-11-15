@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from '../../../core/services/common.service';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
+import { ApiService } from '../../../core/services/api.service';
 
 export interface Project {
-  id: string;
+  _id: string;
   title: string;
   category: string;
   role: string;
@@ -27,15 +28,18 @@ export class ManageProjectsComponent {
   projectForm!: FormGroup;
   editingProject: Project | null = null;
   isDialogOpen = false;
+  confirmDialog = { show: false, message: '', projectId: '' };
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private cs: CommonService
+    private commonService: CommonService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.loadProjects();
   }
 
   initForm() {
@@ -65,32 +69,101 @@ export class ManageProjectsComponent {
     this.isDialogOpen = false;
   }
 
-  saveProject() {
-    if (this.projectForm.invalid) return;
-    const formData = this.projectForm.value;
-
-    if (this.editingProject) {
-      const index = this.projects.findIndex(
-        (p) => p.id === this.editingProject?.id
-      );
-      this.projects[index] = { ...this.editingProject, ...formData };
-      this.cs.showToast('Project updated successfully!', 'success');
-    } else {
-      const newProject: Project = {
-        id: Math.random().toString(36).substring(2, 9),
-        ...formData,
-      };
-      this.projects.push(newProject);
-      this.cs.showToast('Project added successfully!', 'success');
-    }
-
-    this.isDialogOpen = false;
+  loadProjects() {
+    const payload = { id: this.commonService.userInfo?.id };
+    this.apiService.GetPortfolioProjects(payload).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.projects = res.data.projects || [];
+        }
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
   }
 
-  deleteProject(id: string) {
-    if (confirm('Are you sure you want to delete this project?')) {
-      this.projects = this.projects.filter((p) => p.id !== id);
-      this.cs.showToast('Project deleted successfully!', 'success');
+  saveProject() {
+    if (this.projectForm.invalid) return;
+
+    const { title, category, role, image, description, codeLink, previewLink } =
+      this.projectForm.getRawValue();
+    const payload = {
+      adminId: this.commonService.userInfo?.id,
+      title,
+      category,
+      role,
+      image,
+      description,
+      codeLink,
+      previewLink,
+    };
+
+    this.apiService.SavePortfolioProjects(payload).subscribe({
+      next: (res) => {
+        this.loadProjects();
+        this.commonService.showToast(res.message, 'success');
+        this.closeDialog();
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
+  }
+
+  updateProject() {
+    if (!this.editingProject || this.projectForm.invalid) return;
+
+    const { title, category, role, image, description, codeLink, previewLink } =
+      this.projectForm.getRawValue();
+    const payload = {
+      adminId: this.commonService.userInfo?.id,
+      serviceId: this.editingProject._id,
+      title,
+      category,
+      role,
+      image,
+      description,
+      codeLink,
+      previewLink,
+    };
+
+    this.apiService.UpdatePortfolioServices(payload).subscribe({
+      next: (res) => {
+        this.loadProjects();
+        this.commonService.showToast(res.message, 'success');
+        this.closeDialog();
+      },
+      error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    });
+  }
+
+  deleteProject(projectId: string) {
+    const project = this.projects.find((e) => e._id === projectId);
+    if (!project) return;
+
+    console.log(project);
+
+    this.confirmDialog = {
+      show: true,
+      message: `Are you sure you want to delete ${project.title}?`,
+      projectId,
+    };
+  }
+
+  handleConfirm(result: boolean) {
+    debugger;
+    if (result && this.confirmDialog.projectId) {
+      const payload = {
+        adminId: this.commonService.userInfo?.id,
+        projectId: this.confirmDialog.projectId,
+      };
+
+      this.apiService.DeletePortfolioServices(payload).subscribe({
+        next: (res) => {
+          this.loadProjects();
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) =>
+          this.commonService.showToast(err.error.message, 'error'),
+      });
     }
+    this.confirmDialog.show = false;
   }
 }

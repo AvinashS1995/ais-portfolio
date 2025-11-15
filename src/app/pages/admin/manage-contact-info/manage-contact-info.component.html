@@ -1,151 +1,238 @@
 <div class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative">
+  <!-- Overlay -->
   <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none"></div>
 
-  <div class="relative max-w-4xl mx-auto z-10">
-    <!-- Back Button -->
-    <button
-      (click)="router.navigate(['/admin/dashboard'])"
-      class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] mb-8 transition-colors"
-    >
-      <i class="fa-solid fa-arrow-left"></i>
-      Back to Dashboard
-    </button>
+  <div class="relative max-w-6xl mx-auto z-10">
 
+    <div class="flex items-center justify-between mb-8">
+      <button
+        routerLink="/admin/dashboard"
+        class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] transition-colors"
+      >
+        <i class="fas fa-arrow-left w-5 h-5"></i>
+        Back to Dashboard
+      </button>
+
+      <button
+        (click)="openDialog()"
+        class="flex items-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg shadow transition-all"
+      >
+        <i class="fas fa-plus"></i> Add Contact
+      </button>
+    </div>
+
+    <h2 class="text-3xl text-[#f58b49] mb-8">Contact Information</h2>
+
+    <!-- No contacts -->
+    <div *ngIf="contactCards.length === 0" class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
+                border border-[#f58b49]/30 rounded-3xl p-12 text-center
+                shadow-[0_0_40px_rgba(245,139,73,0.15)]">
+      <i class="fa-solid fa-address-book text-gray-600 text-5xl mb-4"></i>
+      <p class="text-gray-400">No contacts yet</p>
+    </div>
+
+    <!-- Contact Cards -->
+    <div *ngIf="contactCards.length > 0" class="space-y-6">
+      <div *ngFor="let contact of contactCards"
+  class="relative bg-gradient-to-br from-[#1a1a1a]/80 via-[#0f0f0f]/90 to-black/90
+         border border-[#f58b49]/20 backdrop-blur-xl rounded-3xl
+         p-6 transition-all duration-300 hover:shadow-[0_0_55px_rgba(245,139,73,0.35)]
+         hover:-translate-y-1">
+
+  <!-- Header Row -->
+  <div class="flex justify-between items-start mb-5">
+    
+    <div class="flex flex-col gap-1">
+      <h3 class="text-2xl font-semibold text-[#f58b49] tracking-wide">
+        {{ contact.location.company }}
+      </h3>
+
+      <p class="text-gray-400 text-sm">
+        <i class="fa-solid fa-envelope mr-2 text-[#f58b49]"></i>
+        {{ contact.email }}
+      </p>
+
+      <p class="text-gray-400 text-sm">
+        <i class="fa-solid fa-phone mr-2 text-[#f58b49]"></i>
+        {{ contact.phone }}
+      </p>
+
+      <p class="text-gray-400 text-sm leading-relaxed">
+        <i class="fa-solid fa-location-dot mr-2 text-[#f58b49]"></i>
+        {{ contact.location.address }},
+        {{ contact.location.city }},
+        {{ contact.location.country }} -
+        {{ contact.location.postalCode }}
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-3">
+      <button (click)="openDialog(contact)"
+        class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition">
+        <i class="fas fa-edit text-[#f58b49] text-lg"></i>
+      </button>
+
+      <button (click)="deleteContactInfo(contact._id)"
+        class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition">
+        <i class="fa-solid fa-trash text-red-400 text-lg"></i>
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- Google Map -->
+  <div *ngIf="contact.location.mapEmbedUrl" class="mt-4">
+    <iframe
+      [src]="contact.location.mapEmbedUrl | safeUrl"
+      class="w-full h-48 rounded-xl border border-[#f58b49]/20 shadow-inner shadow-black/50">
+    </iframe>
+  </div>
+
+
+  <!-- Social Icons -->
+  <div class="flex gap-5 mt-6">
+    <ng-container *ngFor="let key of socialPlatforms">
+      <a *ngIf="contact.socialMedia[key]"
+         [href]="contact.socialMedia[key]"
+         target="_blank"
+         class="text-gray-400 hover:text-[#f58b49] transition-all text-3xl hover:scale-110">
+        <i [class]="socialIcons[key]"></i>
+      </a>
+    </ng-container>
+  </div>
+
+  <!-- Footer Timestamp -->
+  <div class="text-gray-500 text-xs mt-5 border-t border-white/10 pt-3">
+    <i class="fa-regular fa-clock mr-1"></i>
+    {{ contact.createdAt | date:'medium' }}
+  </div>
+
+</div>
+
+    </div>
+  </div>
+
+  <!-- Dialog Modal -->
+  <div *ngIf="showDialog" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
     <div
-      class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c]
-             border border-[#f58b49]/30 rounded-3xl p-8
-             shadow-[0_0_40px_rgba(245,139,73,0.15)] backdrop-blur-xl"
-    >
-      <h2 class="text-3xl text-[#f58b49] mb-8">Edit Contact Information</h2>
+      class="bg-[#1a1a1a] border border-[#f58b49]/30 text-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
+      <h2 class="text-[#f58b49] text-2xl font-bold mb-4">Add Contact Info</h2>
 
-      <form (ngSubmit)="onSubmit()" class="space-y-8">
-        <!-- Location Details -->
-        <div class="space-y-4">
+      <form [formGroup]="contactForm" class="space-y-8">
+
+        <!-- LOCATION DETAILS -->
+        <div formGroupName="location" class="space-y-4">
           <div class="flex items-center gap-2 mb-4">
             <i class="fa-solid fa-map-pin text-[#f58b49]"></i>
             <h3 class="text-xl text-[#f58b49]">Location Details</h3>
           </div>
 
+          <!-- Company -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Company Name</label>
-            <input
-              [(ngModel)]="formData.location.company"
-              name="company"
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            />
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Company Name</label>
+            <input formControlName="company"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
           </div>
 
+          <!-- Address -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Address</label>
-            <input
-              [(ngModel)]="formData.location.address"
-              name="address"
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            />
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Address</label>
+            <input formControlName="address"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
           </div>
 
+          <!-- City / Country -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">City</label>
-              <input
-                [(ngModel)]="formData.location.city"
-                name="city"
-                class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-              />
+              <label class="block mb-2 text-[#f58b49] font-bold text-sm">City</label>
+              <input formControlName="city"
+                class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
             </div>
 
             <div>
-              <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Country</label>
-              <input
-                [(ngModel)]="formData.location.country"
-                name="country"
-                class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-              />
+              <label class="block mb-2 text-[#f58b49] font-bold text-sm">Country</label>
+              <input formControlName="country"
+                class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
             </div>
           </div>
 
+          <!-- Postal Code -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Postal Code</label>
-            <input
-              [(ngModel)]="formData.location.postalCode"
-              name="postalCode"
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            />
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Postal Code</label>
+            <input formControlName="postalCode"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
           </div>
 
+          <!-- Google Map URL -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Google Maps Embed URL</label>
-            <textarea
-              [(ngModel)]="formData.location.mapEmbedUrl"
-              name="mapEmbedUrl"
-              rows="3"
-              placeholder="https://www.google.com/maps/embed?pb=..."
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            ></textarea>
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Google Maps Embed URL</label>
+            <textarea formControlName="mapEmbedUrl" rows="3" placeholder="https://www.google.com/maps/embed?pb=..."
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"></textarea>
             <p class="text-gray-500 text-xs mt-1">
               Get the embed URL from Google Maps → Share → Embed a map
             </p>
           </div>
         </div>
 
-        <!-- Contact Details -->
+        <!-- CONTACT DETAILS -->
         <div class="space-y-4 pt-6 border-t border-gray-800">
           <div class="flex items-center gap-2 mb-4">
             <i class="fa-solid fa-envelope text-[#f58b49]"></i>
             <h3 class="text-xl text-[#f58b49]">Contact Details</h3>
           </div>
 
+          <!-- Email -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Email Address</label>
-            <input
-              [(ngModel)]="formData.email"
-              name="email"
-              type="email"
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            />
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Email Address</label>
+            <input formControlName="email" type="email"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
           </div>
 
+          <!-- Phone -->
           <div>
-            <label class="block mb-2 text-sm text-gray-300 font-bold text-[#f58b49]">Phone Number</label>
-            <input
-              [(ngModel)]="formData.phone"
-              name="phone"
-              type="tel"
-              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-            />
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm">Phone Number</label>
+            <input formControlName="phone" type="tel"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
           </div>
         </div>
 
-        <!-- Social Media Links -->
-        <div class="space-y-4 pt-6 border-t border-gray-800">
+        <!-- SOCIAL MEDIA -->
+        <div class="space-y-4 pt-6 border-t border-gray-800" formGroupName="socialMedia">
           <div class="flex items-center gap-2 mb-4">
             <i class="fa-solid fa-link text-[#f58b49]"></i>
             <h3 class="text-xl text-[#f58b49]">Social Media Links</h3>
           </div>
 
+          <!-- Dynamic Social Inputs -->
           <div *ngFor="let social of socialPlatforms">
-  <label class="block mb-2 text-sm text-gray-300 capitalize font-bold text-[#f58b49]">
-    {{ social }} URL (Optional)
-  </label>
-  <input
-    [(ngModel)]="formData.socialMedia[social]"
-    [name]="social"
-    [placeholder]="'https://' + social + '.com/your-profile'"
-    class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200"
-  />
-</div>
+            <label class="block mb-2 text-[#f58b49] font-bold text-sm capitalize">
+              {{ social }} URL (Optional)
+            </label>
 
+            <input [formControlName]="social" [placeholder]="'https://' + social + '.com/your-profile'"
+              class="w-full bg-[#1a1a1a] border border-[#2b2b2b] rounded-lg px-3 py-2 text-gray-200" />
+          </div>
         </div>
 
-        <!-- Save Button -->
-        <button
-          type="submit"
-          class="w-full bg-[#f58b49] hover:bg-[#ff9a61] text-white font-semibold py-3 rounded-lg transition-all"
-        >
-          <i class="fa-solid fa-floppy-disk mr-2"></i>
-          Save Changes
-        </button>
+        <div class="flex gap-3">
+          <!-- SAVE BUTTON -->
+          <button type="submit" (click)="editingContactInfo ? updateContactInfo() : saveContactInfo()"
+            class="flex-1 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-4 py-2 rounded-lg transition-colors">
+            <i class="fa-solid fa-floppy-disk mr-2"></i>
+            Save Changes
+          </button>
+
+          <button type="button" (click)="closeDialog()"
+            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+            <i class="fa-solid fa-xmark mr-2"></i> Cancel
+          </button>
+        </div>
+
       </form>
+
+
     </div>
   </div>
 </div>

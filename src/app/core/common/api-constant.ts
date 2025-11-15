@@ -38,4 +38,18 @@ export const API_ENDPOINTS = {
     'portfolio/update-portfolio-service',
   SERVICE_DELETE_PORTFOLIO_SERVICE_SECTION:
     'portfolio/delete-portfolio-service',
+  SERVICE_SAVE_PORTFOLIO_PROJECTS_SECTION: 'portfolio/save-portfolio-project',
+  SERVICE_GET_PORTFOLIO_PROJECTS_SECTION: 'portfolio/get-portfolio-projects',
+  SERVICE_UPDATE_PORTFOLIO_PROJECTS_SECTION:
+    'portfolio/update-portfolio-project',
+  SERVICE_DELETE_PORTFOLIO_PROJECTS_SECTION:
+    'portfolio/delete-portfolio-project',
+  SERVICE_SAVE_PORTFOLIO_CONTACT_INFO_SECTION:
+    'portfolio/save-portfolio-contact-info',
+  SERVICE_GET_PORTFOLIO_CONTACT_INFO_SECTION:
+    'portfolio/get-portfolio-contact-info',
+  SERVICE_UPDATE_PORTFOLIO_CONTACT_INFO_SECTION:
+    'portfolio/update-portfolio-contact-info',
+  SERVICE_DELETE_PORTFOLIO_CONTACT_INFO_SECTION:
+    'portfolio/delete-portfolio-contact-info',
 };
