@@ -4,18 +4,14 @@
   <div class="relative max-w-6xl mx-auto z-10">
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
-      <button
-        routerLink="/admin/dashboard"
-        class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] transition-colors"
-      >
+      <button routerLink="/admin/dashboard"
+        class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] transition-colors">
         <i class="fas fa-arrow-left w-5 h-5"></i>
         Back to Dashboard
       </button>
 
-      <button
-        (click)="openDialog()"
-        class="flex items-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg shadow transition-all"
-      >
+      <button (click)="openDialog()"
+        class="flex items-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg shadow transition-all">
         <i class="fas fa-plus"></i> Add Experience
       </button>
     </div>
@@ -24,16 +20,15 @@
 
     <!-- Experience List -->
     <div class="space-y-6">
-      <div
-        *ngFor="let exp of experiences"
-        class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl p-6 shadow-[0_0_40px_rgba(245,139,73,0.15)]"
-      >
+      <div *ngFor="let exp of experiences"
+        class="bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl p-6 shadow-[0_0_40px_rgba(245,139,73,0.15)]">
         <div class="flex justify-between items-start">
           <div class="flex-1">
             <h3 class="text-xl text-[#f58b49] mb-2 font-semibold">{{ exp.role }}</h3>
             <p class="text-gray-300 mb-1">{{ exp.company }}</p>
             <p class="text-gray-400 text-sm mb-2">
-              <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ exp.period }}
+              <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ exp.fromYear }} - {{ exp.currentlyWorking ?
+              'Present' : exp.toYear }}
             </p>
             <p class="text-gray-400 text-sm mb-2">
               <strong class="text-[#f58b49]">Project:</strong> {{ exp.project }}
@@ -42,16 +37,10 @@
           </div>
 
           <div class="flex gap-2">
-            <button
-              (click)="openDialog(exp)"
-              class="p-2 hover:bg-[#f58b49]/20 rounded-lg transition-colors"
-            >
+            <button (click)="openDialog(exp)" class="p-2 hover:bg-[#f58b49]/20 rounded-lg transition-colors">
               <i class="fas fa-edit text-[#f58b49]"></i>
             </button>
-            <button
-              (click)="deleteExperience(exp._id)"
-              class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
-            >
+            <button (click)="deleteExperience(exp._id)" class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
               <i class="fas fa-trash text-red-400"></i>
             </button>
           </div>
@@ -61,13 +50,9 @@
   </div>
 
   <!-- Dialog Modal -->
-  <div
-    *ngIf="showDialog"
-    class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-  >
+  <div *ngIf="showDialog" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div
-      class="bg-[#1a1a1a] border border-[#f58b49]/30 text-white rounded-2xl shadow-xl w-[90%] max-w-2xl p-6 relative"
-    >
+      class="bg-[#1a1a1a] border border-[#f58b49]/30 text-white rounded-2xl shadow-xl w-[90%] max-w-2xl p-6 relative">
       <h2 class="text-[#f58b49] text-2xl font-bold mb-4">
         {{ editingExperience ? 'Edit Experience' : 'Add New Experience' }}
       </h2>
@@ -75,62 +60,62 @@
       <form [formGroup]="experienceForm" class="space-y-4">
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Company</label>
-          <input
-            type="text"
-            formControlName="company"
-            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-          />
+          <input type="text" formControlName="company"
+            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" />
         </div>
 
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Role</label>
-          <input
-            type="text"
-            formControlName="role"
-            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-          />
+          <input type="text" formControlName="role"
+            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" />
         </div>
 
-        <div>
-          <label class="block font-bold text-[#f58b49] mb-1">Period</label>
-          <input
-            type="text"
-            placeholder="2021 - 2024"
-            formControlName="period"
-            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-          />
+        <!-- From & To Year -->
+        <div class="flex gap-2">
+
+          <!-- From Year -->
+          <div class="flex-1">
+            <label class="block mb-1 font-bold text-[#f58b49]">From Year</label>
+            <input id="fromYear" type="text" formControlName="fromYear"
+              class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
+              placeholder="From Year" />
+          </div>
+
+          <!-- To Year -->
+          <div class="flex-1">
+            <label class="block mb-1 font-bold text-[#f58b49]">To Year</label>
+            <input id="toYear" type="text" formControlName="toYear"
+              class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" placeholder="To Year"
+               [disabled]="experienceForm.get('currentlyWorking')?.value" />
+          </div>
         </div>
+
+        <!-- Currently Working -->
+        <label class="inline-flex items-center gap-2 mt-2 cursor-pointer select-none">
+          <input type="checkbox" formControlName="currentlyWorking"
+            class="w-5 h-5 text-[#f58b49] border-gray-400 rounded focus:ring-0" />
+          <span class="text-gray-300 text-sm">Currently Working</span>
+        </label>
 
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Project</label>
-          <input
-            type="text"
-            formControlName="project"
-            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-          />
+          <input type="text" formControlName="project"
+            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" />
         </div>
 
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Description</label>
-          <textarea
-            rows="4"
-            formControlName="description"
-            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-          ></textarea>
+          <textarea rows="4" formControlName="description"
+            class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"></textarea>
         </div>
 
         <div class="flex gap-3 pt-2">
-          <button
-            type="submit" (click)="editingExperience ? updateExperience() : saveExperience()"
-            class="flex-1 flex items-center justify-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg font-semibold"
-          >
+          <button type="submit" (click)="editingExperience ? updateExperience() : saveExperience()"
+            class="flex-1 flex items-center justify-center gap-2 bg-[#f58b49] hover:bg-[#ff9a61] text-white px-5 py-2 rounded-lg font-semibold">
             <i class="fas fa-save"></i> {{ editingExperience ? 'Update' : 'Add' }}
           </button>
-          <button
-            type="button"
-            (click)="closeDialog()"
-            class="flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded-lg"
-          >
+          <button type="button" (click)="closeDialog()"
+            class="flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded-lg">
             <i class="fas fa-times"></i> Cancel
           </button>
         </div>
@@ -139,10 +124,6 @@
   </div>
 </div>
 
- <!-- Confirmation Dialog -->
-    <app-confirmation-dialog
-      *ngIf="confirmDialog.show"
-      [message]="confirmDialog.message"
-      (confirm)="handleConfirm(true)"
-      (cancel)="handleConfirm(false)"
-    ></app-confirmation-dialog>
+<!-- Confirmation Dialog -->
+<app-confirmation-dialog *ngIf="confirmDialog.show" [message]="confirmDialog.message" (confirm)="handleConfirm(true)"
+  (cancel)="handleConfirm(false)"></app-confirmation-dialog>

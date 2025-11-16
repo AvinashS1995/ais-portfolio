@@ -9,7 +9,9 @@ interface Experience {
   _id: string;
   company: string;
   role: string;
-  period: string;
+  fromYear: string;
+  toYear?: string;
+  currentlyWorking: boolean;
   project: string;
   description: string;
 }
@@ -38,13 +40,27 @@ export class ManageExperienceComponent {
   ngOnInit(): void {
     this.initializeForm();
     this.loadExperiences();
+    // Currently Studying checkbox logic
+    this.experienceForm
+      .get('currentlyWorking')
+      ?.valueChanges.subscribe((val) => {
+        const toYearControl = this.experienceForm.get('toYear');
+        if (val) {
+          toYearControl?.disable({ emitEvent: false }); // disable To Year
+          toYearControl?.setValue(''); // clear To Year
+        } else {
+          toYearControl?.enable({ emitEvent: false });
+        }
+      });
   }
 
   initializeForm() {
     this.experienceForm = this.fb.group({
       company: ['', Validators.required],
       role: ['', Validators.required],
-      period: ['', Validators.required],
+      fromYear: ['', Validators.required],
+      toYear: [''],
+      currentlyWorking: [false],
       project: ['', Validators.required],
       description: ['', Validators.required],
     });
@@ -56,7 +72,7 @@ export class ManageExperienceComponent {
       this.experienceForm.patchValue(experience);
     } else {
       this.editingExperience = null;
-      this.experienceForm.reset();
+      this.experienceForm.reset({ currentlyWorking: false });
     }
     this.showDialog = true;
   }
@@ -84,11 +100,7 @@ export class ManageExperienceComponent {
       this.experienceForm.getRawValue();
     const payload = {
       adminId: this.commonService.userInfo?.id,
-      company,
-      role,
-      period,
-      project,
-      description,
+      ...this.experienceForm.getRawValue(),
     };
 
     this.apiService.SavePortfolioExperiences(payload).subscribe({
@@ -112,11 +124,7 @@ export class ManageExperienceComponent {
     const payload = {
       adminId: this.commonService.userInfo?.id,
       expId: this.editingExperience._id,
-      company,
-      role,
-      period,
-      project,
-      description,
+      ...this.experienceForm.getRawValue(),
     };
 
     this.apiService.UpdatePortfolioExperiences(payload).subscribe({

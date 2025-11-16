@@ -8,7 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 interface Experience {
   id: number;
   company: string;
-  period: string;
+  fromYear: string;
+  toYear?: string;
+  currentlyWorking: boolean;
   role: string;
   project: string;
   description: string;
@@ -18,7 +20,9 @@ interface Education {
   id: number;
   university: string;
   degree: string;
-  period: string;
+  fromYear: string;
+  toYear?: string;
+  currentlyStudying: boolean;
 }
 
 @Component({

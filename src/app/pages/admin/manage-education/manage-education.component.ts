@@ -9,7 +9,9 @@ export interface Education {
   _id: string;
   degree: string;
   university: string;
-  period: string;
+  fromYear: string;
+  toYear?: string;
+  currentlyStudying: boolean;
 }
 
 @Component({
@@ -26,22 +28,58 @@ export class ManageEducationComponent {
   isDialogOpen = false;
   confirmDialog = { show: false, message: '', eduId: '' };
 
+  years: number[] = [];
+  toYears: number[] = [];
+
   constructor(
     private fb: FormBuilder,
     private cs: CommonService,
     private apiService: ApiService
-  ) {}
+  ) {
+    // Populate years from 1980 to current year + 5
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y >= 2011; y--) {
+      this.years.push(y);
+    }
+  }
 
   ngOnInit(): void {
     this.initForm();
     this.loadEducation();
+
+    // From Year change => update To Year options
+    this.eduForm.get('fromYear')?.valueChanges.subscribe((fromYear) => {
+      if (fromYear) {
+        this.toYears = this.years.filter((y) => y >= fromYear);
+      } else {
+        this.toYears = [...this.years];
+      }
+
+      const toYearControl = this.eduForm.get('toYear');
+      if (toYearControl?.value && toYearControl.value < fromYear) {
+        toYearControl.setValue('');
+      }
+    });
+
+    // Currently Studying checkbox logic
+    this.eduForm.get('currentlyStudying')?.valueChanges.subscribe((val) => {
+      const toYearControl = this.eduForm.get('toYear');
+      if (val) {
+        toYearControl?.disable({ emitEvent: false }); // disable To Year
+        toYearControl?.setValue(''); // clear To Year
+      } else {
+        toYearControl?.enable({ emitEvent: false });
+      }
+    });
   }
 
   initForm() {
     this.eduForm = this.fb.group({
       degree: ['', Validators.required],
       university: ['', Validators.required],
-      period: ['', Validators.required],
+      fromYear: ['', Validators.required],
+      toYear: [''],
+      currentlyStudying: [false],
     });
   }
 
@@ -52,7 +90,7 @@ export class ManageEducationComponent {
       this.eduForm.patchValue(edu);
     } else {
       this.editingEdu = null;
-      this.eduForm.reset();
+      this.eduForm.reset({ currentlyStudying: false });
     }
   }
 
@@ -75,12 +113,9 @@ export class ManageEducationComponent {
   saveEducation() {
     if (this.eduForm.invalid) return;
 
-    const { degree, university, period } = this.eduForm.getRawValue();
     const payload = {
       adminId: this.cs.userInfo?.id,
-      degree,
-      university,
-      period,
+      ...this.eduForm.getRawValue(),
     };
 
     this.apiService.SavePortfolioEducations(payload).subscribe({
@@ -96,13 +131,10 @@ export class ManageEducationComponent {
   updateEducation() {
     if (!this.editingEdu || this.eduForm.invalid) return;
 
-    const { degree, university, period } = this.eduForm.getRawValue();
     const payload = {
       adminId: this.cs.userInfo?.id,
       eduId: this.editingEdu._id,
-      degree,
-      university,
-      period,
+      ...this.eduForm.getRawValue(),
     };
 
     this.apiService.UpdatePortfolioEducations(payload).subscribe({

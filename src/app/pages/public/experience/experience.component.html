@@ -63,7 +63,7 @@
           <i class="fas fa-building text-[#f58b49]"></i> {{ exp.company }}
         </h3>
         <p class="text-gray-400 text-sm mt-1">
-          <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ exp.period }}
+          <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ exp.fromYear }} - {{ exp.currentlyWorking ? 'Present' : exp.toYear }}
         </p>
       </div>
 
@@ -131,7 +131,7 @@
         </h3>
 
         <p class="text-gray-400 text-sm mt-1">
-          <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ edu.period }}
+          <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ edu.fromYear }} - {{ edu.currentlyStudying ? 'Present' : edu.toYear }}
         </p>
       </div>
 
