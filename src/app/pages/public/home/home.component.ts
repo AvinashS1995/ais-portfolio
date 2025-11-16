@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
+import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +21,13 @@ export class HomeComponent {
   currentRoleIndex = 0;
   currentCharIndex = 0;
   isDeleting = false;
+  slug!: string;
+
+  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.typeEffect();
+    this.slug = this.route.snapshot.paramMap.get('slug')!;
   }
 
   typeEffect() {
