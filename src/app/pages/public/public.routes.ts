@@ -7,10 +7,10 @@ import { ProjectComponent } from './project/project.component';
 import { ContactComponent } from './contact/contact.component';
 
 export const PUBLIC_ROUTES: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'service', component: ServiceComponent },
-  { path: 'experience', component: ExperienceComponent },
-  { path: 'project', component: ProjectComponent },
-  { path: 'contact', component: ContactComponent },
+  { path: ':slug', component: HomeComponent },
+  { path: ':slug/about', component: AboutComponent },
+  { path: ':slug/service', component: ServiceComponent },
+  { path: ':slug/experience', component: ExperienceComponent },
+  { path: ':slug/project', component: ProjectComponent },
+  { path: ':slug/contact', component: ContactComponent },
 ];

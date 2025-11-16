@@ -1,13 +1,11 @@
 <section class="relative bg-black text-white py-24 px-6 md:px-12 overflow-hidden">
   <!-- Background Glow -->
-  <div
-    class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none">
+  <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111]/90 pointer-events-none">
   </div>
 
   <!-- Header -->
   <div class="relative text-center mb-20 z-10">
-    <h2
-      class="text-5xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_15px_rgba(245,139,73,0.5)]">
+    <h2 class="text-5xl font-extrabold text-[#f58b49] tracking-wide mb-4 drop-shadow-[0_0_15px_rgba(245,139,73,0.5)]">
       My Projects
     </h2>
     <p class="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -19,53 +17,39 @@
   </div>
 
   <!-- Projects Grid -->
-  <div
-    class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto z-10">
-    <div
-      *ngFor="let project of projects"
-      class="group bg-[#1a1a1a] border border-[#2b2b2b] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(245,139,73,0.4)] hover:-translate-y-2 flex flex-col">
+  <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto z-10">
+    <div *ngFor="let project of projects"
+     class="group bg-gradient-to-br from-[#141414] via-[#0f0f0f] to-[#1c1c1c] border border-[#f58b49]/30 rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(245,139,73,0.15)] transition-all duration-700 hover:shadow-[0_0_55px_rgba(245,139,73,0.4)] hover:scale-[1.02] flex flex-col">
 
-      <!-- Project Image -->
-      <div class="relative overflow-hidden">
-        <img
-          [src]="project.image"
-          [alt]="project.title"
-          class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" />
-      </div>
+  <!-- Image -->
+  <img [src]="project.image || 'assets/images/projects/default.jpg'" [alt]="project.title"
+       class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-105" />
 
-      <!-- Project Content -->
-      <div class="flex flex-col justify-between flex-1 p-6">
-        <div>
-          <h3 class="text-xl text-white mb-2">{{ project.title }}</h3>
-          <p class="text-[#f58b49] text-sm font-medium mb-1">
-            {{ project.category }}
-          </p>
-          <p class="text-gray-400 text-sm">{{ project.role }}</p>
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex items-center justify-between mt-6">
-          <a
-            *ngIf="project.codeLink"
-            [href]="project.codeLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-400 text-sm flex items-center gap-1 hover:text-[#f58b49] transition-all duration-300">
-            <i class="fa-brands fa-github text-lg"></i>
-            View Code
-          </a>
-
-          <a
-            *ngIf="project.previewLink"
-            [href]="project.previewLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="bg-[#f58b49] text-black text-sm font-semibold px-5 py-2 rounded-lg shadow-[0_0_15px_rgba(245,139,73,0.3)] hover:bg-[#ff9a61] transition-all duration-500 flex items-center gap-2">
-            <i class="fa-solid fa-up-right-from-square text-sm"></i>
-            Live Preview
-          </a>
-        </div>
-      </div>
+  <!-- Content -->
+  <div class="p-6 flex flex-col justify-between flex-1">
+    <div>
+      <h3 class="text-lg text-[#f58b49] mb-2">{{ project.title }}</h3>
+      <p class="text-gray-400 text-sm mb-1">{{ project.category }}</p>
+      <p class="text-gray-500 text-xs mb-2">{{ project.role }}</p>
+      <!-- <p class="text-gray-400 text-sm">{{ project.description }}</p> -->
     </div>
+
+    <!-- Buttons -->
+    <div class="flex items-center justify-between mt-6">
+      <a *ngIf="project.codeLink" [href]="project.codeLink" target="_blank" rel="noopener noreferrer"
+         class="text-gray-400 text-sm flex items-center gap-1 hover:text-[#f58b49] transition-all duration-300">
+        <i class="fa-brands fa-github text-lg"></i>
+        View Code
+      </a>
+
+      <a *ngIf="project.previewLink" [href]="project.previewLink" target="_blank" rel="noopener noreferrer"
+         class="bg-[#f58b49] text-black text-sm font-semibold px-5 py-2 rounded-lg shadow-[0_0_15px_rgba(245,139,73,0.3)] hover:bg-[#ff9a61] transition-all duration-500 flex items-center gap-2">
+        <i class="fa-solid fa-up-right-from-square text-sm"></i>
+        Live Preview
+      </a>
+    </div>
+  </div>
+</div>
+
   </div>
 </section>

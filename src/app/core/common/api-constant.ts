@@ -32,6 +32,10 @@ export const API_ENDPOINTS = {
     'portfolio/update-portfolio-experience',
   SERVICE_DELETE_PORTFOLIO_EXPERIENCES_SECTION:
     'portfolio/delete-portfolio-experience',
+  SERVICE_SAVE_PORTFOLIO_SKILL_SECTION: 'portfolio/save-portfolio-skill',
+  SERVICE_GET_PORTFOLIO_SKILLS_SECTION: 'portfolio/get-portfolio-skills',
+  SERVICE_UPDATE_PORTFOLIO_SKILL_SECTION: 'portfolio/update-portfolio-skill',
+  SERVICE_DELETE_PORTFOLIO_SKILL_SECTION: 'portfolio/delete-portfolio-skill',
   SERVICE_SAVE_PORTFOLIO_SERVICE_SECTION: 'portfolio/save-portfolio-service',
   SERVICE_GET_PORTFOLIO_SERVICES_SECTION: 'portfolio/get-portfolio-services',
   SERVICE_UPDATE_PORTFOLIO_SERVICE_SECTION:
@@ -52,4 +56,18 @@ export const API_ENDPOINTS = {
     'portfolio/update-portfolio-contact-info',
   SERVICE_DELETE_PORTFOLIO_CONTACT_INFO_SECTION:
     'portfolio/delete-portfolio-contact-info',
+  SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION:
+    'portfolio/get-public-portfolio-about-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_EDUCATIONS_SECTION:
+    'portfolio/get-public-portfolio-educations-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_EXPERIENCES_SECTION:
+    'portfolio/get-public-portfolio-experiences-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_SKILLS_SECTION:
+    'portfolio/get-public-portfolio-skills-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_SERVICES_SECTION:
+    'portfolio/get-public-portfolio-services-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_PROJECTS_SECTION:
+    'portfolio/get-public-portfolio-projects-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_CONTACT_INFO_SECTION:
+    'portfolio/get-public-portfolio-contact-info-by-slug/:slug',
 };

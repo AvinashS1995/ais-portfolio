@@ -84,12 +84,12 @@
         <div class="flex flex-col items-center text-center mb-6 relative">
           <div
             class="w-14 h-14 flex items-center justify-center rounded-full bg-[#f58b49]/10 mb-3"
-            [style.boxShadow]="'0 0 15px ' + category.accent"
+            [style.boxShadow]="'0 0 15px ' + category.color"
           >
-            <i class="fa-solid" [ngClass]="category.icon" [style.color]="category.accent"></i>
+            <i class="fa-solid" [ngClass]="category.icon" [style.color]="category.color"></i>
           </div>
 
-          <h4 class="text-lg font-semibold tracking-wide mb-1" [style.color]="category.accent">
+          <h4 class="text-lg font-semibold tracking-wide mb-1" [style.color]="category.color">
             {{ category.title }}
           </h4>
 
@@ -105,7 +105,8 @@
             <div
               class="relative w-14 h-14 flex items-center justify-center rounded-full bg-[#111]/70 border border-[#f58b49]/30 backdrop-blur-sm shadow-[0_0_12px_rgba(245,139,73,0.15)] group-hover:shadow-[0_0_20px_rgba(245,139,73,0.3)] transition-all duration-300"
             >
-              <span class="text-2xl opacity-90 grayscale group-hover:grayscale-0 transition duration-300">💻</span>
+            
+              <span class="text-2xl opacity-90 grayscale group-hover:grayscale-0 transition duration-300"><i class="fa-solid" [ngClass]="skill.icon" class="text-[#f58b49] w-7 h-7 text-xl"></i></span>
             </div>
             <p class="text-gray-300 text-xs font-medium text-center">{{ skill.name }}</p>
           </div>

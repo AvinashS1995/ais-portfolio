@@ -122,4 +122,14 @@ export class CommonService {
       setTimeout(() => toast.remove(), 600);
     }, 3000);
   }
+
+  buildUrl(url: string, params: Record<string, string>) {
+    let finalUrl = url;
+
+    Object.keys(params).forEach((key) => {
+      finalUrl = finalUrl.replace(`:${key}`, params[key]);
+    });
+
+    return finalUrl;
+  }
 }

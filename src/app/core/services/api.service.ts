@@ -16,6 +16,7 @@ import {
   UpdateAdmin,
 } from '../interfaces/admin';
 import { SavePortfolioAboutPayload } from '../interfaces/about';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ import { SavePortfolioAboutPayload } from '../interfaces/about';
 export class ApiService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private commonService: CommonService) {}
 
   SaveNewAdminCreation(payload: SaveNewAdmin): Observable<any> {
     return this.http.post<SaveNewAdmin>(
@@ -186,6 +187,34 @@ export class ApiService {
     );
   }
 
+  SavePortfolioSkills(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_SKILL_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioSkills(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_SKILLS_SECTION}`,
+      payload
+    );
+  }
+
+  UpdatePortfolioSkills(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_PORTFOLIO_SKILL_SECTION}`,
+      payload
+    );
+  }
+
+  DeletePortfolioSkills(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_SKILL_SECTION}`,
+      payload
+    );
+  }
+
   SavePortfolioServices(payload: any): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_SERVICE_SECTION}`,
@@ -268,5 +297,61 @@ export class ApiService {
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_CONTACT_INFO_SECTION}`,
       payload
     );
+  }
+
+  GetPublicPortfolioAbout(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioEducations(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_EDUCATIONS_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioExperiences(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_EXPERIENCES_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioSkills(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_SKILLS_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioServices(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_SERVICES_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioProjects(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_PROJECTS_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  GetPublicPortfolioContactInfo(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_CONTACT_INFO_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
   }
 }

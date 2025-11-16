@@ -10,14 +10,16 @@ import { ManageMessagesComponent } from './manage-messages/manage-messages.compo
 import { ManageContactInfoComponent } from './manage-contact-info/manage-contact-info.component';
 import { AdminUserManagementComponent } from './admin-user-management/admin-user-management.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { ManageSkillsComponent } from './manage-skills/manage-skills.component';
 
 export const ADMIN_ROUTES: Routes = [
   { path: 'login', component: AdminLoginComponent },
   { path: 'dashboard', component: AdminDashboardComponent },
-  { path: 'about', component: ManageAboutComponent },
+  { path: 'abouts', component: ManageAboutComponent },
   { path: 'education', component: ManageEducationComponent },
-  { path: 'experience', component: ManageExperienceComponent },
+  { path: 'experiences', component: ManageExperienceComponent },
   { path: 'projects', component: ManageProjectsComponent },
+  { path: 'skills', component: ManageSkillsComponent },
   { path: 'services', component: ManageServicesComponent },
   { path: 'messages', component: ManageMessagesComponent },
   { path: 'contact-info', component: ManageContactInfoComponent },

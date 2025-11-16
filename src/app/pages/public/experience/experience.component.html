@@ -30,8 +30,11 @@
     </p>
   </div>
 
-  <!-- Experience Section -->
+  <!-- =============================== -->
+  <!-- EXPERIENCE SECTION -->
+  <!-- =============================== -->
   <div class="relative max-w-6xl mx-auto z-10 mb-24">
+    <!-- Timeline vertical line -->
     <div
       class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"
     ></div>
@@ -45,12 +48,15 @@
       </h3>
     </div>
 
+    <!-- Experience Item -->
     <div
       *ngFor="let exp of experiences"
-      class="relative flex flex-col md:flex-row justify-between items-center mb-20"
+      class="relative flex flex-col md:flex-row justify-between items-center mb-40 md:mb-24"
     >
-      <!-- Left -->
-      <div class="w-full md:w-5/12 text-center md:text-right pr-0 md:pr-12">
+      <!-- LEFT SECTION -->
+      <div
+        class="w-full md:w-5/12 text-center md:text-right pr-0 md:pr-12 mb-10 md:mb-0"
+      >
         <h3
           class="text-2xl font-semibold text-white flex justify-center md:justify-end items-center gap-2"
         >
@@ -61,21 +67,31 @@
         </p>
       </div>
 
-      <!-- Center Node -->
+      <!-- CENTER DOT (Fixed for Mobile) -->
       <div
-        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-8 h-8 rounded-full border-4 border-black shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10 flex items-center justify-center"
+        class="
+          absolute left-1/2 transform -translate-x-1/2 
+          md:top-1/2 md:-translate-y-1/2 
+          top-[115px]
+          bg-[#f58b49] w-10 h-10 rounded-full border-4 border-black 
+          shadow-[0_0_20px_rgba(245,139,73,0.7)] 
+          z-10 flex items-center justify-center
+        "
       >
-        <i class="fas fa-briefcase text-black text-sm"></i>
+        <i class="fas fa-briefcase text-black text-base"></i>
       </div>
 
-      <!-- Right -->
+      <!-- RIGHT SECTION -->
       <div
-        class="w-full md:w-5/12 md:pl-12 pl-0 mt-8 md:mt-0 text-center md:text-left"
+        class="w-full md:w-5/12 md:pl-12 pl-0 mt-14 md:mt-0 text-center md:text-left"
       >
-        <h4 class="text-2xl text-[#f58b49] mb-2">{{ exp.role }}</h4>
-        <p class="text-gray-400 text-base leading-relaxed mb-2">
-          <i class="fas fa-laptop-code text-[#f58b49] mr-1"></i> {{ exp.project }}
+        <h4 class="text-2xl text-[#f58b49] mb-3">{{ exp.role }}</h4>
+
+        <p class="text-gray-400 text-base leading-relaxed mb-3">
+          <i class="fas fa-laptop-code text-[#f58b49] mr-1"></i>
+          {{ exp.project }}
         </p>
+
         <p class="text-gray-500 text-sm italic">
           {{ exp.description }}
         </p>
@@ -83,8 +99,11 @@
     </div>
   </div>
 
-  <!-- Education Section -->
+  <!-- =============================== -->
+  <!-- EDUCATION SECTION -->
+  <!-- =============================== -->
   <div class="relative max-w-6xl mx-auto z-10">
+    <!-- Timeline line -->
     <div
       class="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dotted border-[#f58b49]/40 -translate-x-1/2"
     ></div>
@@ -98,39 +117,48 @@
       </h3>
     </div>
 
+    <!-- Education Item -->
     <div
       *ngFor="let edu of education"
-      class="relative flex flex-col md:flex-row justify-between items-center mb-20"
+      class="relative flex flex-col md:flex-row justify-between items-center mb-40 md:mb-24"
     >
-      <!-- Left -->
-      <div class="w-full md:w-5/12 text-center md:text-right md:pr-12">
+      <!-- LEFT SECTION -->
+      <div class="w-full md:w-5/12 text-center md:text-right md:pr-12 mb-10 md:mb-0">
         <h3
           class="text-2xl font-semibold text-white flex justify-center md:justify-end items-center gap-2"
         >
           <i class="fas fa-building text-[#f58b49]"></i> {{ edu.university }}
         </h3>
+
         <p class="text-gray-400 text-sm mt-1">
           <i class="fas fa-calendar text-[#f58b49] mr-1"></i> {{ edu.period }}
         </p>
       </div>
 
-      <!-- Center Node -->
+      <!-- CENTER DOT -->
       <div
-        class="absolute left-1/2 transform -translate-x-1/2 bg-[#f58b49] w-8 h-8 rounded-full border-4 border-black shadow-[0_0_20px_rgba(245,139,73,0.7)] z-10 flex items-center justify-center"
+        class="
+          absolute left-1/2 transform -translate-x-1/2 
+          md:top-1/2 md:-translate-y-1/2 
+          top-[115px]
+          bg-[#f58b49] w-10 h-10 rounded-full border-4 border-black 
+          shadow-[0_0_20px_rgba(245,139,73,0.7)] 
+          z-10 flex items-center justify-center
+        "
       >
-        <i class="fas fa-graduation-cap text-black text-sm"></i>
+        <i class="fas fa-graduation-cap text-black text-base"></i>
       </div>
 
-      <!-- Right -->
+      <!-- RIGHT SECTION -->
       <div
-        class="w-full md:w-5/12 md:pl-12 mt-8 md:mt-0 text-center md:text-left"
+        class="w-full md:w-5/12 md:pl-12 pl-0 mt-14 md:mt-0 text-center md:text-left"
       >
-        <h4 class="text-2xl text-[#f58b49] mb-2">{{ edu.degree }}</h4>
+        <h4 class="text-2xl text-[#f58b49] mb-3">{{ edu.degree }}</h4>
       </div>
     </div>
   </div>
 
-  <!-- CTA Button -->
+  <!-- CTA BUTTON -->
   <div class="relative text-center mt-24 z-10">
     <a
       routerLink="/contact"

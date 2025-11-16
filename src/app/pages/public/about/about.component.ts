@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
+import { Subject, takeUntil } from 'rxjs';
+import { ApiService } from '../../../core/services/api.service';
+import { ActivatedRoute } from '@angular/router';
+import { CommonService } from '../../../core/services/common.service';
 
 @Component({
   selector: 'app-about',
@@ -12,11 +16,38 @@ export class AboutComponent {
   aboutData: any;
   skillCategories: any[] = [];
 
-  constructor() {}
+  private destroy$ = new Subject<void>();
+  slug!: string;
+
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
-    this.aboutData = this.getAboutData();
-    this.skillCategories = this.getSkillCategories();
+    // get slug from URL
+    this.slug = this.route.snapshot.paramMap.get('slug')!;
+
+    this.getAboutSection();
+    this.getSkillCategories();
+  }
+
+  // 🔥 Fetch About Section with RxJS takeUntil
+  getAboutSection() {
+    this.apiService
+      .GetPublicPortfolioAbout(this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.aboutData = res.data?.about;
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) => {
+          console.error('About fetch error:', err);
+          this.commonService.showToast(err.error.message, 'error');
+        },
+      });
   }
 
   getAboutData() {
@@ -34,25 +65,18 @@ export class AboutComponent {
   }
 
   getSkillCategories() {
-    return [
-      {
-        title: 'Frontend Development',
-        accent: '#f58b49',
-        icon: 'fa-code',
-        skills: [{ name: 'Angular' }, { name: 'HTML' }, { name: 'Tailwind' }],
-      },
-      {
-        title: 'Backend',
-        accent: '#f58b49',
-        icon: 'fa-database',
-        skills: [{ name: 'Node.js' }, { name: 'Express' }, { name: 'MongoDB' }],
-      },
-      {
-        title: 'Tools & Platforms',
-        accent: '#f58b49',
-        icon: 'fa-tools',
-        skills: [{ name: 'Git' }, { name: 'Vercel' }, { name: 'Render' }],
-      },
-    ];
+    this.apiService
+      .GetPublicPortfolioSkills(this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.skillCategories = res.data?.skills || [];
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) => {
+          console.error('About fetch error:', err);
+          this.commonService.showToast(err.error.message, 'error');
+        },
+      });
   }
 }

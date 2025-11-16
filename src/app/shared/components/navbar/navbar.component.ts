@@ -15,15 +15,8 @@ export class NavbarComponent {
   isScrolled = false;
   isMenuOpen = false;
   isAdmin = false;
-
-  navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-    { label: 'Services', path: '/service' },
-    { label: 'Experience', path: '/experience' },
-    { label: 'Projects', path: '/project' },
-    { label: 'Contact', path: '/contact' },
-  ];
+  navLinks: any[] = [];
+  slug = '';
 
   constructor(
     private router: Router,
@@ -32,6 +25,16 @@ export class NavbarComponent {
   ) {}
 
   ngOnInit(): void {
+    this.slug = this.router.url.split('/')[1];
+    this.navLinks = [
+      { label: 'Home', path: `/${this.slug}` },
+      { label: 'About', path: `/${this.slug}/about` },
+      { label: 'Services', path: `/${this.slug}/service` },
+      { label: 'Experience', path: `/${this.slug}/experience` },
+      { label: 'Projects', path: `/${this.slug}/project` },
+      { label: 'Contact', path: `/${this.slug}/contact` },
+    ];
+
     this.commonService.isAdmin$.subscribe((status) => {
       this.isAdmin = status;
     });
