@@ -49,6 +49,7 @@ export class ManageAboutComponent implements OnInit {
   }
 
   openDialog(about?: any) {
+    debugger;
     if (about) {
       this.editingAbout = about;
       this.aboutForm.patchValue({
@@ -92,31 +93,63 @@ export class ManageAboutComponent implements OnInit {
     };
 
     this.apiService.SavePortfolioAbout(payload).subscribe({
-      next: () => {
+      next: (res) => {
         this.loadAbout();
-        this.commonService.showToast('About section added!', 'success');
+        this.commonService.showToast(
+          res.action === 'Created'
+            ? 'About section created!'
+            : 'About section updated!',
+          'success'
+        );
         this.closeDialog();
       },
       error: (err) => this.commonService.showToast(err.error.message, 'error'),
     });
   }
 
-  updateAbout() {
-    if (!this.editingAbout || this.aboutForm.invalid) return;
+  selectedProfileImage: string | null = null;
+  resumeFileName: string | null = null;
 
-    // const payload = {
-    //   adminId: this.commonService.userInfo?.id,
-    //   aboutId: this.editingAbout._id,
-    //   ...this.aboutForm.value,
-    // };
+  onProfileImageUpload(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    // this.apiService.UpdatePortfolioAbout(payload).subscribe({
-    //   next: (res) => {
-    //     this.loadAbout();
-    //     this.commonService.showToast(res.message, 'success');
-    //     this.closeDialog();
-    //   },
-    //   error: (err) => this.commonService.showToast(err.error.message, 'error'),
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedProfileImage = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to server / AWS / your API
+    // this.apiService.uploadFile(file).subscribe((res: any) => {
+    //   this.aboutForm.patchValue({
+    //     profileImage: res.url
+    //   });
     // });
+  }
+
+  removeProfileImage() {
+    this.selectedProfileImage = null;
+    this.aboutForm.patchValue({ profileImage: '' });
+  }
+
+  onResumeUpload(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    this.resumeFileName = file.name;
+
+    // Upload to backend
+    // this.apiService.uploadFile(file).subscribe((res: any) => {
+    //   this.aboutForm.patchValue({
+    //     resumeUrl: res.url
+    //   });
+    // });
+  }
+
+  removeResume() {
+    this.resumeFileName = null;
+    this.aboutForm.patchValue({ resumeUrl: '' });
   }
 }

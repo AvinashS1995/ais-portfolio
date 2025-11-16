@@ -58,7 +58,7 @@ export class AdminDashboardComponent {
           console.log(res);
           this.stats = res.data?.stats || [];
           console.log(this.stats);
-          this.commonService.showToast(res.message, 'success');
+          // this.commonService.showToast(res.message, 'success');
         },
         error: (err) =>
           this.commonService.showToast(err.error.message, 'error'),
@@ -78,7 +78,7 @@ export class AdminDashboardComponent {
           console.log(res);
           this.cards = res.data?.cards || [];
           console.log(this.cards);
-          this.commonService.showToast(res.message, 'success');
+          // this.commonService.showToast(res.message, 'success');
         },
         error: (err) => this.commonService.showToast(err.error.message),
       });

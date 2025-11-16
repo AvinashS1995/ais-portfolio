@@ -76,7 +76,7 @@
   <!-- CTA -->
   <div class="text-center mt-16">
     <a
-      routerLink="/contact"
+      [routerLink]="['/', slug, 'contact']"
       class="inline-flex items-center gap-2 bg-[#f58b49] text-black font-semibold px-8 py-3 rounded-full hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_25px_rgba(245,139,73,0.3)]"
     >
       Let's Work Together

@@ -13,16 +13,27 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { ManageSkillsComponent } from './manage-skills/manage-skills.component';
 
 export const ADMIN_ROUTES: Routes = [
+  // LOGIN — NO GUARD
   { path: 'login', component: AdminLoginComponent },
-  { path: 'dashboard', component: AdminDashboardComponent },
-  { path: 'abouts', component: ManageAboutComponent },
-  { path: 'education', component: ManageEducationComponent },
-  { path: 'experiences', component: ManageExperienceComponent },
-  { path: 'projects', component: ManageProjectsComponent },
-  { path: 'skills', component: ManageSkillsComponent },
-  { path: 'services', component: ManageServicesComponent },
-  { path: 'messages', component: ManageMessagesComponent },
-  { path: 'contact-info', component: ManageContactInfoComponent },
-  { path: 'user-management', component: AdminUserManagementComponent },
-  { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
+
+  // PROTECTED ADMIN AREA
+  {
+    path: '',
+    canActivateChild: [adminGuard],
+    children: [
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'abouts', component: ManageAboutComponent },
+      { path: 'education', component: ManageEducationComponent },
+      { path: 'experiences', component: ManageExperienceComponent },
+      { path: 'projects', component: ManageProjectsComponent },
+      { path: 'skills', component: ManageSkillsComponent },
+      { path: 'services', component: ManageServicesComponent },
+      { path: 'messages', component: ManageMessagesComponent },
+      { path: 'contact-info', component: ManageContactInfoComponent },
+      { path: 'user-management', component: AdminUserManagementComponent },
+
+      // Default redirect if someone opens /admin
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
 ];

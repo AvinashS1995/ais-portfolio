@@ -166,4 +166,30 @@ export class ManageProjectsComponent {
     }
     this.confirmDialog.show = false;
   }
+
+  selectedProfileImage: string | null = null;
+
+  onProfileImageUpload(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedProfileImage = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to server / AWS / your API
+    // this.apiService.uploadFile(file).subscribe((res: any) => {
+    //   this.aboutForm.patchValue({
+    //     profileImage: res.url
+    //   });
+    // });
+  }
+
+  removeProfileImage() {
+    this.selectedProfileImage = null;
+    this.projectForm.patchValue({ profileImage: '' });
+  }
 }

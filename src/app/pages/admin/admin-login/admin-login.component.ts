@@ -26,8 +26,13 @@ export class AdminLoginComponent {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+  }
+
+  get email() {
+    return this.loginForm.get('email');
   }
 
   get password() {
@@ -42,29 +47,28 @@ export class AdminLoginComponent {
 
     this.isSubmitting = true;
     this.errorMessage = '';
-    // this.router.navigate(['/admin/dashboard']);
 
-    const password = this.password?.value;
+    const payload = {
+      email: this.email?.value,
+      password: this.password?.value,
+    };
 
-    this.apiService.LoginAdmin({ password }).subscribe({
+    this.apiService.LoginAdmin(payload).subscribe({
       next: (res) => {
         if (res?.status === 'success') {
-          // ✅ Store both access and refresh tokens
           sessionStorage.setItem('accessToken', res.tokens.accessToken);
           sessionStorage.setItem('refreshToken', res.tokens.refreshToken);
-
-          // ✅ Store admin info
-          // localStorage.setItem('adminInfo', JSON.stringify(res.admin));
-          this.commonService.loadUserFromToken();
+          console.log(res.message);
           this.commonService.showToast(res.message, 'success');
+          this.commonService.loadUserFromToken();
           this.commonService.setLoginState();
-          // Navigate to dashboard
           this.router.navigate(['/admin/dashboard']);
         }
         this.isSubmitting = false;
       },
       error: (err) => {
-        this.commonService.showToast(err.error.message, 'error');
+        this.errorMessage = err.error.message || 'Login failed';
+        this.commonService.showToast(this.errorMessage, 'error');
         this.isSubmitting = false;
       },
     });

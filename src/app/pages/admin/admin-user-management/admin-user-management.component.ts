@@ -40,7 +40,6 @@ interface AdminActivity {
 export class AdminUserManagementComponent {
   admins: AdminUser[] = [];
   paginatedUsers: AdminUser[] = [];
-  total = 0;
   page = 1;
   pageSize = 10;
 
@@ -61,6 +60,7 @@ export class AdminUserManagementComponent {
   showActivityDialog = false;
   activityUserName = '';
   userActivities: any[] = [];
+  isSuperAdmin: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -70,39 +70,30 @@ export class AdminUserManagementComponent {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      role: ['admin', Validators.required],
+      role: ['Admin', Validators.required],
       password: ['', [Validators.minLength(6)]],
     });
   }
 
   ngOnInit() {
+    this.isSuperAdmin = this.commonService.userInfo?.role || '';
     this.fetchAdmins();
-    const role = this.commonService.userInfo?.role;
-    console.log('User Role:', role);
   }
 
-  // ✅ Fetch paginated admin list
   fetchAdmins() {
-    const payload = {
-      role: this.commonService.userInfo?.role || '',
-    };
-    this.apiService
-      .GetAdminUserList(payload)
-      .pipe()
-      .subscribe((res) => {
-        this.admins = res.data.admins;
-        this.total = res.data?.pagination?.total;
-        this.paginatedUsers = this.admins;
-      });
+    const payload = { role: this.commonService.userInfo?.role || '' };
+    this.apiService.GetAdminUserList(payload).subscribe((res: any) => {
+      this.admins = res.data.admins;
+      this.paginatedUsers = this.admins;
+    });
   }
 
   nextPage() {
-    if (this.page * this.pageSize < this.total) {
+    if (this.page * this.pageSize < this.admins.length) {
       this.page++;
       this.fetchAdmins();
     }
   }
-
   prevPage() {
     if (this.page > 1) {
       this.page--;
@@ -115,7 +106,8 @@ export class AdminUserManagementComponent {
     this.userForm.reset({
       name: user?.fullName || '',
       email: user?.email || '',
-      role: user?.role || 'admin',
+      role: user?.role || 'Admin',
+      password: '',
     });
     this.showDialog = true;
   }
@@ -126,67 +118,44 @@ export class AdminUserManagementComponent {
 
   saveUser() {
     if (this.userForm.invalid) return;
-    const { name, email, password, role } = this.userForm.getRawValue();
+    const { name, email, role, password } = this.userForm.getRawValue();
+    const payload: any = { fullName: name, email, role };
 
-    const payload = {
-      fullName: name || '',
-      email: email || '',
-      password: password || '',
-      role: role || '',
-    };
-
-    const request = this.apiService.SaveNewAdminCreation(payload);
-
-    request.pipe().subscribe((res: any) => {
-      if (!res) return;
-      this.alertDialog = {
-        show: true,
-        title: 'Created!',
-        message: res.message,
-        type: 'success',
-      };
-      this.fetchAdmins();
-      this.closeDialog();
-    });
-  }
-
-  editUser(user: any) {
-    if (this.userForm.invalid) return;
-    const { name, email, password, role } = this.userForm.getRawValue();
-
-    const payload = {
-      id: user._id || '',
-      fullName: name || '',
-      email: email || '',
-      password: password || '',
-      role: role || '',
-    };
-
-    const request = this.apiService.UpdateAdmin(payload);
-
-    request.pipe().subscribe((res: any) => {
-      if (!res) return;
-      this.alertDialog = {
-        show: true,
-        title: 'Updated!',
-        message: res.message,
-        type: 'success',
-      };
-      this.fetchAdmins();
-      this.closeDialog();
-    });
+    if (this.editingUser) {
+      // Update
+      payload.id = this.editingUser._id;
+      if (password) payload.password = password; // optional password change
+      this.apiService.UpdateAdmin(payload).subscribe((res: any) => {
+        this.alertDialog = {
+          show: true,
+          title: 'Updated!',
+          message: res.message,
+          type: 'success',
+        };
+        this.fetchAdmins();
+        this.closeDialog();
+      });
+    } else {
+      // Create
+      payload.password = password;
+      this.apiService.SaveNewAdminCreation(payload).subscribe((res: any) => {
+        this.alertDialog = {
+          show: true,
+          title: 'Created!',
+          message: res.message,
+          type: 'success',
+        };
+        this.fetchAdmins();
+        this.closeDialog();
+      });
+    }
   }
 
   toggleLock(user: AdminUser) {
     const newStatus = user.status === 'active' ? 'locked' : 'active';
-    const payload = {
-      id: user._id || '',
-    };
     this.apiService
-      .toggleLockUnlockAdmin(payload)
-      .pipe()
-      .subscribe((res) => {
-        if (!res) return;
+      .toggleLockUnlockAdmin({ id: user._id })
+      .subscribe((res: any) => {
         user.status = newStatus;
         this.alertDialog = {
           show: true,
@@ -198,7 +167,7 @@ export class AdminUserManagementComponent {
   }
 
   deleteUser(id: string) {
-    const user = this.admins.find((u: any) => u._id === id);
+    const user = this.admins.find((u) => u._id === id);
     if (!user) return;
     this.confirmDialog = {
       show: true,
@@ -209,56 +178,44 @@ export class AdminUserManagementComponent {
 
   handleConfirm(result: boolean) {
     if (result && this.confirmDialog.id) {
-      const payload = {
-        id: this.confirmDialog.id || '',
-      };
-      this.apiService
-        .DeleteAdmin(payload)
-        .pipe()
-        .subscribe({
-          next: (res) => {
-            this.alertDialog = {
-              show: true,
-              title: 'Deleted!',
-              message: res.message,
-              type: 'success',
-            };
-            this.fetchAdmins();
-          },
-          error: (err) => {
-            this.alertDialog = {
-              show: true,
-              title: 'Error!',
-              message: err.error.message,
-              type: 'error',
-            };
-          },
-        });
+      this.apiService.DeleteAdmin({ id: this.confirmDialog.id }).subscribe({
+        next: (res: any) => {
+          this.alertDialog = {
+            show: true,
+            title: 'Deleted!',
+            message: res.message,
+            type: 'success',
+          };
+          this.fetchAdmins();
+        },
+        error: (err) => {
+          this.alertDialog = {
+            show: true,
+            title: 'Error!',
+            message: err.error.message,
+            type: 'error',
+          };
+        },
+      });
     }
     this.confirmDialog.show = false;
   }
 
   viewActivity(user: AdminUser) {
     this.activityUserName = user.fullName;
-    const payload = {
-      id: user._id || '',
-    };
-    this.apiService
-      .GetAdminActivity(payload)
-      .pipe()
-      .subscribe({
-        next: (res: any) => {
-          this.userActivities = res.activities || [];
-          this.showActivityDialog = true;
-        },
-        error: () => {
-          this.alertDialog = {
-            show: true,
-            title: 'Error!',
-            message: 'Failed to load activity log.',
-            type: 'error',
-          };
-        },
-      });
+    this.apiService.GetAdminActivity({ id: user._id }).subscribe({
+      next: (res: any) => {
+        this.userActivities = res.activities || [];
+        this.showActivityDialog = true;
+      },
+      error: () => {
+        this.alertDialog = {
+          show: true,
+          title: 'Error!',
+          message: 'Failed to load activity log.',
+          type: 'error',
+        };
+      },
+    });
   }
 }

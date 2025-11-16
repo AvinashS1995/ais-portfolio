@@ -1,18 +1,23 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { CommonService } from '../services/common.service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const accessToken = sessionStorage.getItem('accessToken');
+  const commonService = inject(CommonService);
 
-  const role = sessionStorage.getItem('role');
+  const token = sessionStorage.getItem('accessToken');
+  if (!token) return router.parseUrl('/admin/login');
 
-  // ✅ Allow only if adminToken exists and role is 'admin'
-  if (accessToken && role === 'admin') {
+  try {
+    const decoded = commonService.userInfo;
+
+    if (!decoded?.role || !['Admin', 'Super Admin'].includes(decoded?.role)) {
+      return router.parseUrl('/admin/not-authorized');
+    }
+
     return true;
+  } catch {
+    return router.parseUrl('/admin/login');
   }
-
-  // ❌ Redirect to home or login page if not authorized
-  router.navigate(['/admin/login']);
-  return false;
 };

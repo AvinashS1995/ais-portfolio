@@ -121,14 +121,37 @@
             />
           </div>
 
-          <div>
+          <!-- <div>
             <label class="block mb-1 font-bold text-[#f58b49]">Image URL</label>
             <input
               formControlName="image"
               class="w-full bg-[#111] border border-[#2b2b2b] text-gray-200 rounded-lg p-2"
               required
             />
-          </div>
+          </div> -->
+
+          <div class="space-y-4">
+        <label class="block mb-2 text-[#f58b49] font-semibold">Project Image</label>
+
+        <div *ngIf="selectedProfileImage" class="relative group w-40 h-40">
+          <img
+            [src]="selectedProfileImage"
+            class="w-40 h-40 rounded-xl object-cover border border-[#f58b49]/40 shadow-xl"/>
+          <button
+            type="button"
+            (click)="removeProfileImage()"
+            class="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <label
+          class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
+          Select Project Image 
+          <i class="fa-solid fa-upload text-[#f58b49]"></i>
+          <input type="file" hidden accept="image/*" (change)="onProfileImageUpload($event)"/>
+        </label>
+      </div>
 
           <div>
             <label class="block mb-1 font-bold text-[#f58b49]">Description</label>

@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
   SERVICE_ADMIN_USER_LIST: 'portfolio/get-admin-user-list',
   SERVICE_UPDATE_ADMIN: 'portfolio/update-admin',
   SERVICE_DELETE_ADMIN: 'portfolio/delete-admin',
-  SERVICE_LOCK_UNLOCK_ADMIN: 'portfolio/toggle-lock-unclock-admin',
+  SERVICE_LOCK_UNLOCK_ADMIN: 'portfolio/toggle-lock-unlock-admin',
   SERVICE_GET_ADMIN_ACTIVITY: 'portfolio/get-admin-activity',
   SERVICE_SAVE_ADMIN_DASHBOARD_CARDS: 'portfolio/save-admin-dashboard-cards',
   SERVICE_GET_ADMIN_DASHBOARD_CARDS: 'portfolio/get-admin-dashboard-cards',

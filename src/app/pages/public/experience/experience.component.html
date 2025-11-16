@@ -161,7 +161,7 @@
   <!-- CTA BUTTON -->
   <div class="relative text-center mt-24 z-10">
     <a
-      routerLink="/contact"
+      [routerLink]="['/', slug, 'contact']"
       class="inline-flex items-center gap-2 bg-[#f58b49] hover:bg-[#ff9d61] text-white px-10 py-4 rounded-full font-semibold text-lg tracking-wide shadow-[0_0_25px_rgba(245,139,73,0.5)] hover:shadow-[0_0_45px_rgba(245,139,73,0.8)] hover:scale-105 transition-all duration-500"
     >
       Let's Work Together

@@ -27,7 +27,7 @@
 
       <div class="pt-2 flex flex-wrap gap-4">
         <a
-          routerLink="/projects"
+          [routerLink]="['/', slug, 'project']"
           class="inline-flex items-center gap-2 bg-[#f58b49] text-black font-semibold px-6 py-2 rounded-full hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_20px_rgba(245,139,73,0.3)]"
         >
           View My Projects
