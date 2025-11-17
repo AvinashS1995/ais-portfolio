@@ -13,48 +13,32 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = sessionStorage.getItem('accessToken');
   const refreshToken = sessionStorage.getItem('refreshToken');
 
-  // ✅ Attach access token if available
-  const clonedRequest = accessToken
-    ? req.clone({
-        setHeaders: { Authorization: `Bearer ${accessToken}` },
-      })
+  const clonedReq = accessToken
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })
     : req;
 
-  return next(clonedRequest).pipe(
+  return next(clonedReq).pipe(
     catchError((error) => {
-      // 🔒 Handle token expiration (401 / 403)
       if ((error.status === 401 || error.status === 403) && refreshToken) {
         return apiService.refreshAccessToken(refreshToken).pipe(
           switchMap((res: any) => {
-            const newAccessToken = res.accessToken;
-            sessionStorage.setItem('accessToken', newAccessToken);
+            const newToken = res.accessToken;
+            sessionStorage.setItem('accessToken', newToken);
 
-            // 🔁 Retry original request
             const retryReq = req.clone({
-              setHeaders: { Authorization: `Bearer ${newAccessToken}` },
+              setHeaders: { Authorization: `Bearer ${newToken}` },
             });
+
             return next(retryReq);
           }),
-          catchError((refreshErr) => {
-            // ❌ Refresh failed
-
-            console.log(refreshErr);
-            commonService.showToast(
-              'Session expired, please login again',
-              'error'
-            );
+          catchError(() => {
             sessionStorage.clear();
-            router.navigate(['/home']);
-            return throwError(() => refreshErr);
+            commonService.clearUserInfo();
+            commonService.clearSession();
+            router.navigate(['/admin/login']);
+            return throwError(() => error);
           })
         );
-      }
-
-      // ⚠️ Other backend errors
-      if (error?.error?.message) {
-        commonService.showToast(error.error.message, 'error');
-      } else {
-        commonService.showToast('Something went wrong!', 'error');
       }
 
       return throwError(() => error);
