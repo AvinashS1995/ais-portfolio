@@ -47,24 +47,21 @@ export class CommonService {
     this.userInfoSubject.next(null);
   }
 
-  // ✅ Checks whether tokens exist
   private hasToken(): boolean {
     return !!sessionStorage.getItem('accessToken');
   }
 
-  // ✅ Call this on login
   setLoginState(): void {
     this.isAdminSubject.next(true);
   }
 
-  // ✅ Call this on logout
   clearSession(): void {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('refreshToken');
     this.isAdminSubject.next(false);
   }
 
-  // 🌟 Custom Toast Notification (Beautiful YouWare Theme)
+  // 🌟 Custom Toast Notification
   showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {
     const toast = document.createElement('div');
     toast.className = `

@@ -19,6 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(clonedReq).pipe(
     catchError((error) => {
+      // 🔴 If access token expired → try refresh token
       if ((error.status === 401 || error.status === 403) && refreshToken) {
         return apiService.refreshAccessToken(refreshToken).pipe(
           switchMap((res: any) => {
@@ -31,15 +32,31 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
             return next(retryReq);
           }),
-          catchError(() => {
+
+          // 🔴 REFRESH TOKEN FAILED HERE
+          catchError((refreshErr) => {
+            const message =
+              refreshErr?.error?.message ||
+              'Invalid or expired refresh token. Please login again.';
+
+            commonService.showToast(message, 'error');
+
+            // Clear everything and logout
             sessionStorage.clear();
             commonService.clearUserInfo();
             commonService.clearSession();
+
             router.navigate(['/admin/login']);
-            return throwError(() => error);
+
+            return throwError(() => refreshErr);
           })
         );
       }
+
+      commonService.showToast(
+        error?.error?.message || 'Something went wrong!',
+        'error'
+      );
 
       return throwError(() => error);
     })

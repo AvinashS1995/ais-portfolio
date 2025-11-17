@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../common/api-constant';
-import { AdminLockUnlock, LoginAdmin, SaveNewAdmin } from '../interfaces/auth';
+import {
+  AdminLockUnlock,
+  LoginAdmin,
+  LoginResponse,
+  SaveNewAdmin,
+} from '../interfaces/auth';
 import {
   AdminActivity,
   AdminUserList,
-  DashboardCard,
-  DashboardStat,
   DeleteAdmin,
   GetDashboardPayload,
   SaveDashboardCardsPayload,
@@ -33,8 +36,8 @@ export class ApiService {
     );
   }
 
-  LoginAdmin(payload: LoginAdmin): Observable<any> {
-    return this.http.post<LoginAdmin>(
+  LoginAdmin(payload: LoginAdmin): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_LOGIN}`,
       payload
     );
