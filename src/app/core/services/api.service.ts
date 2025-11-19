@@ -127,6 +127,13 @@ export class ApiService {
     );
   }
 
+  UploadFile(formData: FormData): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPLOADFILE}`,
+      formData
+    );
+  }
+
   GetPortfolioAbout(payload: any): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_ABOUT_SECTION}`,
@@ -302,6 +309,22 @@ export class ApiService {
     );
   }
 
+  // Get all portfolio messages (Admin side)
+  GetPortfolioContactMessages(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_CONTACT_MESSSAGES_SECTION}`,
+      payload
+    );
+  }
+
+  // Delete a specific portfolio message (Admin side)
+  DeletePortfolioContactMessage(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_CONTACT_MESSAGE_SECTION}`,
+      payload
+    );
+  }
+
   GetPublicPortfolioAbout(slug: string): Observable<any> {
     const url = this.commonService.buildUrl(
       API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION,
@@ -356,5 +379,13 @@ export class ApiService {
       { slug }
     );
     return this.http.get(`${this.baseUrl}${url}`);
+  }
+
+  SavePortfolioContactMessage(slug: string, payload: any): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_SAVE_CONTACT_INFO_MESSAGE_SECTION,
+      { slug }
+    );
+    return this.http.post(`${this.baseUrl}${url}`, payload);
   }
 }

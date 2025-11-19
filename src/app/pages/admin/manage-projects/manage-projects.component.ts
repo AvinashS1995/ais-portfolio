@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonService } from '../../../core/services/common.service';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { ApiService } from '../../../core/services/api.service';
+
+const allowedImageFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
 export interface Project {
   _id: string;
@@ -29,6 +31,8 @@ export class ManageProjectsComponent {
   editingProject: Project | null = null;
   isDialogOpen = false;
   confirmDialog = { show: false, message: '', projectId: '' };
+
+  @ViewChild('projectInput') projectInput: any;
 
   constructor(
     private fb: FormBuilder,
@@ -91,7 +95,7 @@ export class ManageProjectsComponent {
       title,
       category,
       role,
-      image,
+      image: image.split('/').pop() || '',
       description,
       codeLink,
       previewLink,
@@ -114,17 +118,17 @@ export class ManageProjectsComponent {
       this.projectForm.getRawValue();
     const payload = {
       adminId: this.commonService.userInfo?.id,
-      serviceId: this.editingProject._id,
+      projectId: this.editingProject._id,
       title,
       category,
       role,
-      image,
+      image: image.split('/').pop() || '',
       description,
       codeLink,
       previewLink,
     };
 
-    this.apiService.UpdatePortfolioServices(payload).subscribe({
+    this.apiService.UpdatePortfolioProjects(payload).subscribe({
       next: (res) => {
         this.loadProjects();
         this.commonService.showToast(res.message, 'success');
@@ -173,19 +177,30 @@ export class ManageProjectsComponent {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedProfileImage = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Upload to server / AWS / your API
-    // this.apiService.uploadFile(file).subscribe((res: any) => {
-    //   this.aboutForm.patchValue({
-    //     profileImage: res.url
-    //   });
-    // });
+    if (!allowedImageFileTypes.includes(file.type)) {
+      this.commonService.showToast(
+        'image files are allowed (JPG, JPEG, PNG)',
+        'error'
+      );
+      return;
+    }
+
+    this.apiService.UploadFile(formData).subscribe({
+      next: (res: any) => {
+        const uploaded = res.data;
+        console.log(uploaded);
+        // Show preview
+        this.selectedProfileImage = uploaded.presignFileUrl;
+
+        // Patch form with new object structure
+        this.projectForm.patchValue({
+          image: uploaded.fileUrl,
+        });
+      },
+    });
   }
 
   removeProfileImage() {

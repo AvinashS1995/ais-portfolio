@@ -87,8 +87,8 @@
           </div>
 
           <a
-            *ngIf="aboutData.resumeUrl"
-            [href]="aboutData.resumeUrl"
+            *ngIf="aboutData.resumeFile"
+            [href]="aboutData.resumeFile"
             target="_blank"
             class="text-[#f58b49] underline underline-offset-4 hover:text-[#ffb67a] text-lg flex items-center gap-2 transition-all">
             <i class="fa-solid fa-file-pdf text-3xl"></i>
@@ -187,7 +187,7 @@
             class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
             Select Profile Image
             <i class="fa-solid fa-upload text-[#f58b49]"></i>
-            <input type="file" hidden accept="image/*" (change)="onProfileImageUpload($event)" />
+            <input #profileInput type="file" hidden accept="image/*" (change)="onProfileImageUpload($event)" />
           </label>
         </div>
 
@@ -199,7 +199,7 @@
             class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
             Upload Resume
             <i class="fa-solid fa-file-arrow-up text-[#f58b49]"></i>
-            <input type="file" hidden accept="application/pdf" (change)="onResumeUpload($event)" />
+            <input #resumeInput  type="file" hidden accept="application/pdf" (change)="onResumeUpload($event)" />
           </label>
 
           <div *ngIf="resumeFileName" class="flex items-center gap-3 text-gray-200">

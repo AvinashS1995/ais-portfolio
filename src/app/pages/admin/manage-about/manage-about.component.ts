@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../core/services/common.service';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
+
+const allowedImageFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+const allowedFileTypes = ['application/pdf'];
 
 @Component({
   selector: 'app-manage-about',
@@ -19,6 +22,9 @@ export class ManageAboutComponent implements OnInit {
   editingAbout: any = null;
 
   aboutData: any = null; // loaded API data
+
+  @ViewChild('profileInput') profileInput: any;
+  @ViewChild('resumeInput') resumeInput: any;
 
   constructor(
     private fb: FormBuilder,
@@ -87,10 +93,21 @@ export class ManageAboutComponent implements OnInit {
   saveAbout() {
     if (this.aboutForm.invalid) return;
 
+    const { name, title, bio, bio2, profileImage, resumeUrl, stats } =
+      this.aboutForm.getRawValue();
+
     const payload = {
       adminId: this.commonService.userInfo?.id,
-      ...this.aboutForm.value,
+      profileImage: profileImage.split('/').pop() || '',
+      resumeFile: resumeUrl.split('/').pop() || '',
+      name,
+      title,
+      bio,
+      bio2,
+      stats,
     };
+
+    console.log(payload);
 
     this.apiService.SavePortfolioAbout(payload).subscribe({
       next: (res) => {
@@ -114,19 +131,30 @@ export class ManageAboutComponent implements OnInit {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedProfileImage = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Upload to server / AWS / your API
-    // this.apiService.uploadFile(file).subscribe((res: any) => {
-    //   this.aboutForm.patchValue({
-    //     profileImage: res.url
-    //   });
-    // });
+    if (!allowedImageFileTypes.includes(file.type)) {
+      this.commonService.showToast(
+        'image files are allowed (JPG, JPEG, PNG)',
+        'error'
+      );
+      return;
+    }
+
+    this.apiService.UploadFile(formData).subscribe({
+      next: (res: any) => {
+        const uploaded = res.data;
+        console.log(uploaded);
+        // Show preview
+        this.selectedProfileImage = uploaded.presignFileUrl;
+
+        // Patch form with new object structure
+        this.aboutForm.patchValue({
+          profileImage: uploaded.fileUrl,
+        });
+      },
+    });
   }
 
   removeProfileImage() {
@@ -138,14 +166,30 @@ export class ManageAboutComponent implements OnInit {
     const file = event.target.files[0];
     if (!file) return;
 
-    this.resumeFileName = file.name;
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Upload to backend
-    // this.apiService.uploadFile(file).subscribe((res: any) => {
-    //   this.aboutForm.patchValue({
-    //     resumeUrl: res.url
-    //   });
-    // });
+    if (!allowedFileTypes.includes(file.type)) {
+      this.commonService.showToast('Pdf files are allowed (PDF)', 'error');
+      return;
+    }
+
+    // this.resumeFileName = file.name;
+
+    this.apiService.UploadFile(formData).subscribe({
+      next: (res: any) => {
+        const uploaded = res.data;
+        console.log(uploaded);
+
+        // Show preview
+        this.resumeFileName = uploaded.fileKey;
+
+        // Patch form with new object structure
+        this.aboutForm.patchValue({
+          resumeUrl: uploaded.fileUrl,
+        });
+      },
+    });
   }
 
   removeResume() {

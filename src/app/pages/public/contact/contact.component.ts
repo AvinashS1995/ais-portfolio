@@ -5,6 +5,7 @@ import { ApiService } from '../../../core/services/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../core/services/common.service';
 import { SafeUrlPipe } from '../../../core/pipes/safe-url.pipe';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface ContactInfo {
   location: {
@@ -54,26 +55,30 @@ export class ContactComponent {
     },
   };
 
-  formData = {
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  };
-
   private destroy$ = new Subject<void>();
-  slug: string = 'avinash'; // Can be dynamic from route
+  contactForm!: FormGroup;
+  slug: string = 'avinash';
 
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.slug = this.route.snapshot.paramMap.get('slug')!;
-
+    this.initializeForm();
     this.fetchContactInfo();
+  }
+
+  initializeForm() {
+    this.contactForm = this.fb.group({
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      subject: ['', [Validators.required]],
+      message: ['', [Validators.required]],
+    });
   }
 
   fetchContactInfo(): void {
@@ -97,10 +102,20 @@ export class ContactComponent {
   }
 
   handleSubmit(): void {
-    // Replace this with real POST API to save contact form messages
-    console.log('Message sent:', this.formData);
-    alert('✅ Message sent successfully!');
-    this.formData = { name: '', email: '', subject: '', message: '' };
+    const payload = this.contactForm.value;
+
+    this.apiService
+      .SavePortfolioContactMessage(this.slug, payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.commonService.showToast('Message sent successfully!', 'success');
+          this.contactForm.reset();
+        },
+        error: (err) => {
+          this.commonService.showToast(err.error.message, 'error');
+        },
+      });
   }
 
   ngOnDestroy(): void {

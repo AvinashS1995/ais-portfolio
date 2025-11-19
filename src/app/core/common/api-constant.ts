@@ -56,6 +56,11 @@ export const API_ENDPOINTS = {
     'portfolio/update-portfolio-contact-info',
   SERVICE_DELETE_PORTFOLIO_CONTACT_INFO_SECTION:
     'portfolio/delete-portfolio-contact-info',
+  SERVICE_UPLOADFILE: 'file/upload-file',
+  SERVICE_GET_PORTFOLIO_CONTACT_MESSSAGES_SECTION:
+    'portfolio/get-portfolio-messages',
+  SERVICE_DELETE_PORTFOLIO_CONTACT_MESSAGE_SECTION:
+    'portfolio/delete-portfolio-message',
   SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION:
     'portfolio/get-public-portfolio-about-by-slug/:slug',
   SERVICE_GET_PUBLIC_PORTFOLIO_EDUCATIONS_SECTION:
@@ -70,4 +75,6 @@ export const API_ENDPOINTS = {
     'portfolio/get-public-portfolio-projects-by-slug/:slug',
   SERVICE_GET_PUBLIC_PORTFOLIO_CONTACT_INFO_SECTION:
     'portfolio/get-public-portfolio-contact-info-by-slug/:slug',
+  SERVICE_GET_PUBLIC_PORTFOLIO_SAVE_CONTACT_INFO_MESSAGE_SECTION:
+    'portfolio/save-portfolio-message/:slug',
 };

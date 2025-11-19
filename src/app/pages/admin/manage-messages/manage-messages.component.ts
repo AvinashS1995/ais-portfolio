@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
+import { ApiService } from '../../../core/services/api.service';
+import { CommonService } from '../../../core/services/common.service';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 export interface Message {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   subject: string;
@@ -14,50 +17,74 @@ export interface Message {
 @Component({
   selector: 'app-manage-messages',
   standalone: true,
-  imports: [SHARED_MODULES],
+  imports: [SHARED_MODULES, ConfirmationDialogComponent],
   templateUrl: './manage-messages.component.html',
   styleUrl: './manage-messages.component.css',
 })
 export class ManageMessagesComponent {
-  contactMessages: Message[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      subject: 'Portfolio Design Inquiry',
-      message:
-        'Hi, I loved your portfolio design! Can we collaborate on a freelance project?',
-      createdAt: '2025-11-10T14:30:00Z',
-    },
-    {
-      id: '2',
-      name: 'Sarah Williams',
-      email: 'sarah.williams@example.com',
-      subject: 'Job Opportunity',
-      message:
-        'Hello, we are impressed with your work and would like to discuss a frontend developer role.',
-      createdAt: '2025-11-09T09:45:00Z',
-    },
-    {
-      id: '3',
-      name: 'Ravi Kumar',
-      email: 'ravi.kumar@example.com',
-      subject: 'Project Collaboration',
-      message:
-        'Hey, can you help me design a landing page for my startup using Angular and Tailwind?',
-      createdAt: '2025-11-08T18:15:00Z',
-    },
-  ];
+  contactMessages: Message[] = [];
 
-  constructor(private router: Router) {}
+  confirmDialog = { show: false, message: '', messageId: '' };
 
-  deleteMessage(id: string) {
-    if (confirm('Are you sure you want to delete this message?')) {
-      this.contactMessages = this.contactMessages.filter(
-        (msg) => msg.id !== id
-      );
-      alert('Message deleted successfully!');
+  constructor(
+    private apiService: ApiService,
+    private commonService: CommonService
+  ) {}
+
+  ngOnInit() {
+    this.loadMessages();
+  }
+
+  loadMessages() {
+    const payload = {
+      id: this.commonService.userInfo?.id,
+    };
+
+    this.apiService.GetPortfolioContactMessages(payload).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.contactMessages = res.data.messages || [];
+        }
+      },
+      error: (err) => {
+        this.commonService.showToast(
+          err.error?.message || 'Error loading messages',
+          'error'
+        );
+      },
+    });
+  }
+
+  deleteMessage(messageId: string) {
+    const msg = this.contactMessages.find((e) => e._id === messageId);
+    if (!msg) return;
+
+    console.log(msg);
+
+    this.confirmDialog = {
+      show: true,
+      message: `Are you sure you want to delete ${msg.name} Message?`,
+      messageId,
+    };
+  }
+
+  handleConfirm(result: boolean) {
+    if (result && this.confirmDialog.messageId) {
+      const payload = {
+        adminId: this.commonService.userInfo?.id,
+        messageId: this.confirmDialog.messageId,
+      };
+
+      this.apiService.DeletePortfolioContactMessage(payload).subscribe({
+        next: (res) => {
+          this.loadMessages();
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) =>
+          this.commonService.showToast(err.error.message, 'error'),
+      });
     }
+    this.confirmDialog.show = false;
   }
 
   formatDate(dateString: string): string {
