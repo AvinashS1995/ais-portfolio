@@ -141,6 +141,20 @@ export class ApiService {
     );
   }
 
+  SavePortfolioHome(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_HOME_SECTION}`,
+      payload
+    );
+  }
+
+  GetPortfolioHome(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_PORTFOLIO_HOME_SECTION}`,
+      payload
+    );
+  }
+
   SavePortfolioEducations(payload: any): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_SAVE_PORTFOLIO_EDUCATIONS_SECTION}`,
@@ -323,6 +337,14 @@ export class ApiService {
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_DELETE_PORTFOLIO_CONTACT_MESSAGE_SECTION}`,
       payload
     );
+  }
+
+  GetPublicPortfolioHome(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_HOME_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
   }
 
   GetPublicPortfolioAbout(slug: string): Observable<any> {

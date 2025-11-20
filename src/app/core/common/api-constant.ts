@@ -13,6 +13,8 @@ export const API_ENDPOINTS = {
   SERVICE_GET_ADMIN_DASHBOARD_CARDS: 'portfolio/get-admin-dashboard-cards',
   SERVICE_SAVE_ADMIN_DASHBOARD_STATS: 'portfolio/save-admin-dashboard-stats',
   SERVICE_GET_ADMIN_DASHBOARD_STATS: 'portfolio/get-admin-dashboard-stats',
+  SERVICE_SAVE_PORTFOLIO_HOME_SECTION: 'portfolio/save-portfolio-home-section',
+  SERVICE_GET_PORTFOLIO_HOME_SECTION: 'portfolio/get-portfolio-home',
   SERVICE_SAVE_PORTFOLIO_ABOUT_SECTION:
     'portfolio/save-portfolio-about-section',
   SERVICE_GET_PORTFOLIO_ABOUT_SECTION: 'portfolio/get-portfolio-about',
@@ -61,6 +63,8 @@ export const API_ENDPOINTS = {
     'portfolio/get-portfolio-messages',
   SERVICE_DELETE_PORTFOLIO_CONTACT_MESSAGE_SECTION:
     'portfolio/delete-portfolio-message',
+  SERVICE_GET_PUBLIC_PORTFOLIO_HOME_SECTION:
+    'portfolio/get-public-portfolio-home-by-slug/:slug',
   SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION:
     'portfolio/get-public-portfolio-about-by-slug/:slug',
   SERVICE_GET_PUBLIC_PORTFOLIO_EDUCATIONS_SECTION:

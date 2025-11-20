@@ -1,59 +1,68 @@
 <section
-  class="relative flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 pt-[100px] md:pt-[120px] pb-12 md:pb-16 bg-black text-white overflow-hidden min-h-screen"
->
+  class="relative min-h-screen bg-black text-white flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-12 pt-[100px] md:pt-[120px] pb-16 overflow-hidden">
+  <!-- Soft gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0c0c0c] to-black"></div>
+
+  <!-- Orange ambient glows -->
+  <div class="absolute top-20 left-10 w-80 h-80 bg-[#f58b49]/10 rounded-full blur-[140px] opacity-50 animate-pulse">
+  </div>
+  <div class="absolute bottom-10 right-20 w-96 h-96 bg-[#f58b49]/5 rounded-full blur-[160px] opacity-40"></div>
+
   <!-- Left Content -->
-  <div class="md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left z-10">
+  <div class="relative z-10 md:w-1/2 space-y-6 text-center md:text-left">
+
+    <!-- Hello Tag -->
     <div class="flex justify-center md:justify-start">
       <span
-        class="px-4 py-1 border border-[#f58b49] text-[#f58b49] rounded-full text-sm tracking-wide inline-block animate-pulse"
-      >
+        class="px-4 py-1 border border-[#f58b49] text-[#f58b49] rounded-full text-sm tracking-wide inline-block animate-pulse">
         Hello!
       </span>
     </div>
 
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+    <!-- Title -->
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-xl">
       <span class="block">
         I'm <span class="text-[#f58b49]">{{ aboutData.name }}</span>
       </span>
-      <span class="text-[#f58b49] inline-block min-h-[1.2em]">
-        {{ displayedText }}<span class="animate-pulse">|</span>
+
+      <!-- Typing Role -->
+      <span class="text-[#f58b49] inline-block min-h-[1.3em] drop-shadow-[0_0_10px_rgba(245,139,73,0.8)]">
+        {{ displayedText }}
+        <span class="animate-pulse">|</span>
       </span>
     </h1>
 
-    <p
-      class="text-gray-300 max-w-md mx-auto md:mx-0 leading-relaxed text-sm sm:text-base"
-    >
-      Creativity with purpose, design with impact — that's my approach, that's my passion.
+    <!-- Description -->
+    <p class="text-gray-300 max-w-lg mx-auto md:mx-0 leading-relaxed text-base opacity-90 tracking-wide">
+      {{ aboutData.description }}
     </p>
 
-    <div class="flex justify-center md:justify-start items-center space-x-4">
-      <a
-        [routerLink]="['/', slug, 'project']"
-        class="inline-flex items-center gap-2 bg-[#f58b49] text-black font-semibold px-6 py-2 rounded-full hover:bg-[#ff9557] hover:scale-105 transition transform shadow-[0_0_20px_rgba(245,139,73,0.3)]"
-      >
-        Portfolio <i class="fa-solid fa-arrow-right w-4 h-4"></i>
+
+    <!-- Buttons -->
+    <div class="flex justify-center md:justify-start items-center space-x-4 pt-4">
+      <a [routerLink]="['/', slug, 'project']"
+        class="inline-flex items-center gap-3 bg-gradient-to-r from-[#f58b49] to-[#ff9f65] text-black font-semibold px-7 py-3 rounded-full hover:scale-105 hover:shadow-[0_0_25px_rgba(245,139,73,0.5)] transition-all">
+        Portfolio <i class="fa-solid fa-arrow-right"></i>
       </a>
 
-      <a
-        [routerLink]="['/', slug, 'contact']"
-        class="inline-flex items-center gap-2 border border-[#f58b49]/60 text-[#f58b49] font-semibold px-6 py-2 rounded-full hover:bg-[#f58b49] hover:text-black hover:scale-105 transition transform shadow-[0_0_15px_rgba(245,139,73,0.2)]"
-      >
-        <i class="fa-solid fa-briefcase w-4 h-4"></i>
+      <a [routerLink]="['/', slug, 'contact']"
+        class="inline-flex items-center gap-3 border border-[#f58b49]/60 text-[#f58b49] font-semibold px-7 py-3 rounded-full hover:bg-[#f58b49] hover:text-black hover:scale-105 hover:shadow-[0_0_20px_rgba(245,139,73,0.5)] transition-all">
+        <i class="fa-solid fa-briefcase"></i>
         Hire Me
       </a>
     </div>
   </div>
 
   <!-- Right Avatar -->
-  <div class="md:w-1/2 flex flex-col items-center justify-center mt-10 md:mt-0 relative">
-    <div
-      class="absolute rounded-full bg-[#f58b49] w-56 h-56 sm:w-64 sm:h-64 md:w-[26rem] md:h-[26rem] -z-10 top-10 md:top-auto blur-3xl opacity-30 animate-pulse"
-    ></div>
+  <div class="relative md:w-1/2 flex items-center justify-center mt-12 md:mt-0">
 
-    <img
-      [src]="aboutData.profileImage"
-      alt="profile"
-      class="w-56 h-56 sm:w-64 sm:h-64 md:w-[26rem] md:h-[26rem] rounded-full object-cover border-4 border-[#f58b49] shadow-[0_0_40px_rgba(245,139,73,0.4)]"
-    />
+    <!-- Glow Circle -->
+    <div
+      class="absolute rounded-full bg-[#f58b49] w-56 h-56 sm:w-72 sm:h-72 md:w-[28rem] md:h-[28rem] -z-10 blur-3xl opacity-30 animate-pulse">
+    </div>
+
+    <!-- Avatar Image -->
+    <img [src]="aboutData.profileImage" alt="profile"
+      class="w-56 h-56 sm:w-72 sm:h-72 md:w-[28rem] md:h-[28rem] rounded-full object-cover border-4 border-[#f58b49] shadow-[0_0_60px_rgba(245,139,73,0.45)] hover:scale-105 transition-all duration-500" />
   </div>
 </section>

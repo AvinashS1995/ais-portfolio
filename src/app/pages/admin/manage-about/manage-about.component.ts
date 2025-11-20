@@ -21,7 +21,10 @@ export class ManageAboutComponent implements OnInit {
   showDialog = false;
   editingAbout: any = null;
 
-  aboutData: any = null; // loaded API data
+  aboutData: any = null;
+
+  selectedProfileImage: string | null = null;
+  resumeFileName: string | null = null;
 
   @ViewChild('profileInput') profileInput: any;
   @ViewChild('resumeInput') resumeInput: any;
@@ -123,9 +126,6 @@ export class ManageAboutComponent implements OnInit {
       error: (err) => this.commonService.showToast(err.error.message, 'error'),
     });
   }
-
-  selectedProfileImage: string | null = null;
-  resumeFileName: string | null = null;
 
   onProfileImageUpload(event: any) {
     const file = event.target.files[0];

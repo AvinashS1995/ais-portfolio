@@ -11,6 +11,7 @@ import { ManageContactInfoComponent } from './manage-contact-info/manage-contact
 import { AdminUserManagementComponent } from './admin-user-management/admin-user-management.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { ManageSkillsComponent } from './manage-skills/manage-skills.component';
+import { ManageHomeComponent } from './manage-home/manage-home.component';
 
 export const ADMIN_ROUTES: Routes = [
   // LOGIN — NO GUARD
@@ -22,6 +23,7 @@ export const ADMIN_ROUTES: Routes = [
     canActivateChild: [adminGuard],
     children: [
       { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'home', component: ManageHomeComponent },
       { path: 'abouts', component: ManageAboutComponent },
       { path: 'education', component: ManageEducationComponent },
       { path: 'experiences', component: ManageExperienceComponent },

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
+import { CommonService } from '../../../core/services/common.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -11,26 +13,65 @@ import { ApiService } from '../../../core/services/api.service';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  aboutData = {
-    name: 'Avinash Suryawanshi',
-    profileImage: 'assets/profile.jpg', // ✅ Replace with your real image URL or presigned URL
-  };
-
-  roles = ['Angular Developer', 'Frontend Developer', 'Full Stack Developer'];
+  aboutData: any = {};
+  roles: string[] = []; // <-- dynamic roles from API
   displayedText = '';
   currentRoleIndex = 0;
   currentCharIndex = 0;
   isDeleting = false;
-  slug!: string;
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
+  slug!: string;
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
-    this.typeEffect();
     this.slug = this.route.snapshot.paramMap.get('slug')!;
+    this.getHomeSection();
+  }
+
+  getHomeSection() {
+    this.apiService
+      .GetPublicPortfolioHome(this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.aboutData = res.data?.home;
+
+          // 🔥 NEW - assign roles from API
+          this.roles = res.data?.home?.roles || [];
+
+          // restart typing effect with new roles
+          this.resetTypingEffect();
+
+          this.commonService.showToast(res.message, 'success');
+        },
+        error: (err) => {
+          console.error('Home fetch error:', err);
+          this.commonService.showToast(err.error.message, 'error');
+        },
+      });
+  }
+
+  // reset & start typing effect again after API load
+  resetTypingEffect() {
+    this.displayedText = '';
+    this.currentRoleIndex = 0;
+    this.currentCharIndex = 0;
+    this.isDeleting = false;
+
+    if (this.roles.length > 0) {
+      this.typeEffect();
+    }
   }
 
   typeEffect() {
+    if (this.roles.length === 0) return; // avoid error
+
     const currentRole = this.roles[this.currentRoleIndex];
     const typingSpeed = this.isDeleting ? 70 : 120;
 

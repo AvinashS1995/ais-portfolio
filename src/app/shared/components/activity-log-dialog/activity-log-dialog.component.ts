@@ -20,40 +20,18 @@ interface AdminActivity {
 export class ActivityLogDialogComponent {
   @Input() show = false;
   @Input() userName = '';
-  @Input() activities: AdminActivity[] = [];
+  @Input() activities: any[] = [];
   @Output() close = new EventEmitter<void>();
 
-  getIcon(type: string) {
-    switch (type) {
-      case 'create':
-        return 'fa-plus-circle text-green-400';
-      case 'update':
-        return 'fa-pen text-blue-400';
-      case 'delete':
-        return 'fa-trash text-red-400';
-      case 'lock':
-        return 'fa-lock text-red-400';
-      case 'unlock':
-        return 'fa-unlock text-green-400';
+  getIcon(status: string) {
+    switch (status) {
+      case 'success':
+        return 'fa-circle-check text-green-400';
+      case 'failed':
+      case 'error':
+        return 'fa-circle-xmark text-red-400';
       default:
-        return 'fa-info-circle text-gray-400';
-    }
-  }
-
-  getTypeLabel(type: string) {
-    switch (type) {
-      case 'create':
-        return 'Created';
-      case 'update':
-        return 'Updated';
-      case 'delete':
-        return 'Deleted';
-      case 'lock':
-        return 'Locked';
-      case 'unlock':
-        return 'Unlocked';
-      default:
-        return 'Viewed';
+        return 'fa-circle-info text-gray-400';
     }
   }
 }

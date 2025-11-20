@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative overflow-hidden">
+
+  <!-- Ambient Background -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0c0c0c] to-black"></div>
+  <div class="absolute top-32 right-20 w-80 h-80 bg-[#f58b49]/10 rounded-full blur-[120px] opacity-60"></div>
+  <div class="absolute bottom-10 left-10 w-72 h-72 bg-[#f58b49]/5 rounded-full blur-[140px] opacity-50"></div>
+
+  <div class="relative max-w-5xl mx-auto z-10">
+
+    <!-- Back Button -->
+    <button routerLink="/admin/dashboard"
+      class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] mb-8 transition">
+      <i class="fa-solid fa-arrow-left text-sm"></i>
+      <span class="text-sm">Back to Dashboard</span>
+    </button>
+
+    <!-- MAIN CARD -->
+    <div
+      class="bg-[#111]/80 backdrop-blur-xl p-10 rounded-3xl border border-[#f58b49]/20 shadow-[0_0_80px_rgba(245,139,73,0.20)]">
+
+      <!-- Title Row -->
+      <div class="flex justify-between items-center mb-10">
+        <h2
+          class="text-4xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#f58b49] to-[#ffb67a]">
+          <i class="fa-solid fa-house mr-2"></i> Home Section
+        </h2>
+
+        <button (click)="openDialog(homeData)"
+          class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#f58b49] to-[#ff9a61] text-black font-semibold hover:scale-105 transition">
+          <i class="fa-solid fa-pen-to-square mr-1"></i>
+          {{ homeData ? 'Edit' : 'Add' }}
+        </button>
+      </div>
+
+      <!-- No Data -->
+      <div *ngIf="!homeData" class="text-center text-gray-500 py-20">
+        <i class="fa-regular fa-circle-xmark text-5xl mb-3"></i>
+        <p>No Home Section Added Yet</p>
+      </div>
+
+      <!-- Data View -->
+      <div *ngIf="homeData" class="space-y-8">
+
+        <!-- Name -->
+        <h3 class="text-3xl font-bold text-white">
+          <i class="fa-solid fa-user mr-2 text-[#f58b49]"></i>
+          {{ homeData.name }}
+        </h3>
+
+        <!-- Description -->
+        <p class="text-gray-300 text-lg border-l-4 border-[#f58b49] pl-4 leading-relaxed">
+          <i class="fa-solid fa-align-left mr-2 text-[#f58b49]"></i>
+          {{ homeData.description }}
+        </p>
+
+        <!-- Roles -->
+        <div>
+          <h4 class="text-xl text-[#f58b49] font-semibold mb-2">
+            <i class="fa-solid fa-id-badge mr-1"></i> Roles
+          </h4>
+
+          <div class="flex flex-wrap gap-2">
+            <span *ngFor="let r of homeData.roles"
+              class="px-4 py-1.5 bg-[#141414] border border-[#f58b49]/40 rounded-full text-[#f58b49]">
+              <i class="fa-solid fa-check mr-1 text-xs"></i> {{ r }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div>
+          <h4 class="text-xl text-[#f58b49] font-semibold mb-3">
+            <i class="fa-solid fa-image mr-1"></i> Profile Image
+          </h4>
+
+          <img [src]="homeData.profileImage"
+            class="w-44 h-44 rounded-2xl object-cover border border-[#f58b49]/30 shadow-lg">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIALOG -->
+<div *ngIf="showDialog"
+  class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+
+  <div
+    class="bg-[#151515] border border-[#f58b49]/30 rounded-2xl shadow-2xl w-full max-w-xl p-6 max-h-[88vh] overflow-y-auto">
+
+    <h2
+      class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#f58b49] to-[#ffb67a] mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-sliders"></i> Manage Home
+    </h2>
+
+    <form [formGroup]="homeForm" class="space-y-4">
+
+      <!-- Name -->
+      <div>
+        <label class="text-[#f58b49] text-sm mb-1 block">Name</label>
+        <input formControlName="name"
+          class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
+          placeholder="Enter name" />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="text-[#f58b49] text-sm mb-1 block">Description</label>
+        <textarea rows="2" formControlName="description"
+          class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
+          placeholder="Write description..."></textarea>
+      </div>
+
+      <!-- Roles -->
+      <div>
+        <label class="text-[#f58b49] text-sm mb-1 block">Roles</label>
+
+        <div class="space-y-2">
+          <div class="flex gap-2" *ngFor="let r of roles.controls; let i = index">
+            <input [formControl]="getRoleControl(r)"
+              class="flex-1 bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
+              placeholder="Enter role" />
+            <button (click)="removeRole(i)" type="button"
+              class="bg-red-600/20 text-red-400 px-2 py-1 rounded-lg border border-red-500/40">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+
+          <button type="button" (click)="addRole()"
+            class="px-4 py-2 bg-[#f58b49]/20 border border-[#f58b49]/40 text-[#f58b49] rounded-xl hover:bg-[#f58b49] hover:text-black transition">
+            <i class="fa-solid fa-plus mr-1"></i> Add Role
+          </button>
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div>
+        <label class="text-[#f58b49] text-sm mb-1 block">Profile Image</label>
+
+        <div *ngIf="imagePreview" class="relative w-28 h-28 mb-2">
+          <img [src]="imagePreview" class="w-28 h-28 rounded-xl object-cover border border-[#f58b49]/40" />
+          <button (click)="removeImage()" type="button"
+            class="absolute -top-2 -right-2 bg-red-600 text-white p-1.5 rounded-full">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <label
+          class="cursor-pointer bg-[#222] px-4 py-2 rounded-xl border border-[#333] flex items-center justify-between hover:border-[#f58b49] transition">
+          Upload Image
+          <i class="fa-solid fa-upload text-[#f58b49]"></i>
+          <input hidden #profileInput type="file" (change)="onFileSelected($event)" />
+        </label>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-2 pt-3">
+        <button type="submit" (click)="saveHome()"
+          class="flex-1 py-2 bg-gradient-to-r from-[#f58b49] to-[#ffb67a] text-black font-semibold rounded-xl hover:scale-105 transition">
+          Save
+        </button>
+
+        <button type="button" (click)="closeDialog()"
+          class="px-4 py-2 bg-gray-700 rounded-xl hover:bg-gray-600">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
