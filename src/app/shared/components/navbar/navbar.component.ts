@@ -46,7 +46,7 @@ export class NavbarComponent {
       next: (res) => {
         this.commonService.showToast(res.message, 'success');
         this.commonService.clearSession();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/admin/login']);
       },
       error: (err) => {
         const msg = err.error?.message;

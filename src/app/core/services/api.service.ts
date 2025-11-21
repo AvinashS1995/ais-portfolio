@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, from, Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../common/api-constant';
 import {
@@ -29,6 +29,18 @@ export class ApiService {
 
   constructor(private http: HttpClient, private commonService: CommonService) {}
 
+  async getClientIp(): Promise<string> {
+    try {
+      const response: any = await firstValueFrom(
+        this.http.get('https://api.ipify.org?format=json')
+      );
+      return response.ip; // public IP
+    } catch (err) {
+      console.error('IP fetch failed', err);
+      return '0.0.0.0';
+    }
+  }
+
   SaveNewAdminCreation(payload: SaveNewAdmin): Observable<any> {
     return this.http.post<SaveNewAdmin>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_ADMIN_CREATION}`,
@@ -37,9 +49,18 @@ export class ApiService {
   }
 
   LoginAdmin(payload: LoginAdmin): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
-      `${this.baseUrl}${API_ENDPOINTS.SERVICE_LOGIN}`,
-      payload
+    return from(this.commonService.getClientIp()).pipe(
+      switchMap((ip) => {
+        const updatedPayload = {
+          ...payload,
+          clientIp: ip,
+        };
+
+        return this.http.post<LoginResponse>(
+          `${this.baseUrl}${API_ENDPOINTS.SERVICE_LOGIN}`,
+          updatedPayload
+        );
+      })
     );
   }
 

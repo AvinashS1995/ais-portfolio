@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
 
 interface DecodedToken {
   id?: string;
@@ -20,7 +21,7 @@ export class CommonService {
   private userInfoSubject = new BehaviorSubject<DecodedToken | null>(null);
   userInfo$ = this.userInfoSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.loadUserFromToken();
   }
 
@@ -128,5 +129,17 @@ export class CommonService {
     });
 
     return finalUrl;
+  }
+
+  async getClientIp(): Promise<string> {
+    try {
+      const response: any = await firstValueFrom(
+        this.http.get('https://api.ipify.org?format=json')
+      );
+      return response.ip; // public IP
+    } catch (err) {
+      console.error('IP fetch failed', err);
+      return '0.0.0.0';
+    }
   }
 }
