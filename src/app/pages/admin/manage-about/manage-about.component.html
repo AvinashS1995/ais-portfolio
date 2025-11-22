@@ -1,18 +1,15 @@
-<div
-  class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative overflow-hidden">
+<div class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative overflow-hidden">
 
   <!-- Soft Ambient Gradient Background -->
   <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0c0c0c] to-black"></div>
-  <div
-    class="absolute top-32 right-20 w-80 h-80 bg-[#f58b49]/10 rounded-full blur-[120px] opacity-60 animate-pulse"></div>
-  <div
-    class="absolute bottom-0 left-10 w-96 h-96 bg-[#f58b49]/5 rounded-full blur-[140px] opacity-40"></div>
+  <div class="absolute top-32 right-20 w-80 h-80 bg-[#f58b49]/10 rounded-full blur-[120px] opacity-60 animate-pulse">
+  </div>
+  <div class="absolute bottom-0 left-10 w-96 h-96 bg-[#f58b49]/5 rounded-full blur-[140px] opacity-40"></div>
 
   <div class="relative max-w-5xl mx-auto z-10">
 
     <!-- Back Button -->
-    <button
-      routerLink="/admin/dashboard"
+    <button routerLink="/admin/dashboard"
       class="flex items-center gap-2 text-gray-400 hover:text-[#f58b49] mb-10 transition-all duration-300">
       <i class="fa-solid fa-arrow-left text-sm"></i>
       <span class="tracking-wide text-sm font-medium">Back to Dashboard</span>
@@ -32,8 +29,7 @@
           <i class="fa-solid fa-user-pen mr-3"></i> About Me
         </h2>
 
-        <button
-          (click)="openDialog(aboutData)"
+        <button (click)="openDialog(aboutData)"
           class="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#f58b49] to-[#ff9f65] text-black font-semibold shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300">
           <i class="fa-solid fa-pen-to-square"></i>
           {{ aboutData ? 'Edit' : 'Add' }}
@@ -41,9 +37,7 @@
       </div>
 
       <!-- NO DATA -->
-      <div
-        *ngIf="!aboutData"
-        class="text-gray-500 text-center py-20 text-xl italic tracking-wide">
+      <div *ngIf="!aboutData" class="text-gray-500 text-center py-20 text-xl italic tracking-wide">
         <i class="fa-regular fa-circle-xmark text-5xl mb-4 text-gray-600"></i>
         No About Section Added Yet
       </div>
@@ -69,7 +63,7 @@
             {{ aboutData.bio }}
           </p>
 
-          <p class="opacity-80 tracking-wide">
+          <p class="opacity-80 border-l-4 border-[#f58b49] pl-4 italic tracking-wide">
             {{ aboutData.bio2 }}
           </p>
         </div>
@@ -77,19 +71,15 @@
         <!-- IMAGE + RESUME -->
         <div class="flex flex-wrap gap-10 items-start">
           <div class="relative group">
-            <img
-              *ngIf="aboutData.profileImage"
-              [src]="aboutData.profileImage"
-              class="w-56 h-56 rounded-2xl object-cover border border-[#f58b49]/40 shadow-[0_0_40px_rgba(245,139,73,0.35)] group-hover:scale-105 transition-all duration-500"/>
+            <img *ngIf="aboutData.profileImage" [src]="aboutData.profileImage"
+              class="w-56 h-56 rounded-2xl object-cover border border-[#f58b49]/40 shadow-[0_0_40px_rgba(245,139,73,0.35)] group-hover:scale-105 transition-all duration-500" />
 
             <div
-              class="absolute inset-0 bg-[#f58b49]/20 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-all"></div>
+              class="absolute inset-0 bg-[#f58b49]/20 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-all">
+            </div>
           </div>
 
-          <a
-            *ngIf="aboutData.resumeFile"
-            [href]="aboutData.resumeFile"
-            target="_blank"
+          <a *ngIf="aboutData.resumeFile" [href]="aboutData.resumeFile" target="_blank"
             class="text-[#f58b49] underline underline-offset-4 hover:text-[#ffb67a] text-lg flex items-center gap-2 transition-all">
             <i class="fa-solid fa-file-pdf text-3xl"></i>
             View Resume
@@ -126,127 +116,198 @@
 </div>
 
 
-  <div *ngIf="showDialog"
-    class="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-xl z-50 p-4 animate-fadeIn">
+<div *ngIf="showDialog"
+  class="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-xl z-50 p-4 animate-fadeIn">
 
-    <div
-      class="bg-gradient-to-br from-[#151515]/90 via-[#0e0e0e]/90 to-[#1c1c1c]/90 border border-[#f58b49]/30 rounded-3xl shadow-[0_0_80px_rgba(245,139,73,0.25)] w-full max-w-3xl max-h-[92vh] overflow-y-auto p-8 relative animate-fadeUp">
+  <div
+    class="bg-gradient-to-br from-[#151515]/90 via-[#0e0e0e]/90 to-[#1c1c1c]/90 border border-[#f58b49]/30 rounded-3xl shadow-[0_0_80px_rgba(245,139,73,0.25)] w-full max-w-3xl max-h-[92vh] overflow-y-auto p-8 relative animate-fadeUp">
 
-      <!-- Header -->
-      <h2
-        class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#f58b49] to-[#ffb67a] mb-8 tracking-wide">
-        ✨ Edit About Section
-      </h2>
+    <!-- Header -->
+    <h2
+      class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#f58b49] to-[#ffb67a] mb-8 tracking-wide">
+      ✨ Edit About Section
+    </h2>
 
-      <form [formGroup]="aboutForm" (ngSubmit)="saveAbout()" class="space-y-7">
+    <form [formGroup]="aboutForm" (ngSubmit)="saveAbout()" class="space-y-7">
 
-        <!-- Inputs -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Inputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-          <div>
-            <label class="block mb-2 text-[#f58b49] font-semibold">Name</label>
-            <input formControlName="name"
-              class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
-          </div>
-
-          <div>
-            <label class="block mb-2 text-[#f58b49] font-semibold">Title</label>
-            <input formControlName="title"
-              class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
-          </div>
-
-        </div>
-
-        <!-- Bio -->
         <div>
-          <label class="block mb-2 text-[#f58b49] font-semibold">Bio (Paragraph 1)</label>
-          <textarea rows="3" formControlName="bio"
-            class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] rounded-xl px-4 py-3 outline-none text-gray-200 transition-all"></textarea>
+          <label class="block mb-2 text-[#f58b49] font-semibold">Name</label>
+          <input formControlName="name"
+            class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
         </div>
 
         <div>
-          <label class="block mb-2 text-[#f58b49] font-semibold">Bio (Paragraph 2)</label>
-          <textarea rows="3" formControlName="bio2"
-            class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] rounded-xl px-4 py-3 outline-none text-gray-200 transition-all"></textarea>
+          <label class="block mb-2 text-[#f58b49] font-semibold">Title</label>
+          <input formControlName="title"
+            class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
         </div>
 
-        <!-- Profile Upload -->
-        <div class="space-y-4">
-          <label class="block mb-2 text-[#f58b49] font-semibold">Profile Image</label>
+      </div>
 
-          <div *ngIf="selectedProfileImage" class="relative group w-40 h-40">
-            <img [src]="selectedProfileImage"
-              class="w-40 h-40 rounded-xl object-cover border border-[#f58b49]/40 shadow-xl" />
-            <button type="button" (click)="removeProfileImage()"
-              class="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
+      <!-- Bio -->
+      <div class="mb-6">
+        <label class="block mb-2 text-[#f58b49] font-semibold">Bio (Paragraph 1)</label>
+        <textarea rows="3" formControlName="bio" class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] 
+           rounded-xl px-4 py-3 outline-none text-gray-200 transition-all"></textarea>
 
-          <label
-            class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
-            Select Profile Image
-            <i class="fa-solid fa-upload text-[#f58b49]"></i>
-            <input #profileInput type="file" hidden accept="image/*" (change)="onProfileImageUpload($event)" />
-          </label>
-        </div>
-
-        <!-- Resume Upload -->
-        <div class="space-y-4">
-          <label class="block mb-2 text-[#f58b49] font-semibold">Resume (PDF)</label>
-
-          <label
-            class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
-            Upload Resume
-            <i class="fa-solid fa-file-arrow-up text-[#f58b49]"></i>
-            <input #resumeInput  type="file" hidden accept="application/pdf" (change)="onResumeUpload($event)" />
-          </label>
-
-          <div *ngIf="resumeFileName" class="flex items-center gap-3 text-gray-200">
-            <i class="fa-solid fa-file-pdf text-[#f58b49] text-2xl"></i>
-            <span>{{ resumeFileName }}</span>
-
-            <button type="button" (click)="removeResume()"
-              class="ml-auto bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
-              Remove
-            </button>
-          </div>
-        </div>
-
-        <!-- Stats -->
-        <div formGroupName="stats" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div>
-            <label class="text-[#f58b49] font-semibold block mb-2">Experience</label>
-            <input formControlName="experience"
-              class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
-          </div>
-
-          <div>
-            <label class="text-[#f58b49] font-semibold block mb-2">Clients</label>
-            <input formControlName="clients" class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
-          </div>
-
-          <div>
-            <label class="text-[#f58b49] font-semibold block mb-2">Recruiters</label>
-            <input formControlName="recruiters"
-              class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
-          </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex gap-4 pt-6">
-          <button type="submit"
-            class="flex-1 bg-gradient-to-r from-[#f58b49] to-[#ffb67a] text-black font-bold py-3 rounded-xl hover:scale-105 transition-all">
-            Save Changes
+        <!-- AI Button placed outside, bottom-right -->
+        <div class="flex justify-end">
+          <button type="button" (click)="generateAI('bio')" class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
+         text-black font-semibold text-sm
+         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            Generate AI
           </button>
 
-          <button type="button" (click)="closeDialog()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl">
-            Cancel
+
+        </div>
+      </div>
+
+
+
+      <div>
+        <label class="block mb-2 text-[#f58b49] font-semibold">Bio (Paragraph 2)</label>
+        <textarea rows="3" formControlName="bio2"
+          class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] rounded-xl px-4 py-3 outline-none text-gray-200 transition-all"></textarea>
+
+        <div class="flex justify-end">
+          <button type="button" (click)="generateAI('bio2')" class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
+         text-black font-semibold text-sm
+         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            Generate AI
+          </button>
+
+
+        </div>
+      </div>
+
+      <!-- Profile Upload -->
+      <div class="space-y-4">
+        <label class="block mb-2 text-[#f58b49] font-semibold">Profile Image</label>
+
+        <div *ngIf="selectedProfileImage" class="relative group w-40 h-40">
+          <img [src]="selectedProfileImage"
+            class="w-40 h-40 rounded-xl object-cover border border-[#f58b49]/40 shadow-xl" />
+          <button type="button" (click)="removeProfileImage()"
+            class="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow">
+            <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
-      </form>
+        <label
+          class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
+          Select Profile Image
+          <i class="fa-solid fa-upload text-[#f58b49]"></i>
+          <input #profileInput type="file" hidden accept="image/*" (change)="onProfileImageUpload($event)" />
+        </label>
+      </div>
+
+      <!-- Resume Upload -->
+      <div class="space-y-4">
+        <label class="block mb-2 text-[#f58b49] font-semibold">Resume (PDF)</label>
+
+        <label
+          class="cursor-pointer bg-[#222] border border-[#333] hover:border-[#f58b49] hover:bg-[#2c2c2c] px-4 py-3 rounded-xl flex items-center justify-between text-gray-300 transition-all">
+          Upload Resume
+          <i class="fa-solid fa-file-arrow-up text-[#f58b49]"></i>
+          <input #resumeInput type="file" hidden accept="application/pdf" (change)="onResumeUpload($event)" />
+        </label>
+
+        <div *ngIf="resumeFileName" class="flex items-center gap-3 text-gray-200">
+          <i class="fa-solid fa-file-pdf text-[#f58b49] text-2xl"></i>
+          <span>{{ resumeFileName }}</span>
+
+          <button type="button" (click)="removeResume()"
+            class="ml-auto bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div formGroupName="stats" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div>
+          <label class="text-[#f58b49] font-semibold block mb-2">Experience</label>
+          <input formControlName="experience"
+            class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
+        </div>
+
+        <div>
+          <label class="text-[#f58b49] font-semibold block mb-2">Clients</label>
+          <input formControlName="clients" class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
+        </div>
+
+        <div>
+          <label class="text-[#f58b49] font-semibold block mb-2">Recruiters</label>
+          <input formControlName="recruiters"
+            class="w-full bg-[#141414]/80 border border-[#333] rounded-xl px-4 py-3" />
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-4 pt-6">
+        <button type="submit"
+          class="flex-1 bg-gradient-to-r from-[#f58b49] to-[#ffb67a] text-black font-bold py-3 rounded-xl hover:scale-105 transition-all">
+          Save Changes
+        </button>
+
+        <button type="button" (click)="closeDialog()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- AI Generate Dialog -->
+<div *ngIf="showAIDialog" class="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
+
+  <div class="bg-[#1a1a1a] rounded-3xl p-6 w-full max-w-lg shadow-lg relative animate-fadeUp">
+
+    <h3 class="text-xl font-bold text-[#f58b49] mb-4">AI Generated Bio</h3>
+
+    <!-- Loading / Typing Effect -->
+    <div class="min-h-[80px] flex items-center justify-center text-gray-300">
+     <div *ngIf="loading" class="flex flex-col items-center gap-4 py-8 ai-loader">
+
+        <!-- Glowing AI Orb -->
+        <div class="orb-container">
+          <div class="orb"></div>
+          <div class="orb-glow"></div>
+        </div>
+
+        <!-- Typing Animation -->
+        <div class="dots-loader">
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </div>
+
+        <p class="loading-text">Enhancing your bio with AI…</p>
+      </div>
+
+
+      <p *ngIf="!loading && aiBio" class="whitespace-pre-wrap">{{ aiBio }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-4 mt-6">
+      <button *ngIf="!loading && aiBio" (click)="addAIBio()"
+        class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f58b49] to-[#ff9f65] text-black font-semibold hover:scale-105 transition">
+        Add to Bio
+      </button>
+
+      <button (click)="closeAIDialog()"
+        class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white transition">
+        Cancel
+      </button>
     </div>
   </div>
-
-
+</div>

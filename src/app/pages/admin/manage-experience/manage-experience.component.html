@@ -77,8 +77,7 @@
           <div class="flex-1">
             <label class="block mb-1 font-bold text-[#f58b49]">From Year</label>
             <input id="fromYear" type="text" formControlName="fromYear"
-              class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"
-              placeholder="From Year" />
+              class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" placeholder="From Year" />
           </div>
 
           <!-- To Year -->
@@ -86,7 +85,7 @@
             <label class="block mb-1 font-bold text-[#f58b49]">To Year</label>
             <input id="toYear" type="text" formControlName="toYear"
               class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200" placeholder="To Year"
-               [disabled]="experienceForm.get('currentlyWorking')?.value" />
+              [disabled]="experienceForm.get('currentlyWorking')?.value" />
           </div>
         </div>
 
@@ -105,8 +104,18 @@
 
         <div>
           <label class="block font-bold text-[#f58b49] mb-1">Description</label>
-          <textarea rows="4" formControlName="description"
+          <textarea rows="4" formControlName="experienceDescription"
             class="w-full bg-[#111] border border-[#2b2b2b] rounded-lg p-2 text-gray-200"></textarea>
+
+          <div class="flex justify-end">
+            <button type="button" (click)="generateAI('experienceDescription')" class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
+         text-black font-semibold text-sm
+         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+              <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+              Generate AI
+            </button>
+          </div>
         </div>
 
         <div class="flex gap-3 pt-2">
@@ -127,3 +136,50 @@
 <!-- Confirmation Dialog -->
 <app-confirmation-dialog *ngIf="confirmDialog.show" [message]="confirmDialog.message" (confirm)="handleConfirm(true)"
   (cancel)="handleConfirm(false)"></app-confirmation-dialog>
+
+
+<!-- AI Generate Dialog -->
+<div *ngIf="showAIDialog" class="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
+
+  <div class="bg-[#1a1a1a] rounded-3xl p-6 w-full max-w-lg shadow-lg relative animate-fadeUp">
+
+    <h3 class="text-xl font-bold text-[#f58b49] mb-4">AI Generated Project Description</h3>
+
+    <!-- Loading / Typing Effect -->
+    <div class="min-h-[80px] flex items-center justify-center text-gray-300">
+      <div *ngIf="loading" class="flex flex-col items-center gap-4 py-8 ai-loader">
+
+        <!-- Glowing AI Orb -->
+        <div class="orb-container">
+          <div class="orb"></div>
+          <div class="orb-glow"></div>
+        </div>
+
+        <!-- Typing Animation -->
+        <div class="dots-loader">
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </div>
+
+        <p class="loading-text">Enhancing your experience project description with AI…</p>
+      </div>
+
+
+      <p *ngIf="!loading && aiProjectDescription" class="whitespace-pre-wrap">{{ aiProjectDescription }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-4 mt-6">
+      <button *ngIf="!loading && aiProjectDescription" (click)="addAIProjectDescription()"
+        class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f58b49] to-[#ff9f65] text-black font-semibold hover:scale-105 transition">
+        Add to Description
+      </button>
+
+      <button (click)="closeAIDialog()"
+        class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white transition">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

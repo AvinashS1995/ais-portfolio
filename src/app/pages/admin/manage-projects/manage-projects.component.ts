@@ -34,6 +34,13 @@ export class ManageProjectsComponent {
 
   @ViewChild('projectInput') projectInput: any;
 
+  showAIDialog = false;
+  loading = false;
+  aiProjectDescription: string = '';
+  currentProjectDecriptionField: 'description' = 'description';
+  typingIndex = 0;
+  typingInterval: any;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -206,5 +213,75 @@ export class ManageProjectsComponent {
   removeProfileImage() {
     this.selectedProfileImage = null;
     this.projectForm.patchValue({ profileImage: '' });
+  }
+
+  generateAI(field: 'description') {
+    this.currentProjectDecriptionField = field;
+    this.aiProjectDescription = '';
+    this.typingIndex = 0;
+    this.showAIDialog = true;
+    this.loading = true;
+
+    const title = this.projectForm.get('title')?.value || '';
+    const category = this.projectForm.get('category')?.value || 0;
+    const role = this.projectForm.get('role')?.value || 0;
+    const userInput = this.projectForm.get(field)?.value || ''; // typed input
+
+    const payload = {
+      field,
+      title,
+      category,
+      role,
+      prompt: userInput ? userInput : '', // optional
+    };
+
+    this.apiService.GetPortfolioAIGenerate(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        if (res.status === 'success') {
+          const aiResponse = res.data.aiText;
+          const remaining = res.remaining;
+
+          this.commonService.showToast(res.message, 'success');
+
+          // Typing effect
+          this.aiProjectDescription = '';
+          this.typingIndex = 0;
+          this.typingInterval = setInterval(() => {
+            if (this.typingIndex < aiResponse.length) {
+              this.aiProjectDescription += aiResponse[this.typingIndex];
+              this.typingIndex++;
+            } else {
+              clearInterval(this.typingInterval);
+            }
+          }, 30);
+        } else {
+          this.commonService.showToast(res.message, 'error');
+          this.closeAIDialog();
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err.error?.message;
+        this.commonService.showToast(msg, 'error');
+        this.closeAIDialog();
+      },
+    });
+  }
+
+  // Add AI text to form field
+  addAIProjectDescription() {
+    this.projectForm
+      .get(this.currentProjectDecriptionField)
+      ?.setValue(this.aiProjectDescription);
+    this.closeAIDialog();
+  }
+
+  // Close AI dialog
+  closeAIDialog() {
+    this.showAIDialog = false;
+    this.loading = false;
+    this.aiProjectDescription = '';
+    if (this.typingInterval) clearInterval(this.typingInterval);
   }
 }

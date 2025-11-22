@@ -13,3 +13,83 @@
   from { opacity: 0; transform: translateY(20px) }
   to { opacity: 1; transform: translateY(0) }
 }
+
+
+
+.ai-loader {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.orb-container {
+  position: relative;
+  width: 55px;
+  height: 55px;
+}
+
+.orb {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f58b49, #ffbc7f);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.orb-glow {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  background: rgba(245,139,73,0.25);
+  filter: blur(14px);
+  animation: glowPulse 1.5s infinite ease-in-out;
+}
+
+.dots-loader {
+  display: flex;
+  justify-content: center;
+  font-size: 32px;
+  line-height: 0;
+  gap: 6px;
+  color: #f58b49;
+}
+
+.dots-loader span {
+  animation: bounce 1.2s infinite;
+}
+
+.dots-loader span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots-loader span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.loading-text {
+  color: #d1d1d1;
+  font-size: 14px;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.92); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}

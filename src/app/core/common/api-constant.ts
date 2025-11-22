@@ -63,6 +63,7 @@ export const API_ENDPOINTS = {
     'portfolio/get-portfolio-messages',
   SERVICE_DELETE_PORTFOLIO_CONTACT_MESSAGE_SECTION:
     'portfolio/delete-portfolio-message',
+  SERVICE_GET_AI_GENERATE: 'portfolio/ai-generate',
   SERVICE_GET_PUBLIC_PORTFOLIO_HOME_SECTION:
     'portfolio/get-public-portfolio-home-by-slug/:slug',
   SERVICE_GET_PUBLIC_PORTFOLIO_ABOUT_SECTION:

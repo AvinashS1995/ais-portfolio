@@ -29,6 +29,13 @@ export class ManageHomeComponent {
 
   @ViewChild('profileInput') profileInput: any;
 
+  showAIDialog = false;
+  loading = false;
+  aiSelfDescription: string = '';
+  currentSelfDecriptionField: 'homeDescription' = 'homeDescription';
+  typingIndex = 0;
+  typingInterval: any;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -38,7 +45,7 @@ export class ManageHomeComponent {
   ngOnInit() {
     this.homeForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      homeDescription: ['', Validators.required],
       roles: this.fb.array([]),
       profileImage: [''],
     });
@@ -90,7 +97,7 @@ export class ManageHomeComponent {
     if (data) {
       this.homeForm.patchValue({
         name: data.name,
-        description: data.description,
+        homeDescription: data.description,
         profileImage: data.profileImage,
       });
 
@@ -149,13 +156,13 @@ export class ManageHomeComponent {
       return;
     }
 
-    const { name, description, roles, profileImage } =
+    const { name, homeDescription, roles, profileImage } =
       this.homeForm.getRawValue();
 
     const payload = {
       adminId: this.commonService.userInfo?.id,
       name: name || '',
-      description: description || '',
+      homeDescription: homeDescription || '',
       roles: roles || '',
       profileImage: profileImage.split('/').pop() || '',
     };
@@ -174,5 +181,73 @@ export class ManageHomeComponent {
         this.commonService.showToast('Failed to save', 'error');
       },
     });
+  }
+
+  generateAI(field: 'homeDescription') {
+    this.currentSelfDecriptionField = field;
+    this.aiSelfDescription = '';
+    this.typingIndex = 0;
+    this.showAIDialog = true;
+    this.loading = true;
+
+    const name = this.homeForm.get('name')?.value || '';
+    const roles = this.homeForm.get('roles')?.value || 0;
+    const userInput = this.homeForm.get(field)?.value || ''; // typed input
+
+    const payload = {
+      field,
+      name,
+      roles,
+      prompt: userInput ? userInput : '', // optional
+    };
+
+    this.apiService.GetPortfolioAIGenerate(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        if (res.status === 'success') {
+          const aiResponse = res.data.aiText;
+          const remaining = res.remaining;
+
+          this.commonService.showToast(res.message, 'success');
+
+          // Typing effect
+          this.aiSelfDescription = '';
+          this.typingIndex = 0;
+          this.typingInterval = setInterval(() => {
+            if (this.typingIndex < aiResponse.length) {
+              this.aiSelfDescription += aiResponse[this.typingIndex];
+              this.typingIndex++;
+            } else {
+              clearInterval(this.typingInterval);
+            }
+          }, 30);
+        } else {
+          this.commonService.showToast(res.message, 'error');
+          this.closeAIDialog();
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err.error?.message;
+        this.commonService.showToast(msg, 'error');
+        this.closeAIDialog();
+      },
+    });
+  }
+
+  // Add AI text to form field
+  addAISelfDescription() {
+    this.homeForm
+      .get(this.currentSelfDecriptionField)
+      ?.setValue(this.aiSelfDescription);
+    this.closeAIDialog();
+  }
+
+  // Close AI dialog
+  closeAIDialog() {
+    this.showAIDialog = false;
+    this.loading = false;
+    this.aiSelfDescription = '';
+    if (this.typingInterval) clearInterval(this.typingInterval);
   }
 }

@@ -31,6 +31,14 @@ export class ManageExperienceComponent {
   editingExperience: Experience | null = null;
   confirmDialog = { show: false, message: '', expId: '' };
 
+  showAIDialog = false;
+  loading = false;
+  aiProjectDescription: string = '';
+  currentProjectDecriptionField: 'experienceDescription' =
+    'experienceDescription';
+  typingIndex = 0;
+  typingInterval: any;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -62,14 +70,23 @@ export class ManageExperienceComponent {
       toYear: [''],
       currentlyWorking: [false],
       project: ['', Validators.required],
-      description: ['', Validators.required],
+      experienceDescription: ['', Validators.required],
     });
   }
 
   openDialog(experience?: Experience) {
+    debugger;
     if (experience) {
       this.editingExperience = experience;
-      this.experienceForm.patchValue(experience);
+      this.experienceForm.patchValue({
+        company: experience.company,
+        role: experience.role,
+        fromYear: experience.fromYear,
+        toYear: experience.toYear,
+        currentlyWorking: experience.currentlyWorking,
+        project: experience.project,
+        experienceDescription: experience.description,
+      });
     } else {
       this.editingExperience = null;
       this.experienceForm.reset({ currentlyWorking: false });
@@ -96,7 +113,7 @@ export class ManageExperienceComponent {
   saveExperience() {
     if (this.experienceForm.invalid) return;
 
-    const { company, role, period, project, description } =
+    const { company, role, period, project, experienceDescription } =
       this.experienceForm.getRawValue();
     const payload = {
       adminId: this.commonService.userInfo?.id,
@@ -119,7 +136,7 @@ export class ManageExperienceComponent {
   updateExperience() {
     if (!this.editingExperience || this.experienceForm.invalid) return;
 
-    const { company, role, period, project, description } =
+    const { company, role, period, project, experienceDescription } =
       this.experienceForm.getRawValue();
     const payload = {
       adminId: this.commonService.userInfo?.id,
@@ -167,5 +184,75 @@ export class ManageExperienceComponent {
       });
     }
     this.confirmDialog.show = false;
+  }
+
+  generateAI(field: 'experienceDescription') {
+    this.currentProjectDecriptionField = field;
+    this.aiProjectDescription = '';
+    this.typingIndex = 0;
+    this.showAIDialog = true;
+    this.loading = true;
+
+    const company = this.experienceForm.get('company')?.value || '';
+    const role = this.experienceForm.get('role')?.value || 0;
+    const project = this.experienceForm.get('project')?.value || 0;
+    const userInput = this.experienceForm.get(field)?.value || ''; // typed input
+
+    const payload = {
+      field,
+      company,
+      project,
+      role,
+      prompt: userInput ? userInput : '', // optional
+    };
+
+    this.apiService.GetPortfolioAIGenerate(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        if (res.status === 'success') {
+          const aiResponse = res.data.aiText;
+          const remaining = res.remaining;
+
+          this.commonService.showToast(res.message, 'success');
+
+          // Typing effect
+          this.aiProjectDescription = '';
+          this.typingIndex = 0;
+          this.typingInterval = setInterval(() => {
+            if (this.typingIndex < aiResponse.length) {
+              this.aiProjectDescription += aiResponse[this.typingIndex];
+              this.typingIndex++;
+            } else {
+              clearInterval(this.typingInterval);
+            }
+          }, 30);
+        } else {
+          this.commonService.showToast(res.message, 'error');
+          this.closeAIDialog();
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err.error?.message;
+        this.commonService.showToast(msg, 'error');
+        this.closeAIDialog();
+      },
+    });
+  }
+
+  // Add AI text to form field
+  addAIProjectDescription() {
+    this.experienceForm
+      .get(this.currentProjectDecriptionField)
+      ?.setValue(this.aiProjectDescription);
+    this.closeAIDialog();
+  }
+
+  // Close AI dialog
+  closeAIDialog() {
+    this.showAIDialog = false;
+    this.loading = false;
+    this.aiProjectDescription = '';
+    if (this.typingInterval) clearInterval(this.typingInterval);
   }
 }

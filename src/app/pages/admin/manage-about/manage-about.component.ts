@@ -29,6 +29,13 @@ export class ManageAboutComponent implements OnInit {
   @ViewChild('profileInput') profileInput: any;
   @ViewChild('resumeInput') resumeInput: any;
 
+  showAIDialog = false;
+  loading = false;
+  aiBio: string = '';
+  currentBioField: 'bio' | 'bio2' = 'bio';
+  typingIndex = 0;
+  typingInterval: any;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -58,7 +65,6 @@ export class ManageAboutComponent implements OnInit {
   }
 
   openDialog(about?: any) {
-    debugger;
     if (about) {
       this.editingAbout = about;
       this.aboutForm.patchValue({
@@ -195,5 +201,71 @@ export class ManageAboutComponent implements OnInit {
   removeResume() {
     this.resumeFileName = null;
     this.aboutForm.patchValue({ resumeUrl: '' });
+  }
+
+  generateAI(field: 'bio' | 'bio2') {
+    this.currentBioField = field;
+    this.aiBio = '';
+    this.typingIndex = 0;
+    this.showAIDialog = true;
+    this.loading = true;
+
+    const title = this.aboutForm.get('title')?.value || '';
+    const experience = this.aboutForm.get('stats.experience')?.value || 0;
+    const userInput = this.aboutForm.get(field)?.value || ''; // typed input
+
+    const payload = {
+      field,
+      title,
+      experience,
+      prompt: userInput ? userInput : '', // optional
+    };
+
+    this.apiService.GetPortfolioAIGenerate(payload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        if (res.status === 'success') {
+          const aiResponse = res.data.aiText;
+          const remaining = res.remaining;
+
+          this.commonService.showToast(res.message, 'success');
+
+          // Typing effect
+          this.aiBio = '';
+          this.typingIndex = 0;
+          this.typingInterval = setInterval(() => {
+            if (this.typingIndex < aiResponse.length) {
+              this.aiBio += aiResponse[this.typingIndex];
+              this.typingIndex++;
+            } else {
+              clearInterval(this.typingInterval);
+            }
+          }, 30);
+        } else {
+          this.commonService.showToast(res.message, 'error');
+          this.closeAIDialog();
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err.error?.message;
+        this.commonService.showToast(msg, 'error');
+        this.closeAIDialog();
+      },
+    });
+  }
+
+  // Add AI text to form field
+  addAIBio() {
+    this.aboutForm.get(this.currentBioField)?.setValue(this.aiBio);
+    this.closeAIDialog();
+  }
+
+  // Close AI dialog
+  closeAIDialog() {
+    this.showAIDialog = false;
+    this.loading = false;
+    this.aiBio = '';
+    if (this.typingInterval) clearInterval(this.typingInterval);
   }
 }

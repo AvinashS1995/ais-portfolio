@@ -83,8 +83,7 @@
 </div>
 
 <!-- DIALOG -->
-<div *ngIf="showDialog"
-  class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+<div *ngIf="showDialog" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
 
   <div
     class="bg-[#151515] border border-[#f58b49]/30 rounded-2xl shadow-2xl w-full max-w-xl p-6 max-h-[88vh] overflow-y-auto">
@@ -107,9 +106,18 @@
       <!-- Description -->
       <div>
         <label class="text-[#f58b49] text-sm mb-1 block">Description</label>
-        <textarea rows="2" formControlName="description"
+        <textarea rows="2" formControlName="homeDescription"
           class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
           placeholder="Write description..."></textarea>
+        <div class="flex justify-end">
+          <button type="button" (click)="generateAI('homeDescription')" class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
+         text-black font-semibold text-sm
+         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            Generate AI
+          </button>
+        </div>
       </div>
 
       <!-- Roles -->
@@ -161,13 +169,57 @@
           Save
         </button>
 
-        <button type="button" (click)="closeDialog()"
-          class="px-4 py-2 bg-gray-700 rounded-xl hover:bg-gray-600">
+        <button type="button" (click)="closeDialog()" class="px-4 py-2 bg-gray-700 rounded-xl hover:bg-gray-600">
           Cancel
         </button>
       </div>
 
     </form>
 
+  </div>
+</div>
+
+<!-- AI Generate Dialog -->
+<div *ngIf="showAIDialog" class="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 p-4">
+
+  <div class="bg-[#1a1a1a] rounded-3xl p-6 w-full max-w-lg shadow-lg relative animate-fadeUp">
+
+    <h3 class="text-xl font-bold text-[#f58b49] mb-4">AI Generated Project Description</h3>
+
+    <!-- Loading / Typing Effect -->
+    <div class="min-h-[80px] flex items-center justify-center text-gray-300">
+      <div *ngIf="loading" class="flex flex-col items-center gap-4 py-8 ai-loader">
+
+        <!-- Glowing AI Orb -->
+        <div class="orb-container">
+          <div class="orb"></div>
+          <div class="orb-glow"></div>
+        </div>
+
+        <!-- Typing Animation -->
+        <div class="dots-loader">
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </div>
+
+        <p class="loading-text">Enhancing your Self Intro with AI…</p>
+      </div>
+
+      <p *ngIf="!loading && aiSelfDescription" class="whitespace-pre-wrap">{{ aiSelfDescription }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-4 mt-6">
+      <button *ngIf="!loading && aiSelfDescription" (click)="addAISelfDescription()"
+        class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#f58b49] to-[#ff9f65] text-black font-semibold hover:scale-105 transition">
+        Add to Description
+      </button>
+
+      <button (click)="closeAIDialog()"
+        class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white transition">
+        Cancel
+      </button>
+    </div>
   </div>
 </div>

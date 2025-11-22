@@ -344,6 +344,13 @@ export class ApiService {
     );
   }
 
+  GetPortfolioAIGenerate(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_AI_GENERATE}`,
+      payload
+    );
+  }
+
   // Get all portfolio messages (Admin side)
   GetPortfolioContactMessages(payload: any): Observable<any> {
     return this.http.post<any>(
