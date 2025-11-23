@@ -152,10 +152,8 @@ export class ManageAboutComponent implements OnInit {
       next: (res: any) => {
         const uploaded = res.data;
         console.log(uploaded);
-        // Show preview
         this.selectedProfileImage = uploaded.presignFileUrl;
 
-        // Patch form with new object structure
         this.aboutForm.patchValue({
           profileImage: uploaded.fileUrl,
         });
@@ -180,17 +178,13 @@ export class ManageAboutComponent implements OnInit {
       return;
     }
 
-    // this.resumeFileName = file.name;
-
     this.apiService.UploadFile(formData).subscribe({
       next: (res: any) => {
         const uploaded = res.data;
         console.log(uploaded);
 
-        // Show preview
         this.resumeFileName = uploaded.fileKey;
 
-        // Patch form with new object structure
         this.aboutForm.patchValue({
           resumeUrl: uploaded.fileUrl,
         });
@@ -212,13 +206,13 @@ export class ManageAboutComponent implements OnInit {
 
     const title = this.aboutForm.get('title')?.value || '';
     const experience = this.aboutForm.get('stats.experience')?.value || 0;
-    const userInput = this.aboutForm.get(field)?.value || ''; // typed input
+    const userInput = this.aboutForm.get(field)?.value || '';
 
     const payload = {
       field,
       title,
       experience,
-      prompt: userInput ? userInput : '', // optional
+      prompt: userInput ? userInput : '',
     };
 
     this.apiService.GetPortfolioAIGenerate(payload).subscribe({
@@ -230,7 +224,6 @@ export class ManageAboutComponent implements OnInit {
 
           this.commonService.showToast(res.message, 'success');
 
-          // Typing effect
           this.aiBio = '';
           this.typingIndex = 0;
           this.typingInterval = setInterval(() => {
@@ -255,13 +248,11 @@ export class ManageAboutComponent implements OnInit {
     });
   }
 
-  // Add AI text to form field
   addAIBio() {
     this.aboutForm.get(this.currentBioField)?.setValue(this.aiBio);
     this.closeAIDialog();
   }
 
-  // Close AI dialog
   closeAIDialog() {
     this.showAIDialog = false;
     this.loading = false;

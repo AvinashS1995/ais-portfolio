@@ -199,10 +199,8 @@ export class ManageProjectsComponent {
       next: (res: any) => {
         const uploaded = res.data;
         console.log(uploaded);
-        // Show preview
         this.selectedProfileImage = uploaded.presignFileUrl;
 
-        // Patch form with new object structure
         this.projectForm.patchValue({
           image: uploaded.fileUrl,
         });
@@ -225,14 +223,14 @@ export class ManageProjectsComponent {
     const title = this.projectForm.get('title')?.value || '';
     const category = this.projectForm.get('category')?.value || 0;
     const role = this.projectForm.get('role')?.value || 0;
-    const userInput = this.projectForm.get(field)?.value || ''; // typed input
+    const userInput = this.projectForm.get(field)?.value || '';
 
     const payload = {
       field,
       title,
       category,
       role,
-      prompt: userInput ? userInput : '', // optional
+      prompt: userInput ? userInput : '',
     };
 
     this.apiService.GetPortfolioAIGenerate(payload).subscribe({
@@ -244,7 +242,6 @@ export class ManageProjectsComponent {
 
           this.commonService.showToast(res.message, 'success');
 
-          // Typing effect
           this.aiProjectDescription = '';
           this.typingIndex = 0;
           this.typingInterval = setInterval(() => {
@@ -269,7 +266,6 @@ export class ManageProjectsComponent {
     });
   }
 
-  // Add AI text to form field
   addAIProjectDescription() {
     this.projectForm
       .get(this.currentProjectDecriptionField)
@@ -277,7 +273,6 @@ export class ManageProjectsComponent {
     this.closeAIDialog();
   }
 
-  // Close AI dialog
   closeAIDialog() {
     this.showAIDialog = false;
     this.loading = false;

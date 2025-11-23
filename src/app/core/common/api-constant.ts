@@ -5,6 +5,8 @@ export const API_ENDPOINTS = {
   SERVICE_ADMIN_LOGOUT: 'portfolio/admin-log-out',
   SERVICE_RESET_PASSWORD: 'portfolio/reset-password',
   SERVICE_ADMIN_USER_LIST: 'portfolio/get-admin-user-list',
+  SERVICE_CHECK_USERNAME_SLUG: 'portfolio/portfolio-check-unique-username-slug',
+  SERVICE_GET_ADMIN_BY_ID: 'portfolio/portfolio-get-admin-by-id',
   SERVICE_UPDATE_ADMIN: 'portfolio/update-admin',
   SERVICE_DELETE_ADMIN: 'portfolio/delete-admin',
   SERVICE_LOCK_UNLOCK_ADMIN: 'portfolio/toggle-lock-unlock-admin',

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
+import { VALIDATION_MESSAGES } from '../common/constant';
+import { FormGroup } from '@angular/forms';
 
 interface DecodedToken {
   id?: string;
@@ -9,6 +11,7 @@ interface DecodedToken {
   email?: string;
   name?: string;
   exp?: number;
+  profileImage?: string;
 }
 
 @Injectable({
@@ -62,7 +65,7 @@ export class CommonService {
     this.isAdminSubject.next(false);
   }
 
-  // 🌟 Custom Toast Notification
+  // Custom Toast Notification
   showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {
     const toast = document.createElement('div');
     toast.className = `
@@ -86,7 +89,7 @@ export class CommonService {
         ? 'fa-circle-xmark text-red-400'
         : 'fa-circle-info text-[#f58b49]';
 
-    // 🌟 Toast HTML structure
+    // Toast HTML structure
     toast.innerHTML = `
     <div class="flex items-center w-full">
       <div class="flex items-center justify-center w-9 h-9 rounded-full 
@@ -136,10 +139,28 @@ export class CommonService {
       const response: any = await firstValueFrom(
         this.http.get('https://api.ipify.org?format=json')
       );
-      return response.ip; // public IP
+      return response.ip;
     } catch (err) {
       console.error('IP fetch failed', err);
       return '0.0.0.0';
     }
+  }
+
+  getFormErrors(form: FormGroup): string {
+    for (const key in form.controls) {
+      const control = form.get(key);
+      if (control && control.errors) {
+        const errors = control.errors;
+        if (VALIDATION_MESSAGES[key]) {
+          for (const errorKey in errors) {
+            if (VALIDATION_MESSAGES[key][errorKey]) {
+              return VALIDATION_MESSAGES[key][errorKey];
+            }
+          }
+        }
+        return `${key} is invalid`;
+      }
+    }
+    return '';
   }
 }

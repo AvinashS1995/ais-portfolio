@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { AlertDialogComponent } from '../../../shared/components/alert-dialog/alert-dialog.component';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -122,9 +121,8 @@ export class AdminUserManagementComponent {
     const payload: any = { fullName: name, email, role };
 
     if (this.editingUser) {
-      // Update
       payload.id = this.editingUser._id;
-      if (password) payload.password = password; // optional password change
+      if (password) payload.password = password;
       this.apiService.UpdateAdmin(payload).subscribe((res: any) => {
         this.alertDialog = {
           show: true,
@@ -136,7 +134,6 @@ export class AdminUserManagementComponent {
         this.closeDialog();
       });
     } else {
-      // Create
       payload.password = password;
       this.apiService.SaveNewAdminCreation(payload).subscribe((res: any) => {
         this.alertDialog = {

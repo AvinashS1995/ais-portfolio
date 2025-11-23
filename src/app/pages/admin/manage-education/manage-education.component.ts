@@ -36,7 +36,6 @@ export class ManageEducationComponent {
     private cs: CommonService,
     private apiService: ApiService
   ) {
-    // Populate years from 1980 to current year + 5
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y >= 2011; y--) {
       this.years.push(y);
@@ -47,7 +46,6 @@ export class ManageEducationComponent {
     this.initForm();
     this.loadEducation();
 
-    // From Year change => update To Year options
     this.eduForm.get('fromYear')?.valueChanges.subscribe((fromYear) => {
       if (fromYear) {
         this.toYears = this.years.filter((y) => y >= fromYear);
@@ -61,12 +59,11 @@ export class ManageEducationComponent {
       }
     });
 
-    // Currently Studying checkbox logic
     this.eduForm.get('currentlyStudying')?.valueChanges.subscribe((val) => {
       const toYearControl = this.eduForm.get('toYear');
       if (val) {
-        toYearControl?.disable({ emitEvent: false }); // disable To Year
-        toYearControl?.setValue(''); // clear To Year
+        toYearControl?.disable({ emitEvent: false });
+        toYearControl?.setValue('');
       } else {
         toYearControl?.enable({ emitEvent: false });
       }

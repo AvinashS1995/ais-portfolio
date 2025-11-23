@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
@@ -8,7 +7,7 @@ import { SafeUrlPipe } from '../../../core/pipes/safe-url.pipe';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 export interface SocialLinks {
-  [key: string]: string | undefined; // <-- FIX: allows index access
+  [key: string]: string | undefined;
   linkedin?: string;
   github?: string;
   twitter?: string;
@@ -31,7 +30,7 @@ export interface ContactInfo {
   email: string;
   phone: string;
   socialMedia: SocialLinks;
-  createdAt?: string; // <-- FIX: added missing field
+  createdAt?: string;
 }
 
 @Component({

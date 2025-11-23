@@ -5,8 +5,6 @@ import {
   DashboardCard,
   DashboardStat,
   GetDashboardPayload,
-  SaveDashboardCardsPayload,
-  SaveDashboardStatsPayload,
 } from '../../../core/interfaces/admin';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
@@ -15,7 +13,7 @@ import { CommonService } from '../../../core/services/common.service';
 interface StatCard {
   label: string;
   count: number;
-  icon: string; // FontAwesome or lucide icon class
+  icon: string;
   link: string;
   color: string;
 }
@@ -58,7 +56,6 @@ export class AdminDashboardComponent {
           console.log(res);
           this.stats = res.data?.stats || [];
           console.log(this.stats);
-          // this.commonService.showToast(res.message, 'success');
         },
         error: (err) =>
           this.commonService.showToast(err.error.message, 'error'),
@@ -78,7 +75,6 @@ export class AdminDashboardComponent {
           console.log(res);
           this.cards = res.data?.cards || [];
           console.log(this.cards);
-          // this.commonService.showToast(res.message, 'success');
         },
         error: (err) => this.commonService.showToast(err.error.message),
       });

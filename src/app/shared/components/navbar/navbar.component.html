@@ -27,7 +27,7 @@
       <!-- When Admin Logged In -->
       <ng-container *ngIf="isAdmin; else showNavLinks">
         <div class="relative">
-          <img src="assets/images/default-profile.png" alt="Profile" (click)="toggleProfileMenu()"
+          <img [src]="adminProfileAvatarUrl" alt="Profile" (click)="toggleProfileMenu()"
             class="w-10 h-10 rounded-full border border-gray-600 cursor-pointer hover:scale-105 transition" />
 
           <div *ngIf="isProfileOpen"

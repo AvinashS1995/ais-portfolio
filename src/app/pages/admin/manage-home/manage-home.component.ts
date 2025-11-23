@@ -77,7 +77,6 @@ export class ManageHomeComponent {
         if (res.status === 'success' && res.data?.home) {
           this.homeData = res.data.home;
 
-          // populate image preview
           this.imagePreview = this.homeData.profileImage ?? null;
         }
       },
@@ -192,13 +191,13 @@ export class ManageHomeComponent {
 
     const name = this.homeForm.get('name')?.value || '';
     const roles = this.homeForm.get('roles')?.value || 0;
-    const userInput = this.homeForm.get(field)?.value || ''; // typed input
+    const userInput = this.homeForm.get(field)?.value || '';
 
     const payload = {
       field,
       name,
       roles,
-      prompt: userInput ? userInput : '', // optional
+      prompt: userInput ? userInput : '',
     };
 
     this.apiService.GetPortfolioAIGenerate(payload).subscribe({
@@ -210,7 +209,6 @@ export class ManageHomeComponent {
 
           this.commonService.showToast(res.message, 'success');
 
-          // Typing effect
           this.aiSelfDescription = '';
           this.typingIndex = 0;
           this.typingInterval = setInterval(() => {
@@ -235,7 +233,6 @@ export class ManageHomeComponent {
     });
   }
 
-  // Add AI text to form field
   addAISelfDescription() {
     this.homeForm
       .get(this.currentSelfDecriptionField)
@@ -243,7 +240,6 @@ export class ManageHomeComponent {
     this.closeAIDialog();
   }
 
-  // Close AI dialog
   closeAIDialog() {
     this.showAIDialog = false;
     this.loading = false;

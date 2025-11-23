@@ -92,7 +92,20 @@ export class ApiService {
     );
   }
 
-  UpdateAdmin(payload: UpdateAdmin): Observable<any> {
+  CheckUniqueUserNameSlug(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_CHECK_USERNAME_SLUG}`,
+      payload
+    );
+  }
+  GetAdminByID(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SERVICE_GET_ADMIN_BY_ID}`,
+      payload
+    );
+  }
+
+  UpdateAdmin(payload: any): Observable<any> {
     return this.http.post<UpdateAdmin>(
       `${this.baseUrl}${API_ENDPOINTS.SERVICE_UPDATE_ADMIN}`,
       payload

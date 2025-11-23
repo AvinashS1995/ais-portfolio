@@ -48,14 +48,13 @@ export class ManageExperienceComponent {
   ngOnInit(): void {
     this.initializeForm();
     this.loadExperiences();
-    // Currently Studying checkbox logic
     this.experienceForm
       .get('currentlyWorking')
       ?.valueChanges.subscribe((val) => {
         const toYearControl = this.experienceForm.get('toYear');
         if (val) {
-          toYearControl?.disable({ emitEvent: false }); // disable To Year
-          toYearControl?.setValue(''); // clear To Year
+          toYearControl?.disable({ emitEvent: false });
+          toYearControl?.setValue('');
         } else {
           toYearControl?.enable({ emitEvent: false });
         }
@@ -196,14 +195,14 @@ export class ManageExperienceComponent {
     const company = this.experienceForm.get('company')?.value || '';
     const role = this.experienceForm.get('role')?.value || 0;
     const project = this.experienceForm.get('project')?.value || 0;
-    const userInput = this.experienceForm.get(field)?.value || ''; // typed input
+    const userInput = this.experienceForm.get(field)?.value || '';
 
     const payload = {
       field,
       company,
       project,
       role,
-      prompt: userInput ? userInput : '', // optional
+      prompt: userInput ? userInput : '',
     };
 
     this.apiService.GetPortfolioAIGenerate(payload).subscribe({
@@ -215,7 +214,6 @@ export class ManageExperienceComponent {
 
           this.commonService.showToast(res.message, 'success');
 
-          // Typing effect
           this.aiProjectDescription = '';
           this.typingIndex = 0;
           this.typingInterval = setInterval(() => {
@@ -240,7 +238,6 @@ export class ManageExperienceComponent {
     });
   }
 
-  // Add AI text to form field
   addAIProjectDescription() {
     this.experienceForm
       .get(this.currentProjectDecriptionField)
@@ -248,7 +245,6 @@ export class ManageExperienceComponent {
     this.closeAIDialog();
   }
 
-  // Close AI dialog
   closeAIDialog() {
     this.showAIDialog = false;
     this.loading = false;

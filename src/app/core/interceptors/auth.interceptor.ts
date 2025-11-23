@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(clonedReq).pipe(
     catchError((error) => {
-      // 🔴 If access token expired → try refresh token
+      // If access token expired → try refresh token
       if ((error.status === 401 || error.status === 403) && refreshToken) {
         return apiService.refreshAccessToken(refreshToken).pipe(
           switchMap((res: any) => {
@@ -33,7 +33,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(retryReq);
           }),
 
-          // 🔴 REFRESH TOKEN FAILED HERE
+          // REFRESH TOKEN FAILED HERE
           catchError((refreshErr) => {
             const message =
               refreshErr?.error?.message ||

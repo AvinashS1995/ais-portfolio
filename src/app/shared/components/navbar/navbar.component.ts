@@ -17,6 +17,7 @@ export class NavbarComponent {
   isProfileOpen = false;
   isAdmin = false;
   slug = '';
+  adminProfileAvatarUrl = '';
   navLinks: any[] = [];
 
   constructor(
@@ -39,6 +40,10 @@ export class NavbarComponent {
     this.commonService.isAdmin$.subscribe((status) => {
       this.isAdmin = status;
     });
+
+    this.adminProfileAvatarUrl =
+      this.commonService.userInfo?.profileImage || '';
+    console.log(this.adminProfileAvatarUrl);
   }
 
   toggleProfileMenu(): void {
