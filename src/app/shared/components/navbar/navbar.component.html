@@ -32,7 +32,8 @@
 
           <div *ngIf="isProfileOpen"
             class="absolute right-0 mt-3 w-52 bg-[#1c1c1c] border border-gray-700 rounded-xl shadow-xl py-2 animate-fadeIn">
-            <button class="menu-item">Profile</button>
+            <button  class="menu-item hover:text-[#f58b49]"
+  (click)="goToAdminProfile()">Profile</button>
             <div class="border-t border-gray-700 my-2"></div>
             <button class="menu-item text-red-400 hover:text-red-500" (click)="logout()">
               Logout

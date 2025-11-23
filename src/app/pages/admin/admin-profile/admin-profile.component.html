@@ -1,0 +1,126 @@
+<div class="min-h-screen bg-black text-white py-24 px-6 md:px-12 relative">
+    <!-- Background Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-black to-[#111] opacity-90"></div>
+
+    <div class="relative max-w-4xl mx-auto z-10">
+
+        <h2 class="text-3xl text-[#f58b49] mb-10 font-semibold tracking-wide">
+            <i class="fa-solid fa-user-shield mr-2"></i> Admin Profile
+        </h2>
+
+        <!-- PROFILE CARD -->
+        <div class="bg-gradient-to-br from-[#1a1a1a]/80 via-[#0f0f0f] to-black
+        border border-[#f58b49]/20 rounded-3xl p-8 shadow-lg backdrop-blur-xl
+        hover:shadow-[0_0_45px_rgba(245,139,73,0.35)]
+        transition-all duration-300" [formGroup]="profileForm">
+
+            <!-- Avatar + Name -->
+            <div class="flex items-center gap-6 mb-8">
+                <div class="relative">
+                    <img [src]="profileForm.value.avatar"
+                        class="w-24 h-24 rounded-full border-4 border-[#f58b49] object-cover shadow-md" />
+
+                    <!-- Upload Button - Camera Icon -->
+                    <label *ngIf="isEditing" class="absolute bottom-0 right-0 bg-[#f58b49] text-black text-xs py-1 px-2 
+            rounded-lg cursor-pointer shadow-md hover:bg-[#ff9a61] transition flex items-center gap-1">
+                        <i class="fa-solid fa-camera"></i>
+                        <input type="file" accept="image/*" class="hidden" (change)="onImageUpload($event)" />
+                    </label>
+                </div>
+
+                <div>
+                    <input formControlName="name" [disabled]="!isEditing" class="bg-transparent text-2xl text-[#f58b49] font-semibold outline-none border-b border-transparent
+            focus:border-[#f58b49] transition w-full disabled:opacity-60 disabled:cursor-not-allowed" />
+                    <p class="text-sm mt-1 flex items-center">
+                        <i class="fa-solid fa-user-tag mr-1 text-[#f58b49]"></i>
+                        <span>{{ profileForm.value.role }}</span>
+                    </p>
+
+                    <p class="text-xs mt-1 flex items-center">
+                        <i class="fa-solid fa-calendar-days mr-1 text-[#f58b49]"></i>
+                        <span>Joined: {{ profileForm.value.joined }}</span>
+                    </p>
+
+                </div>
+            </div>
+
+            <!-- PROFILE DETAILS -->
+            <div class="space-y-6">
+
+                <!-- Username -->
+                <div>
+                    <label class="text-[#f58b49] text-sm">
+                        <i class="fa-solid fa-user-pen mr-1"></i> Username
+                    </label>
+                    <input formControlName="username" [disabled]="!isEditing" class="w-full bg-transparent border-b border-gray-700 p-1
+            focus:border-[#f58b49] outline-none transition disabled:opacity-60 disabled:cursor-not-allowed" />
+                </div>
+
+                <!-- Slug -->
+                <div>
+                    <label class="text-[#f58b49] text-sm">
+                        <i class="fa-solid fa-link mr-1"></i> Slug
+                    </label>
+                    <input formControlName="slug" [disabled]="!isEditing" class="w-full bg-transparent border-b border-gray-700 p-1
+            focus:border-[#f58b49] outline-none transition disabled:opacity-60 disabled:cursor-not-allowed" />
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="text-[#f58b49] text-sm">
+                        <i class="fa-solid fa-envelope mr-1"></i> Email Address
+                    </label>
+                    <input formControlName="email" [disabled]="!isEditing" class="w-full bg-transparent border-b border-gray-700 p-1
+            focus:border-[#f58b49] outline-none transition disabled:opacity-60 disabled:cursor-not-allowed" />
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label class="text-[#f58b49] text-sm">
+                        <i class="fa-solid fa-phone mr-1"></i> Phone Number
+                    </label>
+                    <input formControlName="phone" [disabled]="!isEditing" class="w-full bg-transparent border-b border-gray-700 p-1
+            focus:border-[#f58b49] outline-none transition disabled:opacity-60 disabled:cursor-not-allowed" />
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="text-[#f58b49] text-sm">
+                        <i class="fa-solid fa-lock mr-1"></i> Password
+                    </label>
+
+                    <div class="relative">
+                        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                            [disabled]="!isEditing" class="w-full bg-transparent border-b border-gray-700 p-1 pr-10
+              focus:border-[#f58b49] outline-none transition
+              disabled:opacity-60 disabled:cursor-not-allowed" />
+
+                        <!-- Eye / Eye Slash Toggle -->
+                        <i *ngIf="isEditing" (click)="togglePasswordVisibility()" class="absolute right-2 top-2 text-[#f58b49] text-sm cursor-pointer 
+              hover:text-[#ff9a61] fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'">
+                        </i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BUTTON ACTIONS -->
+            <div class="flex justify-end gap-3 mt-10">
+                <button *ngIf="isEditing" type="button" (click)="cancelEdit()"
+                    class="px-6 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">
+                    <i class="fa-solid fa-xmark mr-1"></i>Cancel
+                </button>
+
+                <button *ngIf="isEditing" type="button" (click)="saveChanges()"
+                    class="px-6 py-2 rounded-lg bg-[#f58b49] hover:bg-[#ff9a61] transition">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i>Save
+                </button>
+
+                <button *ngIf="!isEditing" type="button" (click)="enableEdit()"
+                    class="px-6 py-2 rounded-lg bg-[#f58b49]/80 hover:bg-[#f58b49] transition">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

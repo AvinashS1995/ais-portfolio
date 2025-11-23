@@ -83,4 +83,9 @@ export class NavbarComponent {
       },
     });
   }
+
+  goToAdminProfile(): void {
+    this.router.navigate(['/admin/admin-profile']);
+    this.isProfileOpen = false;
+  }
 }
