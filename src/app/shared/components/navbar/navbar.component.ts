@@ -14,9 +14,10 @@ import { ApiService } from '../../../core/services/api.service';
 export class NavbarComponent {
   isScrolled = false;
   isMenuOpen = false;
+  isProfileOpen = false;
   isAdmin = false;
-  navLinks: any[] = [];
   slug = '';
+  navLinks: any[] = [];
 
   constructor(
     private router: Router,
@@ -40,19 +41,8 @@ export class NavbarComponent {
     });
   }
 
-  // ✅ Logout API call
-  logout(): void {
-    this.apiService.LogOutAdmin().subscribe({
-      next: (res) => {
-        this.commonService.showToast(res.message, 'success');
-        this.commonService.clearSession();
-        this.router.navigate(['/admin/login']);
-      },
-      error: (err) => {
-        const msg = err.error?.message;
-        this.commonService.showToast(msg, 'error');
-      },
-    });
+  toggleProfileMenu(): void {
+    this.isProfileOpen = !this.isProfileOpen;
   }
 
   toggleMenu(): void {
@@ -63,14 +53,34 @@ export class NavbarComponent {
     this.isMenuOpen = false;
   }
 
-  // ✅ Highlight active link
   isActive(path: string): boolean {
     return this.router.url === path;
   }
 
-  // ✅ Add shadow effect on scroll
   @HostListener('window:scroll')
-  onScroll(): void {
+  onScroll() {
     this.isScrolled = window.scrollY > 20;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    const element = event.target as HTMLElement;
+    if (!element.closest('.relative')) {
+      this.isProfileOpen = false;
+    }
+  }
+
+  logout(): void {
+    this.apiService.LogOutAdmin().subscribe({
+      next: (res) => {
+        this.commonService.showToast(res.message, 'success');
+        this.commonService.clearSession();
+        this.router.navigate(['/admin/login']);
+        this.isProfileOpen = false;
+      },
+      error: (err) => {
+        this.commonService.showToast(err.error?.message, 'error');
+      },
+    });
   }
 }

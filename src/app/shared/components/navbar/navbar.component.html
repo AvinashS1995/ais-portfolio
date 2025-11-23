@@ -1,123 +1,115 @@
-<nav
-  class="fixed top-0 left-0 w-full z-50 flex justify-center transition-all duration-300"
-  [ngClass]="{
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-center transition-all duration-300" [ngClass]="{
     'py-3 bg-black/90 border-b border-gray-800 shadow-lg backdrop-blur-md': isScrolled,
     'py-4 bg-black/90 border-b border-gray-800 shadow-lg backdrop-blur-md': !isScrolled
-  }"
->
+  }">
   <div
-    class="relative flex items-center justify-between w-[90%] md:w-[80%] bg-[#111]/90 border border-gray-700 rounded-full px-6 py-3"
-  >
+    class="relative flex items-center justify-between w-[90%] md:w-[80%] bg-[#111]/90 border border-gray-700 rounded-full px-6 py-3">
+
     <!-- Left Menu -->
-    <div class="hidden md:flex items-center space-x-8">
-      <a
-        *ngFor="let link of navLinks.slice(0, 3)"
-        [routerLink]="link.path"
-        class="text-gray-400 hover:text-[#f58b49] transition-colors duration-300 relative"
-        [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
-      >
+    <div class="hidden md:flex items-center space-x-8" *ngIf="!isAdmin">
+      <a *ngFor="let link of navLinks.slice(0, 3)" [routerLink]="link.path" [ngClass]="
+          isActive(link.path)
+            ? 'bg-[#f58b49] text-white font-semibold px-4 py-2 rounded-full hover:scale-105 transition'
+            : 'text-gray-400 hover:text-[#f58b49] transition'
+        " class="cursor-pointer">
         {{ link.label }}
-        <span
-          *ngIf="isActive(link.path)"
-          class="absolute -bottom-1 left-0 w-full h-[2px] bg-[#f58b49]"
-        ></span>
       </a>
     </div>
 
-    <!-- Center Logo -->
-    <a
-      routerLink="/"
-      class="text-[#f58b49] font-extrabold text-3xl tracking-wide hover:scale-105 transition-transform"
-    >
+    <!-- Logo -->
+    <a routerLink="/" class="text-[#f58b49] font-extrabold text-3xl tracking-wide hover:scale-105 transition">
       AIS
     </a>
 
     <!-- Right Menu -->
     <div class="hidden md:flex items-center space-x-6">
-      <a
-        *ngFor="let link of navLinks.slice(3)"
-        [routerLink]="link.path"
-        class="text-gray-400 hover:text-[#f58b49] transition-colors duration-300 relative"
-        [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
-      >
-        {{ link.label }}
-        <span
-          *ngIf="isActive(link.path)"
-          class="absolute -bottom-1 left-0 w-full h-[2px] bg-[#f58b49]"
-        ></span>
-      </a>
+
+      <!-- When Admin Logged In -->
+      <ng-container *ngIf="isAdmin; else showNavLinks">
+        <div class="relative">
+          <img src="assets/images/default-profile.png" alt="Profile" (click)="toggleProfileMenu()"
+            class="w-10 h-10 rounded-full border border-gray-600 cursor-pointer hover:scale-105 transition" />
+
+          <div *ngIf="isProfileOpen"
+            class="absolute right-0 mt-3 w-52 bg-[#1c1c1c] border border-gray-700 rounded-xl shadow-xl py-2 animate-fadeIn">
+            <button class="menu-item">Profile</button>
+            <div class="border-t border-gray-700 my-2"></div>
+            <button class="menu-item text-red-400 hover:text-red-500" (click)="logout()">
+              Logout
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- When Not Admin -->
+      <ng-template #showNavLinks>
+        <ng-container>
+          <a *ngFor="let link of navLinks.slice(3)" [routerLink]="link.path" [ngClass]="
+              isActive(link.path)
+                ? 'bg-[#f58b49] text-white font-semibold px-4 py-2 rounded-full hover:scale-105 transition'
+                : 'text-gray-400 hover:text-[#f58b49] transition'
+            " class="cursor-pointer">
+            {{ link.label }}
+          </a>
+
+          <a routerLink="/admin/login" [ngClass]="
+    isActive('/admin/login')
+      ? 'bg-[#f58b49] text-white font-semibold px-4 py-2 rounded-full hover:scale-105 transition'
+      : 'text-gray-400 hover:text-[#f58b49] transition'
+  " class="cursor-pointer">
+            Admin
+          </a>
+
+        </ng-container>
+      </ng-template>
     </div>
 
-    <!-- Mobile Menu Toggle -->
-    <button
-      (click)="toggleMenu()"
-      class="md:hidden text-gray-400 hover:text-white focus:outline-none transition"
-    >
+    <!-- Mobile Toggle -->
+    <button (click)="toggleMenu()" class="md:hidden text-gray-400 hover:text-white transition">
       <i *ngIf="!isMenuOpen" class="fa-solid fa-bars text-xl"></i>
       <i *ngIf="isMenuOpen" class="fa-solid fa-xmark text-xl"></i>
     </button>
   </div>
 
-  <!-- Admin Button -->
-  <ng-container *ngIf="!isAdmin; else logoutBtn">
-    <a
-      routerLink="/admin/login"
-      class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-[#f58b49] hover:scale-105 transition transform md:flex hidden"
-    >
-      <i class="fa-solid fa-lock text-sm"></i>
-      <span>Admin</span>
-    </a>
-  </ng-container>
-
-  <ng-template #logoutBtn>
-    <button
-      (click)="logout()"
-      class="absolute right-[2%] top-1/2 -translate-y-1/2 flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold shadow-md hover:shadow-lg hover:bg-red-600 hover:scale-105 transition transform md:flex hidden"
-    >
-      <i class="fa-solid fa-right-from-bracket text-red-400 text-sm"></i>
-      <span>Logout</span>
-    </button>
-  </ng-template>
-
   <!-- Mobile Menu -->
-  <div
-    *ngIf="isMenuOpen"
-    class="absolute top-[80px] left-0 w-full bg-[#111] border-t border-gray-700 py-4 z-50 md:hidden"
-  >
+  <div *ngIf="isMenuOpen"
+    class="absolute top-[80px] left-0 w-full bg-[#111] border-t border-gray-700 py-4 z-50 md:hidden">
     <ul class="flex flex-col items-center space-y-4">
-      <li *ngFor="let link of navLinks">
-        <a
-          [routerLink]="link.path"
-          (click)="closeMenu()"
-          class="text-gray-400 hover:text-[#f58b49] transition-colors"
-          [ngClass]="{ 'text-[#f58b49]': isActive(link.path) }"
-        >
-          {{ link.label }}
-        </a>
-      </li>
-
-      <li>
-        <ng-container *ngIf="!isAdmin; else mobileLogout">
-          <a
-            routerLink="/admin/login"
-            (click)="closeMenu()"
-            class="flex items-center space-x-2 text-white px-4 py-2 rounded-full font-semibold hover:bg-[#f58b49] hover:scale-105 transition transform"
-          >
-            <i class="fa-solid fa-lock text-sm"></i>
-            <span>Admin</span>
+      <ng-container *ngIf="!isAdmin">
+        <li *ngFor="let link of navLinks">
+          <a [routerLink]="link.path" (click)="closeMenu()" [ngClass]="
+              isActive(link.path)
+                ? 'bg-[#f58b49] text-white font-semibold px-4 py-2 rounded-full hover:scale-105 transition'
+                : 'text-gray-400 hover:text-[#f58b49] transition'
+            " class="cursor-pointer">
+            {{ link.label }}
           </a>
-        </ng-container>
+        </li>
 
-        <ng-template #mobileLogout>
+        <li>
+          <a routerLink="/admin/login" (click)="closeMenu()" [ngClass]="
+    isActive('/admin/login')
+      ? 'bg-[#f58b49] text-white font-semibold px-4 py-2 rounded-full hover:scale-105 transition'
+      : 'text-gray-400 hover:text-[#f58b49] transition'
+  " class="cursor-pointer">
+            Admin
+          </a>
+
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="isAdmin">
+         <li>
+           <button class="menu-item">Profile</button>
+        </li>
+        <li>
           <button
-            (click)="logout(); closeMenu()"
-            class="flex items-center space-x-2 text-white border border-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-[#1a1a1a] hover:border-red-500 hover:text-red-400 transition"
-          >
-            <i class="fa-solid fa-right-from-bracket text-red-400 text-sm"></i>
-            <span>Logout</span>
+            class="menu-item text-red-400 hover:text-red-500"
+            (click)="logout(); closeMenu()">
+            Logout
           </button>
-        </ng-template>
-      </li>
+        </li>
+      </ng-container>
     </ul>
   </div>
 </nav>

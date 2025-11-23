@@ -137,13 +137,21 @@
           <label class="block mb-2 text-[#f58b49] font-semibold">Name</label>
           <input formControlName="name"
             class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
-        </div>
+        <p class="text-red-400 text-sm mt-1"
+            *ngIf="aboutForm.get('name')?.touched && aboutForm.get('name')?.invalid">
+            name is required.
+          </p> 
+          </div>
 
         <div>
-          <label class="block mb-2 text-[#f58b49] font-semibold">Title</label>
+          <label class="block mb-2 text-[#f58b49] font-semibold">Job Title</label>
           <input formControlName="title"
             class="w-full bg-[#141414]/80 border border-[#3a3a3a] focus:border-[#f58b49] text-gray-200 rounded-xl px-4 py-3 outline-none transition-all" />
-        </div>
+        <p class="text-red-400 text-sm mt-1"
+            *ngIf="aboutForm.get('title')?.touched && aboutForm.get('title')?.invalid">
+            Job Title is required.
+          </p> 
+          </div>
 
       </div>
 

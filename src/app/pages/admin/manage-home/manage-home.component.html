@@ -101,23 +101,10 @@
         <input formControlName="name"
           class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
           placeholder="Enter name" />
-      </div>
-
-      <!-- Description -->
-      <div>
-        <label class="text-[#f58b49] text-sm mb-1 block">Description</label>
-        <textarea rows="2" formControlName="homeDescription"
-          class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
-          placeholder="Write description..."></textarea>
-        <div class="flex justify-end">
-          <button type="button" (click)="generateAI('homeDescription')" class="flex items-center gap-2 px-4 py-2 rounded-xl
-         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
-         text-black font-semibold text-sm
-         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
-            Generate AI
-          </button>
-        </div>
+         <p class="text-red-400 text-sm mt-1"
+            *ngIf="homeForm.get('name')?.touched && homeForm.get('name')?.invalid">
+            Name is required.
+          </p>
       </div>
 
       <!-- Roles -->
@@ -138,6 +125,27 @@
           <button type="button" (click)="addRole()"
             class="px-4 py-2 bg-[#f58b49]/20 border border-[#f58b49]/40 text-[#f58b49] rounded-xl hover:bg-[#f58b49] hover:text-black transition">
             <i class="fa-solid fa-plus mr-1"></i> Add Role
+          </button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="text-[#f58b49] text-sm mb-1 block">Description</label>
+        <textarea rows="2" formControlName="homeDescription"
+          class="w-full bg-[#111] border border-[#333] rounded-xl px-3 py-2 text-gray-200 focus:border-[#f58b49]"
+          placeholder="Write description..."></textarea>
+         <p class="text-red-400 text-sm mt-1"
+            *ngIf="homeForm.get('homeDescription')?.touched && homeForm.get('homeDescription')?.invalid">
+            Description is required.
+          </p> 
+        <div class="flex justify-end">
+          <button type="button" (click)="generateAI('homeDescription')" class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-[#f58b49] to-[#ff9f65]
+         text-black font-semibold text-sm
+         shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            Generate AI
           </button>
         </div>
       </div>
