@@ -33,7 +33,6 @@ export class AboutComponent {
     this.getSkillCategories();
   }
 
-  // 🔥 Fetch About Section with RxJS takeUntil
   getAboutSection() {
     this.apiService
       .GetPublicPortfolioAbout(this.slug)

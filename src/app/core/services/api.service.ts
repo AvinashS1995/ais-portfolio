@@ -380,6 +380,14 @@ export class ApiService {
     );
   }
 
+  GetPublicPortfolioWebsite(slug: string): Observable<any> {
+    const url = this.commonService.buildUrl(
+      API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_WEBSITE_SECTION,
+      { slug }
+    );
+    return this.http.get(`${this.baseUrl}${url}`);
+  }
+
   GetPublicPortfolioHome(slug: string): Observable<any> {
     const url = this.commonService.buildUrl(
       API_ENDPOINTS.SERVICE_GET_PUBLIC_PORTFOLIO_HOME_SECTION,

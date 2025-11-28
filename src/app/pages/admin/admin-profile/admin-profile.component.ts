@@ -43,6 +43,7 @@ export class AdminProfileComponent {
     this.profileForm = this.fb.group({
       avatar: [],
       fullName: ['', Validators.required],
+      portfolioWebsiteName: ['', Validators.required],
       username: ['', Validators.required],
       slug: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -74,6 +75,7 @@ export class AdminProfileComponent {
         this.profileForm.patchValue({
           avatar: admin.profileImage || '',
           fullName: admin.fullName || '',
+          portfolioWebsiteName: admin.portfolioWebsiteName || '',
           username: admin.username || '',
           slug: admin.slug || '',
           email: admin.email || '',
@@ -161,8 +163,17 @@ export class AdminProfileComponent {
 
     this.originalValue = this.profileForm.value;
 
-    const { avatar, fullName, email, password, phone, username, slug, role } =
-      this.originalValue;
+    const {
+      avatar,
+      fullName,
+      email,
+      password,
+      phone,
+      username,
+      slug,
+      role,
+      portfolioWebsiteName,
+    } = this.originalValue;
 
     const payload = {
       id: this.commonService.userInfo?.id || '',
@@ -174,6 +185,7 @@ export class AdminProfileComponent {
       username,
       slug,
       role,
+      portfolioWebsiteName,
     };
 
     console.log(payload);

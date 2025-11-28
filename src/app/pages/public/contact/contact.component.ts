@@ -42,7 +42,7 @@ export class ContactComponent {
       city: 'Mumbai',
       country: 'India',
       postalCode: '400001',
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...', // replace with your map embed link
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!...',
     },
     email: 'hello@example.com',
     phone: '+91 98765 43210',

@@ -24,38 +24,10 @@ interface Project {
   styleUrl: './project.component.css',
 })
 export class ProjectComponent {
-  projects: Project[] = [
-    // {
-    //   id: 1,
-    //   title: 'AI Resume Builder',
-    //   category: 'Web App',
-    //   role: 'Angular, Node.js, OpenAI',
-    //   image: 'assets/images/projects/resume-builder.jpg',
-    //   codeLink: 'https://github.com/yourname/ai-resume-builder',
-    //   previewLink: 'https://airesumebuilder.vercel.app',
-    // },
-    // {
-    //   id: 2,
-    //   title: 'Employee Management System',
-    //   category: 'Enterprise',
-    //   role: 'Angular + Node.js + MongoDB',
-    //   image: 'assets/images/projects/ems.jpg',
-    //   codeLink: 'https://github.com/yourname/ems',
-    //   previewLink: 'https://emsapp.vercel.app',
-    // },
-    // {
-    //   id: 3,
-    //   title: 'Groww Clone',
-    //   category: 'Finance App',
-    //   role: 'Angular + Tailwind + ApexCharts',
-    //   image: 'assets/images/projects/groww.jpg',
-    //   codeLink: 'https://github.com/yourname/groww-clone',
-    //   previewLink: 'https://growwclone.vercel.app',
-    // },
-  ];
+  projects: Project[] = [];
 
   private destroy$ = new Subject<void>();
-  slug: string = 'avinash'; // Can be dynamic from route
+  slug: string = 'avinash';
 
   constructor(
     private apiService: ApiService,

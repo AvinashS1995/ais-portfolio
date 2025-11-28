@@ -3,6 +3,7 @@ import { SHARED_MODULES } from '../../../core/common/shared-module';
 import { Router } from '@angular/router';
 import { CommonService } from '../../../core/services/common.service';
 import { ApiService } from '../../../core/services/api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { ApiService } from '../../../core/services/api.service';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
+  private destroy$ = new Subject<void>();
   isScrolled = false;
   isMenuOpen = false;
   isProfileOpen = false;
@@ -19,6 +21,7 @@ export class NavbarComponent {
   slug = '';
   adminProfileAvatarUrl = '';
   navLinks: any[] = [];
+  adminPortfolioName = '';
 
   constructor(
     private router: Router,
@@ -44,6 +47,30 @@ export class NavbarComponent {
     this.adminProfileAvatarUrl =
       this.commonService.userInfo?.profileImage || '';
     console.log(this.adminProfileAvatarUrl);
+
+    console.log(this.slug);
+    this.adminPortfolioName =
+      this.commonService.userInfo?.portfolioWebsiteName || 'AIS';
+    this.getPortfolioWebsiteOnNav(this.slug);
+  }
+
+  getPortfolioWebsiteOnNav(slug: string) {
+    this.apiService
+      .GetPublicPortfolioWebsite(slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          debugger;
+          if (res?.status === 'success') {
+            this.adminPortfolioName = res.data?.portfolioWebsite || 'AIS';
+            console.log('Website Name:', this.adminPortfolioName);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to fetch projects:', err);
+          this.adminPortfolioName = 'AIS';
+        },
+      });
   }
 
   toggleProfileMenu(): void {
@@ -92,5 +119,10 @@ export class NavbarComponent {
   goToAdminProfile(): void {
     this.router.navigate(['/admin/admin-profile']);
     this.isProfileOpen = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

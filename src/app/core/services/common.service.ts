@@ -12,6 +12,7 @@ interface DecodedToken {
   name?: string;
   exp?: number;
   profileImage?: string;
+  portfolioWebsiteName?: string;
 }
 
 @Injectable({
@@ -65,7 +66,7 @@ export class CommonService {
     this.isAdminSubject.next(false);
   }
 
-  // Custom Toast Notification
+  // Custom Toaster
   showToast(message: string, type: 'success' | 'error' | 'info' = 'success') {
     const toast = document.createElement('div');
     toast.className = `

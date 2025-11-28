@@ -14,7 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class HomeComponent {
   aboutData: any = {};
-  roles: string[] = []; // <-- dynamic roles from API
+  roles: string[] = [];
   displayedText = '';
   currentRoleIndex = 0;
   currentCharIndex = 0;
@@ -42,10 +42,8 @@ export class HomeComponent {
         next: (res) => {
           this.aboutData = res.data?.home;
 
-          // 🔥 NEW - assign roles from API
           this.roles = res.data?.home?.roles || [];
 
-          // restart typing effect with new roles
           this.resetTypingEffect();
 
           this.commonService.showToast(res.message, 'success');
@@ -70,7 +68,7 @@ export class HomeComponent {
   }
 
   typeEffect() {
-    if (this.roles.length === 0) return; // avoid error
+    if (this.roles.length === 0) return;
 
     const currentRole = this.roles[this.currentRoleIndex];
     const typingSpeed = this.isDeleting ? 70 : 120;

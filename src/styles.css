@@ -30,9 +30,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   animation: slide-up 0.4s ease-out;
 }
 
-/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'); */
-
-/* Root variables */
 :root {
   --font-size: 16px;
   --background: #ffffff;
@@ -70,12 +67,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --primary: oklch(0.985 0 0);
   --primary-foreground: oklch(0.205 0 0);
 }
-
-/* Base styles */
-/* * {
-  border: var(--border);
-  outline-color: var(--ring);
-} */
 
 body {
   background-color: var(--background);
